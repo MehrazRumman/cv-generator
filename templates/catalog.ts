@@ -1,4 +1,4 @@
-import type { DocumentType } from "@/lib/schemas";
+import type { DocumentType, FontId } from "@/lib/schemas";
 
 /** Template metadata only (no react-pdf imports) — safe to use on the server and in the picker UI. */
 export interface TemplateInfo {
@@ -11,7 +11,14 @@ export interface TemplateInfo {
   inspiredBy?: string;
   /** Accent colour applied when the user switches to this template. */
   accent: string;
+  /** Photo-led design: picking it switches the photo section on (initials are shown without a photo). */
+  featuresPhoto?: boolean;
+  /** Suggested fonts, applied on selection unless the user has chosen their own. */
+  fonts?: { fontId: FontId; headingFontId: FontId | "same" };
 }
+
+/** Fonts a template uses when it doesn't suggest its own. */
+export const DEFAULT_TEMPLATE_FONTS = { fontId: "inter", headingFontId: "same" } as const;
 
 /** The first entry of each list is the default template. */
 export const TEMPLATE_CATALOG: Record<DocumentType, TemplateInfo[]> = {
@@ -95,6 +102,87 @@ export const TEMPLATE_CATALOG: Record<DocumentType, TemplateInfo[]> = {
       atsFriendly: false,
       inspiredBy: "Deedy-Resume (LaTeX, Apache-2.0)",
       accent: "#b45309",
+    },
+    {
+      id: "navy-sidebar",
+      name: "Navy Sidebar",
+      description: "Dark column with round photo and contact icons.",
+      atsFriendly: false,
+      accent: "#1e3a5f",
+      featuresPhoto: true,
+      fonts: { fontId: "open-sans", headingFontId: "montserrat" },
+    },
+    {
+      id: "pastel-split",
+      name: "Pastel Split",
+      description: "Coloured column, pastel name band, photo across both.",
+      atsFriendly: false,
+      accent: "#5f8f8b",
+      featuresPhoto: true,
+      fonts: { fontId: "lora", headingFontId: "montserrat" },
+    },
+    {
+      id: "gray-column",
+      name: "Gray Column",
+      description: "Light column, ringed photo, dotted timeline.",
+      atsFriendly: false,
+      accent: "#2563a8",
+      featuresPhoto: true,
+      fonts: { fontId: "lato", headingFontId: "montserrat" },
+    },
+    {
+      id: "geometric",
+      name: "Geometric",
+      description: "Corner shapes, gold-ringed photo, icon headings.",
+      atsFriendly: false,
+      accent: "#1b2a4a",
+      featuresPhoto: true,
+      fonts: { fontId: "nunito-sans", headingFontId: "poppins" },
+    },
+    {
+      id: "photo-header",
+      name: "Photo Header",
+      description: "Single column with a round photo beside the name.",
+      atsFriendly: true,
+      accent: "#1d4ed8",
+      featuresPhoto: true,
+      fonts: { fontId: "inter", headingFontId: "montserrat" },
+    },
+    {
+      id: "diagonal",
+      name: "Diagonal",
+      description: "Diagonal colour block behind the photo, serif name.",
+      atsFriendly: false,
+      accent: "#5b7bd5",
+      featuresPhoto: true,
+      fonts: { fontId: "lato", headingFontId: "playfair" },
+    },
+    {
+      id: "soft-panel",
+      name: "Soft Panel",
+      description: "Spaced-out name on a soft band, rounded side panel.",
+      atsFriendly: false,
+      accent: "#475569",
+      featuresPhoto: true,
+      fonts: { fontId: "open-sans", headingFontId: "raleway" },
+    },
+    {
+      id: "navy-header",
+      name: "Navy Header",
+      description: "Dark header band, overlapping photo, icon timeline.",
+      atsFriendly: false,
+      accent: "#1f2a44",
+      featuresPhoto: true,
+      fonts: { fontId: "roboto", headingFontId: "montserrat" },
+    },
+    {
+      id: "bold-pills",
+      name: "Bold Pills",
+      description: "Dark column, colour banner, pill headings, level bars.",
+      atsFriendly: false,
+      accent: "#1e40af",
+      featuresPhoto: true,
+      fonts: { fontId: "poppins", headingFontId: "same" },
     },
   ],
   biodata: [

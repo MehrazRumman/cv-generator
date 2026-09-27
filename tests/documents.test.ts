@@ -103,3 +103,29 @@ describe("import", () => {
     expect(bad.ok).toBe(false);
   });
 });
+
+describe("fonts", async () => {
+  const { existsSync } = await import("node:fs");
+  const { BANGLA_FONTS, LATIN_FONTS } = await import("@/lib/pdf/fonts-meta");
+  it("ships a file for every registered weight and italic", () => {
+    for (const f of [...Object.values(LATIN_FONTS), ...Object.values(BANGLA_FONTS)]) {
+      for (const w of f.weights) expect(existsSync(`public/fonts/${f.id}-${w}.ttf`), `${f.id}-${w}`).toBe(true);
+      for (const w of f.italicWeights) expect(existsSync(`public/fonts/${f.id}-${w}-italic.ttf`), `${f.id}-${w}-italic`).toBe(true);
+    }
+  });
+});
+
+describe("migrations", () => {
+  it("upgrades v1 documents (no heading font) to the current version", () => {
+    const v2 = SAMPLE_VARIANTS.professional[0].create();
+    const { headingFontId: _drop, ...settings } = v2.settings;
+    void _drop;
+    const v1 = { ...v2, schemaVersion: 1, settings };
+    const result = parseAnyDocument(JSON.parse(JSON.stringify(v1)));
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.doc.schemaVersion).toBe(2);
+      expect(result.doc.settings.headingFontId).toBe("same");
+    }
+  });
+});

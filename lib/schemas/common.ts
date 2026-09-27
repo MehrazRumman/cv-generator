@@ -11,22 +11,48 @@ export type DocumentType = (typeof DOCUMENT_TYPES)[number];
 export const PAPER_SIZES = ["A4", "LETTER"] as const;
 export type PaperSize = (typeof PAPER_SIZES)[number];
 
-/** Latin fonts offered in the font selector. */
-export const FONT_IDS = ["inter", "roboto", "lato", "open-sans", "merriweather", "source-serif", "eb-garamond"] as const;
+/** Latin fonts offered in the font selector (metadata and categories live in lib/pdf/fonts-meta.ts). */
+export const FONT_IDS = [
+  "inter",
+  "roboto",
+  "lato",
+  "open-sans",
+  "source-sans",
+  "ibm-plex-sans",
+  "work-sans",
+  "nunito-sans",
+  "montserrat",
+  "poppins",
+  "raleway",
+  "carlito",
+  "merriweather",
+  "source-serif",
+  "eb-garamond",
+  "lora",
+  "crimson-pro",
+  "libre-baskerville",
+  "pt-serif",
+  "playfair",
+  "tinos",
+  "roboto-slab",
+  "ibm-plex-mono",
+  "jetbrains-mono",
+] as const;
 export type FontId = (typeof FONT_IDS)[number];
 
 /**
- * Bangla fonts used as the fallback for any Bengali characters in the document.
- * (Noto Sans Bengali is not offered: react-pdf's shaper mangles its conjuncts — see README.)
+ * Bangla fonts used as the fallback for any Bengali characters in the document. Each one is checked
+ * for correct conjunct shaping under react-pdf; Noto Sans Bengali, Anek Bangla, Baloo Da 2 and
+ * Tiro Bangla are not offered because they mis-shape or crash — see README.
  */
-export const BANGLA_FONT_IDS = ["hind-siliguri", "noto-serif-bengali"] as const;
+export const BANGLA_FONT_IDS = ["hind-siliguri", "mina", "noto-serif-bengali"] as const;
 export type BanglaFontId = (typeof BANGLA_FONT_IDS)[number];
 
 export const PHOTO_ASPECTS = ["square", "passport"] as const; // passport = 35×45 mm
 export const LANGUAGE_LEVELS = ["native", "fluent", "professional", "intermediate", "basic"] as const;
 
-/** Bump when the stored shape changes; lib/storage runs migrations on load/import. */
-export const SCHEMA_VERSION = 1;
+/** Bump when the stored shape changes; lib/storage/migrate.ts upgrades older documents on load/import. */
+export const SCHEMA_VERSION = 2;
 
 /* ------------------------------------------------------------------ */
 /* Reusable building blocks                                            */
@@ -123,6 +149,8 @@ export const baseSettingsSchema = z.object({
   templateId: z.string(),
   paperSize: z.enum(PAPER_SIZES),
   fontId: z.enum(FONT_IDS),
+  /** Font for the name and section headings; "same" uses the body font. (Added in schema v2.) */
+  headingFontId: z.union([z.literal("same"), z.enum(FONT_IDS)]),
   banglaFontId: z.enum(BANGLA_FONT_IDS),
   accentColor: z.string().regex(/^#[0-9a-fA-F]{6}$/, "Use a hex colour like #1f4e79"),
 });

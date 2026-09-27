@@ -1,12 +1,13 @@
 import { Text, View } from "@react-pdf/renderer";
 import { hasText, joinParts } from "@/lib/format/text";
 import type { PreparedAcademic } from "@/lib/documents/prepare";
-import { accentOf, PdfDocument, type Kit } from "../shared/kit";
+import { accentOf, headingFont, PdfDocument, type Kit } from "../shared/kit";
 import { baseKitStyles } from "../shared/presets";
 import { academicLinks, LinkRow, renderAcademicSections, type AcademicExtras } from "./blocks";
 
 /** Quiet, generous spacing and letter-spaced grey headings. Modelled on JSON Resume minimalist themes (MIT). */
 export function AcademicMinimal({ doc }: { doc: PreparedAcademic }) {
+  const hf = headingFont(doc.settings);
   const accent = accentOf(doc.settings.accentColor);
   const p = { text: "#303030", muted: "#8a8a8a", accent };
   const kit: Kit = {
@@ -15,7 +16,7 @@ export function AcademicMinimal({ doc }: { doc: PreparedAcademic }) {
     entryLayout: "stacked",
     dateColumnWidth: 0,
     Heading: ({ title }) => (
-      <Text style={{ fontSize: 8.5, color: p.muted, textTransform: "uppercase", letterSpacing: 2.2, marginBottom: 8 }}>{title}</Text>
+      <Text style={{ ...hf, fontSize: 8.5, color: p.muted, textTransform: "uppercase", letterSpacing: 2.2, marginBottom: 8 }}>{title}</Text>
     ),
   };
   const x: AcademicExtras = {
@@ -31,7 +32,7 @@ export function AcademicMinimal({ doc }: { doc: PreparedAcademic }) {
       pageStyle={{ paddingTop: 52, paddingBottom: 50, paddingHorizontal: 56, color: p.text }}
     >
       <View style={{ marginBottom: 6 }}>
-        <Text style={{ fontSize: 22, fontWeight: 600, color: "#111111" }}>{h.fullName}</Text>
+        <Text style={{ ...hf, fontSize: 22, fontWeight: 600, color: "#111111" }}>{h.fullName}</Text>
         {hasText(h.designation) || hasText(h.institution) ? (
           <Text style={{ fontSize: 10.5, color: accent, marginTop: 3 }}>{joinParts([h.designation, h.department, h.institution], ", ")}</Text>
         ) : null}

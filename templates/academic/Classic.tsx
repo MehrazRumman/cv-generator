@@ -1,12 +1,13 @@
 import { Text, View } from "@react-pdf/renderer";
 import { hasText, joinParts } from "@/lib/format/text";
 import type { PreparedAcademic } from "@/lib/documents/prepare";
-import { accentOf, PdfDocument, type Kit } from "../shared/kit";
+import { accentOf, headingFont, PdfDocument, type Kit } from "../shared/kit";
 import { baseKitStyles, PAGE_MARGIN } from "../shared/presets";
 import { academicLinks, LinkRow, renderAcademicSections, type AcademicExtras } from "./blocks";
 
 /** Traditional academic CV: centred header, small-caps headings over a rule. Modelled on the Harvard/OCS academic CV guide. */
 export function AcademicClassic({ doc }: { doc: PreparedAcademic }) {
+  const hf = headingFont(doc.settings);
   const accent = accentOf(doc.settings.accentColor);
   const p = { text: "#1a1a1a", muted: "#555555", accent };
   const kit: Kit = {
@@ -16,7 +17,7 @@ export function AcademicClassic({ doc }: { doc: PreparedAcademic }) {
     dateColumnWidth: 0,
     Heading: ({ title }) => (
       <View style={{ borderBottomWidth: 0.7, borderBottomColor: accent, marginBottom: 6, paddingBottom: 2 }}>
-        <Text style={{ fontSize: 11.5, fontWeight: 700, color: accent, textTransform: "uppercase", letterSpacing: 1.2 }}>{title}</Text>
+        <Text style={{ ...hf, fontSize: 11.5, fontWeight: 700, color: accent, textTransform: "uppercase", letterSpacing: 1.2 }}>{title}</Text>
       </View>
     ),
   };
@@ -28,7 +29,7 @@ export function AcademicClassic({ doc }: { doc: PreparedAcademic }) {
   return (
     <PdfDocument title={`${h.fullName} — Curriculum Vitae`} author={h.fullName} settings={doc.settings} pageStyle={{ ...PAGE_MARGIN, color: p.text }}>
       <View style={{ alignItems: "center", marginBottom: 4 }}>
-        <Text style={{ fontSize: 22, fontWeight: 700 }}>{h.fullName}</Text>
+        <Text style={{ ...hf, fontSize: 22, fontWeight: 700 }}>{h.fullName}</Text>
         {hasText(h.designation) ? <Text style={{ fontSize: 11.5, marginTop: 3 }}>{h.designation}</Text> : null}
         {hasText(h.department) || hasText(h.institution) ? (
           <Text style={{ fontSize: 10.5, color: p.muted, marginTop: 1, textAlign: "center" }}>{joinParts([h.department, h.institution], ", ")}</Text>

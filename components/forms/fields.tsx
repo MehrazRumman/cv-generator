@@ -49,6 +49,21 @@ export function Grid({ children, cols = 2 }: { children: ReactNode; cols?: 1 | 2
 const asString = (v: unknown): string => (typeof v === "string" ? v : "");
 const asStringArray = (v: unknown): string[] => (Array.isArray(v) ? v.filter((x): x is string => typeof x === "string") : []);
 
+export interface SelectOption {
+  value: string;
+  label: string;
+  group?: string;
+}
+
+function groupOptions(options: readonly SelectOption[]): [string, SelectOption[]][] {
+  const groups = new Map<string, SelectOption[]>();
+  for (const o of options) {
+    const key = o.group ?? "";
+    groups.set(key, [...(groups.get(key) ?? []), o]);
+  }
+  return [...groups.entries()];
+}
+
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 /* ------------------------------------------------------------------ */
@@ -124,7 +139,8 @@ export function createFields<T extends FieldValues>() {
     );
   }
 
-  function Select({ name, label, hint, className, options }: BaseProps<T> & { options: readonly { value: string; label: string }[] }) {
+  /** Options with a `group` are rendered inside <optgroup>s, in first-seen group order. */
+  function Select({ name, label, hint, className, options }: BaseProps<T> & { options: readonly SelectOption[] }) {
     const id = useId();
     const {
       field: { ref, ...field },
@@ -141,11 +157,23 @@ export function createFields<T extends FieldValues>() {
           onChange={(e) => field.onChange(e.target.value)}
           onBlur={field.onBlur}
         >
-          {options.map((o) => (
-            <option key={o.value} value={o.value}>
-              {o.label}
-            </option>
-          ))}
+          {groupOptions(options).map(([group, opts]) =>
+            group ? (
+              <optgroup key={group} label={group}>
+                {opts.map((o) => (
+                  <option key={o.value} value={o.value}>
+                    {o.label}
+                  </option>
+                ))}
+              </optgroup>
+            ) : (
+              opts.map((o) => (
+                <option key={o.value} value={o.value}>
+                  {o.label}
+                </option>
+              ))
+            ),
+          )}
         </select>
       </FieldShell>
     );

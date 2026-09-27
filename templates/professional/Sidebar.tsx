@@ -2,7 +2,7 @@ import { Text, View } from "@react-pdf/renderer";
 import { formatPartialDate } from "@/lib/format/dates";
 import { hasText } from "@/lib/format/text";
 import type { PreparedProfessional } from "@/lib/documents/prepare";
-import { accentOf, fitFontSize, PdfDocument, PdfLink, Photo, tint, type Kit } from "../shared/kit";
+import { accentOf, fitFontSize, headingFont, PdfDocument, PdfLink, Photo, tint, type Kit } from "../shared/kit";
 import { baseKitStyles } from "../shared/presets";
 import { contactItems, LEVEL_LABEL, renderSections } from "./blocks";
 
@@ -11,6 +11,7 @@ const PAD_Y = 36;
 
 /** Tinted left column with photo, contact, skills and languages. Modelled on AltaCV / Deedy (LaTeX). Not ATS-optimised. */
 export function Sidebar({ doc }: { doc: PreparedProfessional }) {
+  const hf = headingFont(doc.settings);
   const accent = accentOf(doc.settings.accentColor);
   const p = { text: "#262626", muted: "#6b6b6b", accent };
   const kit: Kit = {
@@ -20,7 +21,7 @@ export function Sidebar({ doc }: { doc: PreparedProfessional }) {
     dateColumnWidth: 0,
     Heading: ({ title }) => (
       <View style={{ borderBottomWidth: 1.2, borderBottomColor: accent, marginBottom: 7, paddingBottom: 2 }}>
-        <Text style={{ fontSize: 12, fontWeight: 700, color: accent, textTransform: "uppercase", letterSpacing: 0.6 }}>{title}</Text>
+        <Text style={{ ...hf, fontSize: 12, fontWeight: 700, color: accent, textTransform: "uppercase", letterSpacing: 0.6 }}>{title}</Text>
       </View>
     ),
   };
@@ -92,7 +93,7 @@ export function Sidebar({ doc }: { doc: PreparedProfessional }) {
         </View>
 
         <View style={{ flex: 1, paddingLeft: 22, paddingRight: 32 }}>
-          <Text style={{ fontSize: 26, fontWeight: 700, color: "#1d1d1d" }}>{h.fullName}</Text>
+          <Text style={{ ...hf, fontSize: 26, fontWeight: 700, color: "#1d1d1d" }}>{h.fullName}</Text>
           {hasText(h.jobTitle) ? <Text style={{ fontSize: 12, color: accent, marginTop: 2, marginBottom: 4 }}>{h.jobTitle}</Text> : <View style={{ height: 4 }} />}
           {renderSections(kit, doc, ["summary", "experience", "projects", "education", "references"])}
         </View>

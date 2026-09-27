@@ -1,12 +1,13 @@
 import { Text, View } from "@react-pdf/renderer";
 import { hasText } from "@/lib/format/text";
 import type { PreparedProfessional } from "@/lib/documents/prepare";
-import { accentOf, PdfDocument, Photo, tint, type Kit } from "../shared/kit";
+import { accentOf, headingFont, PdfDocument, Photo, tint, type Kit } from "../shared/kit";
 import { baseKitStyles } from "../shared/presets";
 import { contactItems, ContactLine, renderSections } from "./blocks";
 
 /** Dense one-pager: tinted heading bands, tight spacing, 9pt text. Modelled on the "Sb2nov" résumé (LaTeX, MIT). */
 export function Compact({ doc }: { doc: PreparedProfessional }) {
+  const hf = headingFont(doc.settings);
   const accent = accentOf(doc.settings.accentColor);
   const p = { text: "#222222", muted: "#5f5f5f", accent };
   const kit: Kit = {
@@ -23,7 +24,7 @@ export function Compact({ doc }: { doc: PreparedProfessional }) {
     dateColumnWidth: 0,
     Heading: ({ title }) => (
       <View style={{ backgroundColor: tint(accent, 0.86), paddingVertical: 2.5, paddingHorizontal: 6, marginBottom: 5, borderLeftWidth: 3, borderLeftColor: accent }}>
-        <Text style={{ fontSize: 9.5, fontWeight: 700, color: accent, textTransform: "uppercase", letterSpacing: 0.8 }}>{title}</Text>
+        <Text style={{ ...hf, fontSize: 9.5, fontWeight: 700, color: accent, textTransform: "uppercase", letterSpacing: 0.8 }}>{title}</Text>
       </View>
     ),
   };
@@ -37,7 +38,7 @@ export function Compact({ doc }: { doc: PreparedProfessional }) {
     >
       <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 2 }}>
         <View style={{ flex: 1 }}>
-          <Text style={{ fontSize: 20, fontWeight: 700, color: accent }}>
+          <Text style={{ ...hf, fontSize: 20, fontWeight: 700, color: accent }}>
             {h.fullName}
             {hasText(h.jobTitle) ? <Text style={{ fontSize: 11, fontWeight: 400, color: p.muted }}>{`  ·  ${h.jobTitle}`}</Text> : null}
           </Text>

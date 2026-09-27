@@ -1,7 +1,7 @@
 "use client";
 
 import { useFormContext, useWatch } from "react-hook-form";
-import { BANGLA_FONTS, LATIN_FONTS } from "@/lib/pdf/fonts-meta";
+import { BANGLA_FONTS, fontOptions, LATIN_FONTS } from "@/lib/pdf/fonts-meta";
 import type { AnyDocument } from "@/lib/schemas";
 import { TEMPLATE_CATALOG } from "@/templates/catalog";
 import { createFields } from "./fields";
@@ -77,8 +77,19 @@ export function DesignSettings({ extra }: { extra?: React.ReactNode }) {
             <span className="font-mono text-xs text-zinc-500">{accent}</span>
           </div>
         </div>
-        <F.Select name="settings.fontId" label="English font" options={Object.values(LATIN_FONTS).map((f) => ({ value: f.id, label: `${f.label} (${f.category})` }))} />
-        <F.Select name="settings.banglaFontId" label="Bangla font" options={Object.values(BANGLA_FONTS).map((f) => ({ value: f.id, label: f.label }))} />
+        <F.Select name="settings.fontId" label="Body font" options={fontOptions(LATIN_FONTS)} />
+        <F.Select
+          name="settings.headingFontId"
+          label="Heading font"
+          hint="Used for your name and section headings."
+          options={[{ value: "same", label: "Same as body font" }, ...fontOptions(LATIN_FONTS)]}
+        />
+        <F.Select
+          name="settings.banglaFontId"
+          label="Bangla font"
+          hint="Used automatically for any বাংলা text."
+          options={fontOptions(BANGLA_FONTS)}
+        />
         {extra}
       </div>
     </SectionCard>

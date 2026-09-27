@@ -30,12 +30,15 @@ export function splitLongWord(word: string): string[] {
 
 function register<Id extends string>(option: FontOption<Id>, base: string) {
   const src = (weight: number, italic: boolean) => `${base}/${option.id}-${weight}${italic ? "-italic" : ""}.ttf`;
+  const nearestItalic = (weight: number) =>
+    option.italicWeights.reduce<number | null>((best, w) => (best === null || Math.abs(w - weight) < Math.abs(best - weight) ? w : best), null);
   const fonts = option.weights.flatMap((weight) => {
-    // Fonts without italics (Bangla) map italic to upright so italic runs never fail to resolve.
-    const italicSrc = option.italics ? src(weight === 400 ? 400 : 700, true) : src(weight, false);
+    // Weights without an italic use the nearest italic; fonts without italics (Bangla, slab) use upright,
+    // so an italic run never fails to resolve.
+    const italic = nearestItalic(weight);
     return [
       { src: src(weight, false), fontWeight: weight, fontStyle: "normal" as const },
-      { src: italicSrc, fontWeight: weight, fontStyle: "italic" as const },
+      { src: italic === null ? src(weight, false) : src(italic, true), fontWeight: weight, fontStyle: "italic" as const },
     ];
   });
   Font.register({ family: option.id, fonts });

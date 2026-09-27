@@ -1,13 +1,14 @@
 import { Text, View } from "@react-pdf/renderer";
 import { hasText } from "@/lib/format/text";
 import type { PreparedBiodata } from "@/lib/documents/prepare";
-import { accentOf, PdfDocument, Photo, tint } from "../shared/kit";
+import { accentOf, headingFont, PdfDocument, Photo, tint } from "../shared/kit";
 import { renderBiodataSections, type BioKit } from "./blocks";
 import { headerInfo } from "./header";
 import { tracking } from "./labels";
 
 /** Double-ruled page frame, centred small-caps headings — the classic marriage-biodata card look. */
 export function BiodataElegant({ doc }: { doc: PreparedBiodata }) {
+  const hf = headingFont(doc.settings);
   const accent = accentOf(doc.settings.accentColor);
   const text = "#2a2320";
   const soft = tint(accent, 0.55);
@@ -16,7 +17,7 @@ export function BiodataElegant({ doc }: { doc: PreparedBiodata }) {
     heading: (title) => (
       <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 7 }}>
         <View style={{ flex: 1, borderBottomWidth: 0.5, borderBottomColor: soft }} />
-        <Text style={{ fontSize: 11.5, color: accent, marginHorizontal: 10, letterSpacing: tracking(1.2, lang), fontWeight: 600 }}>{title}</Text>
+        <Text style={{ ...hf, fontSize: 11.5, color: accent, marginHorizontal: 10, letterSpacing: tracking(1.2, lang), fontWeight: 600 }}>{title}</Text>
         <View style={{ flex: 1, borderBottomWidth: 0.5, borderBottomColor: soft }} />
       </View>
     ),
@@ -57,7 +58,7 @@ export function BiodataElegant({ doc }: { doc: PreparedBiodata }) {
       numberBottom={27}
     >
       <View style={{ alignItems: "center" }}>
-        <Text style={{ fontSize: 22, color: accent, letterSpacing: tracking(4, lang), fontWeight: 600 }}>{h.title}</Text>
+        <Text style={{ ...hf, fontSize: 22, color: accent, letterSpacing: tracking(4, lang), fontWeight: 600 }}>{h.title}</Text>
         <View style={{ flexDirection: "row", alignItems: "center", marginTop: 4 }}>
           <View style={{ width: 50, borderBottomWidth: 0.6, borderBottomColor: accent }} />
           <View style={{ width: 5, height: 5, backgroundColor: accent, transform: "rotate(45deg)", marginHorizontal: 6 }} />
@@ -66,7 +67,7 @@ export function BiodataElegant({ doc }: { doc: PreparedBiodata }) {
       </View>
       <View style={{ flexDirection: "row", alignItems: "center", marginTop: 14, paddingHorizontal: 18 }}>
         <View style={{ flex: 1 }}>
-          <Text style={{ fontSize: 19, fontWeight: 700, color: text }}>{h.name}</Text>
+          <Text style={{ ...hf, fontSize: 19, fontWeight: 700, color: text }}>{h.name}</Text>
           {h.hasSubtitle ? <Text style={{ fontSize: 10.5, color: accent, marginTop: 3 }}>{h.subtitle}</Text> : null}
           {hasText(h.contact) ? <Text style={{ fontSize: 9.5, color: "#5a504b", marginTop: 6 }}>{h.contact}</Text> : null}
         </View>

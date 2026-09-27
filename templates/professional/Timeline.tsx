@@ -1,7 +1,7 @@
 import { Text, View } from "@react-pdf/renderer";
 import { hasText } from "@/lib/format/text";
 import type { PreparedProfessional } from "@/lib/documents/prepare";
-import { accentOf, fitFontSize, PdfDocument, Photo, tint, type Kit } from "../shared/kit";
+import { accentOf, fitFontSize, headingFont, PdfDocument, Photo, tint, type Kit } from "../shared/kit";
 import { baseKitStyles, PAGE_MARGIN } from "../shared/presets";
 import { contactItems, ContactLine, renderSections } from "./blocks";
 
@@ -9,6 +9,7 @@ const GUTTER = 88;
 
 /** Dates in a left gutter, accent bar headings. Modelled on moderncv's "classic" style (LaTeX, LPPL). */
 export function Timeline({ doc }: { doc: PreparedProfessional }) {
+  const hf = headingFont(doc.settings);
   const accent = accentOf(doc.settings.accentColor);
   const p = { text: "#262626", muted: "#6f6f6f", accent };
   const kit: Kit = {
@@ -23,7 +24,7 @@ export function Timeline({ doc }: { doc: PreparedProfessional }) {
     Heading: ({ title }) => (
       <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 7 }}>
         <View style={{ width: GUTTER - 8, height: 5, backgroundColor: tint(accent, 0.35), marginRight: 8 }} />
-        <Text style={{ fontSize: 13, color: accent }}>{title}</Text>
+        <Text style={{ ...hf, fontSize: 13, color: accent }}>{title}</Text>
       </View>
     ),
   };
@@ -32,7 +33,7 @@ export function Timeline({ doc }: { doc: PreparedProfessional }) {
     <PdfDocument title={`${h.fullName} — CV`} author={h.fullName} settings={doc.settings} pageStyle={{ ...PAGE_MARGIN, color: p.text }}>
       <View style={{ flexDirection: "row", alignItems: "flex-end", marginBottom: 8 }}>
         <View style={{ flex: 1 }}>
-          <Text style={{ fontSize: 28, color: accent }}>{h.fullName}</Text>
+          <Text style={{ ...hf, fontSize: 28, color: accent }}>{h.fullName}</Text>
           {hasText(h.jobTitle) ? <Text style={{ fontSize: 13, color: p.muted, fontStyle: "italic", marginTop: 2 }}>{h.jobTitle}</Text> : null}
         </View>
         <View style={{ width: 200, alignItems: "flex-end" }}>

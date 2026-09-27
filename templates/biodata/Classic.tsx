@@ -1,13 +1,14 @@
 import { Text, View } from "@react-pdf/renderer";
 import { hasText } from "@/lib/format/text";
 import type { PreparedBiodata } from "@/lib/documents/prepare";
-import { accentOf, PdfDocument, Photo, tint } from "../shared/kit";
+import { accentOf, headingFont, PdfDocument, Photo, tint } from "../shared/kit";
 import { renderBiodataSections, type BioKit } from "./blocks";
 import { headerInfo } from "./header";
 import { tracking } from "./labels";
 
 /** Traditional biodata: centred title, photo top-right, heading bands and ruled tables. */
 export function BiodataClassic({ doc }: { doc: PreparedBiodata }) {
+  const hf = headingFont(doc.settings);
   const accent = accentOf(doc.settings.accentColor);
   const text = "#1f1f1f";
   const border = "#9a9a9a";
@@ -15,7 +16,7 @@ export function BiodataClassic({ doc }: { doc: PreparedBiodata }) {
   const kit: BioKit = {
     heading: (title) => (
       <View style={{ backgroundColor: accent, paddingVertical: 3, paddingHorizontal: 8, marginBottom: 6 }}>
-        <Text style={{ color: "#ffffff", fontSize: 10.5, fontWeight: 700, letterSpacing: tracking(0.5, lang) }}>{title}</Text>
+        <Text style={{ ...hf, color: "#ffffff", fontSize: 10.5, fontWeight: 700, letterSpacing: tracking(0.5, lang) }}>{title}</Text>
       </View>
     ),
     labelWidth: 130,
@@ -42,12 +43,12 @@ export function BiodataClassic({ doc }: { doc: PreparedBiodata }) {
   return (
     <PdfDocument title={`${h.name} — ${h.title}`} author={h.name} settings={doc.settings} pageStyle={{ paddingTop: 36, paddingBottom: 44, paddingHorizontal: 42, color: text }}>
       <View style={{ alignItems: "center", marginBottom: 12 }}>
-        <Text style={{ fontSize: 18, fontWeight: 700, color: accent, letterSpacing: tracking(3, lang), textTransform: "uppercase" }}>{h.title}</Text>
+        <Text style={{ ...hf, fontSize: 18, fontWeight: 700, color: accent, letterSpacing: tracking(3, lang), textTransform: "uppercase" }}>{h.title}</Text>
         <View style={{ width: 90, borderBottomWidth: 1.5, borderBottomColor: accent, marginTop: 3 }} />
       </View>
       <View style={{ flexDirection: "row", alignItems: "flex-start" }}>
         <View style={{ flex: 1, paddingTop: 8 }}>
-          <Text style={{ fontSize: 20, fontWeight: 700 }}>{h.name}</Text>
+          <Text style={{ ...hf, fontSize: 20, fontWeight: 700 }}>{h.name}</Text>
           {h.hasSubtitle ? <Text style={{ fontSize: 11, color: "#444444", marginTop: 3 }}>{h.subtitle}</Text> : null}
           {hasText(h.contact) ? <Text style={{ fontSize: 10, color: "#444444", marginTop: 6 }}>{h.contact}</Text> : null}
         </View>

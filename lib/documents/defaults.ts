@@ -16,6 +16,7 @@ export const DEFAULT_DECLARATION =
 const baseSettings = {
   paperSize: "A4",
   fontId: "inter",
+  headingFontId: "same",
   banglaFontId: "hind-siliguri",
   accentColor: "#1f4e79",
 } as const;

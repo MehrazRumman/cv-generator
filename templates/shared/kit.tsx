@@ -42,7 +42,14 @@ export interface Kit {
 export interface PageSettings {
   paperSize: PaperSize;
   fontId: FontId;
+  headingFontId: FontId | "same";
   banglaFontId: BanglaFontId;
+}
+
+/** Font for names and section headings: the chosen heading font, or the body font when "same". */
+export function headingFont(settings: PageSettings): Style {
+  const id = settings.headingFontId === "same" ? settings.fontId : settings.headingFontId;
+  return { fontFamily: fontStack(id, settings.banglaFontId) };
 }
 
 export function PdfDocument({

@@ -1,15 +1,23 @@
 import { z } from "zod";
 import { anyDraftDocumentSchema, draftSchemas, SCHEMA_VERSION, type AnyDocument, type DocumentOf, type DocumentType } from "@/lib/schemas";
 
+const isRecord = (v: unknown): v is Record<string, unknown> => typeof v === "object" && v !== null && !Array.isArray(v);
+
+/** v1 → v2: settings gained `headingFontId` ("same" = use the body font). */
+function v1ToV2(raw: Record<string, unknown>): Record<string, unknown> {
+  const settings = isRecord(raw.settings) ? { headingFontId: "same", ...raw.settings } : raw.settings;
+  return { ...raw, settings, schemaVersion: 2 };
+}
+
 /**
- * Upgrades raw stored/imported JSON to the current schema version.
- * Add a step here whenever SCHEMA_VERSION is bumped: `if (version === 1) raw = v1ToV2(raw)`.
+ * Upgrades raw stored/imported JSON to the current schema version, one step at a time.
+ * When SCHEMA_VERSION is bumped, add the next step here.
  */
-function migrate(raw: unknown): unknown {
-  if (typeof raw !== "object" || raw === null) return raw;
-  const version = "schemaVersion" in raw ? raw.schemaVersion : undefined;
-  if (version === SCHEMA_VERSION) return raw;
-  return raw; // v1 is the first version: nothing to upgrade yet.
+export function migrate(raw: unknown): unknown {
+  if (!isRecord(raw)) return raw;
+  let doc = raw;
+  if (doc.schemaVersion === 1) doc = v1ToV2(doc);
+  return doc.schemaVersion === SCHEMA_VERSION ? doc : raw;
 }
 
 export type ParseResult<T> = { ok: true; doc: T } | { ok: false; error: string };

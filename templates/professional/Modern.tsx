@@ -1,12 +1,13 @@
 import { Text, View } from "@react-pdf/renderer";
 import { hasText } from "@/lib/format/text";
 import type { PreparedProfessional } from "@/lib/documents/prepare";
-import { accentOf, PdfDocument, Photo, type Kit } from "../shared/kit";
+import { accentOf, headingFont, PdfDocument, Photo, type Kit } from "../shared/kit";
 import { baseKitStyles, PAGE_MARGIN } from "../shared/presets";
 import { contactItems, ContactLine, renderSections } from "./blocks";
 
 /** Two-tone name, accent-led headings with a trailing rule. Modelled on Awesome-CV (LaTeX, LPPL). */
 export function Modern({ doc }: { doc: PreparedProfessional }) {
+  const hf = headingFont(doc.settings);
   const accent = accentOf(doc.settings.accentColor);
   const p = { text: "#2b2b2b", muted: "#6b6b6b", accent };
   const kit: Kit = {
@@ -20,7 +21,7 @@ export function Modern({ doc }: { doc: PreparedProfessional }) {
     dateColumnWidth: 0,
     Heading: ({ title }) => (
       <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 6 }}>
-        <Text style={{ fontSize: 13, fontWeight: 700 }}>
+        <Text style={{ ...hf, fontSize: 13, fontWeight: 700 }}>
           <Text style={{ color: accent }}>{title.slice(0, 3)}</Text>
           {title.slice(3)}
         </Text>
@@ -35,7 +36,7 @@ export function Modern({ doc }: { doc: PreparedProfessional }) {
     <PdfDocument title={`${h.fullName} — CV`} author={h.fullName} settings={doc.settings} pageStyle={{ ...PAGE_MARGIN, color: p.text }}>
       <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 6 }}>
         <View style={{ flex: 1, alignItems: "center" }}>
-          <Text style={{ fontSize: 28 }}>
+          <Text style={{ ...hf, fontSize: 28 }}>
             <Text style={{ color: "#777777" }}>{parts.join(" ")} </Text>
             <Text style={{ fontWeight: 700, color: "#222222" }}>{last}</Text>
           </Text>

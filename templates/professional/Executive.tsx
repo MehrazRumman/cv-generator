@@ -1,12 +1,13 @@
 import { Text, View } from "@react-pdf/renderer";
 import { hasText } from "@/lib/format/text";
 import type { PreparedProfessional } from "@/lib/documents/prepare";
-import { accentOf, PdfDocument, Photo, type Kit } from "../shared/kit";
+import { accentOf, headingFont, PdfDocument, Photo, type Kit } from "../shared/kit";
 import { baseKitStyles, PAGE_MARGIN } from "../shared/presets";
 import { contactItems, ContactLine, renderSections } from "./blocks";
 
 /** Small-caps name between double rules, centred headings flanked by lines. Modelled on the "Harvard" / OCS résumé style. */
 export function Executive({ doc }: { doc: PreparedProfessional }) {
+  const hf = headingFont(doc.settings);
   const accent = accentOf(doc.settings.accentColor);
   const p = { text: "#1c1c1c", muted: "#5a5a5a", accent };
   const kit: Kit = {
@@ -21,7 +22,7 @@ export function Executive({ doc }: { doc: PreparedProfessional }) {
     Heading: ({ title }) => (
       <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 7 }}>
         <View style={{ flex: 1, borderBottomWidth: 0.6, borderBottomColor: accent }} />
-        <Text style={{ fontSize: 11, fontWeight: 700, color: accent, textTransform: "uppercase", letterSpacing: 2, marginHorizontal: 10 }}>
+        <Text style={{ ...hf, fontSize: 11, fontWeight: 700, color: accent, textTransform: "uppercase", letterSpacing: 2, marginHorizontal: 10 }}>
           {title}
         </Text>
         <View style={{ flex: 1, borderBottomWidth: 0.6, borderBottomColor: accent }} />
@@ -35,7 +36,7 @@ export function Executive({ doc }: { doc: PreparedProfessional }) {
         <View style={{ borderTopWidth: 0.6, borderColor: accent, position: "absolute", top: 2, left: 0, right: 0 }} />
         <View style={{ flexDirection: "row", alignItems: "center" }}>
           <View style={{ flex: 1, alignItems: "center" }}>
-            <Text style={{ fontSize: 24, letterSpacing: 3, textTransform: "uppercase", color: "#111111" }}>{h.fullName}</Text>
+            <Text style={{ ...hf, fontSize: 24, letterSpacing: 3, textTransform: "uppercase", color: "#111111" }}>{h.fullName}</Text>
             {hasText(h.jobTitle) ? <Text style={{ fontSize: 10.5, color: accent, marginTop: 4, letterSpacing: 1 }}>{h.jobTitle}</Text> : null}
             <ContactLine items={contactItems(doc)} separator="   •   " style={{ fontSize: 8.8, color: p.muted, marginTop: 6 }} />
           </View>

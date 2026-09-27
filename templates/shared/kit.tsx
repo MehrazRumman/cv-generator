@@ -27,8 +27,8 @@ export interface KitStyles {
 
 export interface Kit {
   s: KitStyles;
-  /** Section heading. Rendered with `minPresenceAhead` so it never sits alone at a page bottom. */
-  Heading: (props: { title: string }) => ReactNode;
+  /** Section heading. `id` is the section key (e.g. "experience"), for templates that show icons. */
+  Heading: (props: { title: string; id?: string }) => ReactNode;
   bulletChar: string;
   /**
    * "stacked": title/date on one row. "dateBelow": date on its own line under the subtitle (narrow
@@ -36,6 +36,12 @@ export interface Kit {
    */
   entryLayout: "stacked" | "dateBelow" | "dateColumn";
   dateColumnWidth: number;
+  /**
+   * Optional timeline rail for stacked/dateBelow entries: `style` (e.g. a left border + padding) is
+   * applied to the entry head and to each continuation bullet, `marker` (absolutely positioned, e.g. a
+   * dot on the line) is drawn at the entry title, and `gap` is the space kept below each entry.
+   */
+  rail?: { style: Style; marker?: ReactNode; gap: number };
 }
 
 /* ------------------------------------------------------------------ */
@@ -111,7 +117,7 @@ export function PdfDocument({
  * receives it as `lead` (inside its unbreakable head); any other first child is wrapped with it.
  * `kit.s.section` styles the heading wrapper (use marginTop for spacing between sections).
  */
-export function Section({ kit, title, children }: { kit: Kit; title: string; children: ReactNode }) {
+export function Section({ kit, title, id, children }: { kit: Kit; title: string; id?: string; children: ReactNode }) {
   // In the date-column layout, non-entry content (paragraphs, skill lines) aligns with entry text.
   const indent = kit.entryLayout === "dateColumn" ? kit.dateColumnWidth : 0;
   const isEntry = (node: ReactNode) => isValidElement<EntryProps>(node) && node.type === Entry;
@@ -119,7 +125,7 @@ export function Section({ kit, title, children }: { kit: Kit; title: string; chi
     isEntry(node) || !indent ? node : <View key={key} style={{ paddingLeft: indent }}>{node}</View>;
 
   const [first, ...rest] = Children.toArray(children);
-  const heading = <View style={kit.s.section}>{kit.Heading({ title })}</View>;
+  const heading = <View style={kit.s.section}>{kit.Heading({ title, id })}</View>;
   const glued =
     isValidElement<EntryProps>(first) && first.type === Entry ? (
       cloneElement(first, { lead: heading })
@@ -137,11 +143,21 @@ export function Section({ kit, title, children }: { kit: Kit; title: string; chi
   );
 }
 
-export function Bullets({ kit, items }: { kit: Kit; items: string[] }) {
+export function Bullets({ kit, items, rowStyle, lastRowStyle }: { kit: Kit; items: string[]; rowStyle?: Style; lastRowStyle?: Style }) {
   return (
     <>
       {items.map((item, i) => (
-        <View key={i} style={kit.s.bulletRow} wrap={false}>
+        <View
+          key={i}
+          // On a timeline rail, spacing must be padding (inside the border) or the line shows gaps.
+          style={[
+            kit.s.bulletRow,
+            rowStyle ? { marginTop: 0, paddingTop: typeof kit.s.bulletRow.marginTop === "number" ? kit.s.bulletRow.marginTop : 2 } : {},
+            rowStyle ?? {},
+            i === items.length - 1 && lastRowStyle ? lastRowStyle : {},
+          ]}
+          wrap={false}
+        >
           <Text style={kit.s.bullet}>{kit.bulletChar}</Text>
           <Text style={kit.s.bulletText}>{item}</Text>
         </View>
@@ -191,9 +207,13 @@ export function Entry({ kit, title, subtitle, date, meta, bullets = [], children
   const stackedLead = kit.entryLayout !== "dateColumn" ? lead : null;
   // Only one unbreakable level: when the date-column layout already wraps lead + entry, the head flows inside it.
   const nested = kit.entryLayout === "dateColumn" && lead != null;
-  const head = (
-    <View wrap={nested ? undefined : false}>
-      {stackedLead}
+  // Timeline rail (stacked layouts only). The rail style goes on the head block and on each
+  // continuation bullet row — never on a wrapping View, which react-pdf would mis-paginate.
+  const rail = kit.entryLayout !== "dateColumn" ? kit.rail : undefined;
+  const gap = rail ? { paddingBottom: rail.gap } : undefined;
+  const top = (
+    <>
+      {rail?.marker}
       {kit.entryLayout === "stacked" ? (
         <>
           <View style={s.entryHead}>
@@ -212,12 +232,18 @@ export function Entry({ kit, title, subtitle, date, meta, bullets = [], children
       {meta ? <Text style={s.entryMeta}>{meta}</Text> : null}
       {children}
       {first !== undefined ? <Bullets kit={kit} items={[first]} /> : null}
+    </>
+  );
+  const head = (
+    <View wrap={nested ? undefined : false}>
+      {stackedLead}
+      {rail ? <View style={[rail.style, rest.length === 0 && gap ? gap : {}]}>{top}</View> : top}
     </View>
   );
   const body = (
     <>
       {head}
-      <Bullets kit={kit} items={rest} />
+      <Bullets kit={kit} items={rest} rowStyle={rail?.style} lastRowStyle={gap} />
     </>
   );
 
@@ -246,7 +272,7 @@ export function Entry({ kit, title, subtitle, date, meta, bullets = [], children
       indented
     );
   }
-  return <View style={s.entry}>{body}</View>;
+  return <View style={[s.entry, rail ? { marginBottom: 0 } : {}]}>{body}</View>;
 }
 
 /** "Label: value" line used for skills and similar groups. */
@@ -291,6 +317,13 @@ export function tint(hex: string, amount: number): string {
   const g = mix((n >> 8) & 255);
   const b = mix(n & 255);
   return `#${((1 << 24) | (r << 16) | (g << 8) | b).toString(16).slice(1)}`;
+}
+
+/** Mixes a hex colour with black; `amount` 0 → original, 1 → black. Used for dark variants of the accent. */
+export function shade(hex: string, amount: number): string {
+  const n = parseInt(hex.slice(1), 16);
+  const mix = (c: number) => Math.round(c * (1 - amount));
+  return `#${((1 << 24) | (mix((n >> 16) & 255) << 16) | (mix((n >> 8) & 255) << 8) | mix(n & 255)).toString(16).slice(1)}`;
 }
 
 /** Validated accent colour, falling back to a neutral navy if the stored value is malformed. */

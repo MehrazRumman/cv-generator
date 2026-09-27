@@ -85,13 +85,13 @@ export function ContactLine({
 type Block = (kit: Kit, doc: PreparedProfessional) => ReactNode;
 
 const summary: Block = (kit, doc) => (
-  <Section kit={kit} title={SECTION_TITLES.summary}>
+  <Section kit={kit} title={SECTION_TITLES.summary} id="summary">
     <Text style={kit.s.paragraph}>{doc.data.summary.trim()}</Text>
   </Section>
 );
 
 const experience: Block = (kit, doc) => (
-  <Section kit={kit} title={SECTION_TITLES.experience}>
+  <Section kit={kit} title={SECTION_TITLES.experience} id="experience">
     {doc.data.experience.map((e) => (
       <Entry
         key={e.id}
@@ -106,7 +106,7 @@ const experience: Block = (kit, doc) => (
 );
 
 const education: Block = (kit, doc) => (
-  <Section kit={kit} title={SECTION_TITLES.education}>
+  <Section kit={kit} title={SECTION_TITLES.education} id="education">
     {doc.data.education.map((e) => (
       <Entry
         key={e.id}
@@ -121,7 +121,7 @@ const education: Block = (kit, doc) => (
 );
 
 const skills: Block = (kit, doc) => (
-  <Section kit={kit} title={SECTION_TITLES.skills}>
+  <Section kit={kit} title={SECTION_TITLES.skills} id="skills">
     {doc.data.skills.map((g) => (
       <LabeledLine key={g.id} kit={kit} label={g.category} value={g.items.join(", ")} />
     ))}
@@ -129,7 +129,7 @@ const skills: Block = (kit, doc) => (
 );
 
 const certifications: Block = (kit, doc) => (
-  <Section kit={kit} title={SECTION_TITLES.certifications}>
+  <Section kit={kit} title={SECTION_TITLES.certifications} id="certifications">
     {doc.data.certifications.map((c) => (
       <Entry
         key={c.id}
@@ -144,7 +144,7 @@ const certifications: Block = (kit, doc) => (
 );
 
 const projects: Block = (kit, doc) => (
-  <Section kit={kit} title={SECTION_TITLES.projects}>
+  <Section kit={kit} title={SECTION_TITLES.projects} id="projects">
     {doc.data.projects.map((p) => (
       <Entry
         key={p.id}
@@ -165,7 +165,7 @@ const projects: Block = (kit, doc) => (
 );
 
 const languages: Block = (kit, doc) => (
-  <Section kit={kit} title={SECTION_TITLES.languages}>
+  <Section kit={kit} title={SECTION_TITLES.languages} id="languages">
     <Text style={kit.s.paragraph}>
       {doc.data.languages.map((l, i) => (
         <Text key={l.id}>
@@ -178,7 +178,7 @@ const languages: Block = (kit, doc) => (
 );
 
 const references: Block = (kit, doc) => (
-  <Section kit={kit} title={SECTION_TITLES.references}>
+  <Section kit={kit} title={SECTION_TITLES.references} id="references">
     {doc.data.references.mode === "on-request" ? (
       <Text style={kit.s.paragraph}>Available on request.</Text>
     ) : (

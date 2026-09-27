@@ -40,6 +40,8 @@ type Notice = { kind: "info" | "error" | "success"; text: string } | null;
 /** Applies `?template=<id>` (links from the home page gallery), keeping the user's data. */
 function withRequestedTemplate(doc: AnyDocument): AnyDocument {
   const id = new URLSearchParams(window.location.search).get("template");
+  // Apply the link once: drop the parameter so a later reload doesn't override the user's own choice.
+  if (id) window.history.replaceState(null, "", window.location.pathname);
   const template = id ? TEMPLATE_CATALOG[doc.type].find((t) => t.id === id) : undefined;
   if (!template || template.id === doc.settings.templateId) return doc;
   const sections = template.featuresPhoto && doc.type === "professional" ? { ...doc.sections, photo: true } : doc.sections;

@@ -13,6 +13,7 @@ import { SAMPLE_VARIANTS } from "@/lib/sample-data";
 import type { AnyDocument, DocumentType } from "@/lib/schemas";
 import { TEMPLATE_CATALOG } from "@/templates/catalog";
 import { Logo } from "../brand/Logo";
+import { ThemeToggle } from "../theme/ThemeToggle";
 import { documentOwnerName, downloadBlob, exportDocumentJson, importDocumentJson, repository } from "@/lib/storage";
 import { AcademicForm } from "../forms/academic/AcademicForm";
 import { BiodataForm } from "../forms/biodata/BiodataForm";
@@ -179,7 +180,7 @@ function EditorForm({ type, initial }: { type: DocumentType; initial: AnyDocumen
       <ExpandAllContext.Provider value={expandAll}>
         <div className="flex h-dvh flex-col">
           {/* Toolbar */}
-          <header className="z-20 flex flex-wrap items-center gap-2 border-b border-zinc-200 bg-white px-3 py-2 sm:px-4">
+          <header className="z-20 flex flex-wrap items-center gap-2 border-b border-zinc-200 bg-surface px-3 py-2 sm:px-4">
             <Link href="/" className="flex items-center gap-2 rounded-md px-1 py-1 hover:bg-zinc-100" aria-label="Back to home">
               <Logo size={26} />
             </Link>
@@ -216,6 +217,7 @@ function EditorForm({ type, initial }: { type: DocumentType; initial: AnyDocumen
             <button type="button" className="btn btn-ghost text-zinc-500" onClick={resetAll}>
               Reset
             </button>
+            <ThemeToggle />
             <button type="button" className="btn btn-primary" disabled={downloading} onClick={handleSubmit(onValid, onInvalid)}>
               {downloading ? "Preparing…" : "Download PDF"}
             </button>
@@ -246,7 +248,7 @@ function EditorForm({ type, initial }: { type: DocumentType; initial: AnyDocumen
           ) : null}
 
           {/* Mobile tabs */}
-          <div className="flex border-b border-zinc-200 bg-white md:hidden" role="tablist">
+          <div className="flex border-b border-zinc-200 bg-surface md:hidden" role="tablist">
             {(["form", "preview"] as const).map((t) => (
               <button
                 key={t}

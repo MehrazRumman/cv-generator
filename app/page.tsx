@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { Logo } from "@/components/brand/Logo";
+import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { DOCUMENT_TYPE_META } from "@/lib/documents/meta";
 import { LATIN_FONTS } from "@/lib/pdf/fonts-meta";
 import { DOCUMENT_TYPES, type DocumentType } from "@/lib/schemas";
@@ -38,7 +39,7 @@ const FEATURES: { title: string; text: string; icon: string }[] = [
 function SectionTitle({ eyebrow, title, children }: { eyebrow: string; title: string; children?: ReactNode }) {
   return (
     <div className="mx-auto mb-10 max-w-2xl text-center">
-      <p className="text-sm font-semibold tracking-wide text-indigo-600 uppercase">{eyebrow}</p>
+      <p className="text-sm font-semibold tracking-wide text-indigo-600 dark:text-indigo-400 uppercase">{eyebrow}</p>
       <h2 className="mt-2 text-3xl font-bold tracking-tight text-zinc-900">{title}</h2>
       {children ? <p className="mt-3 text-zinc-600">{children}</p> : null}
     </div>
@@ -47,9 +48,9 @@ function SectionTitle({ eyebrow, title, children }: { eyebrow: string; title: st
 
 export default function Home() {
   return (
-    <div className="flex flex-1 flex-col bg-white">
+    <div className="flex flex-1 flex-col bg-surface">
       {/* Nav */}
-      <header className="sticky top-0 z-30 border-b border-zinc-200/70 bg-white/80 backdrop-blur">
+      <header className="sticky top-0 z-30 border-b border-zinc-200/70 bg-surface/80 backdrop-blur">
         <nav className="mx-auto flex h-14 w-full max-w-6xl items-center gap-6 px-4">
           <Link href="/" className="flex items-center gap-2 font-semibold text-zinc-900">
             <Logo size={28} />
@@ -60,9 +61,12 @@ export default function Home() {
             <a href="#templates" className="hover:text-zinc-900">Templates</a>
             <a href="#features" className="hover:text-zinc-900">Features</a>
           </div>
-          <a href={REPO_URL} className="btn ml-auto sm:ml-0" target="_blank" rel="noreferrer">
-            GitHub
-          </a>
+          <div className="ml-auto flex items-center gap-2 sm:ml-0">
+            <ThemeToggle />
+            <a href={REPO_URL} className="btn" target="_blank" rel="noreferrer">
+              GitHub
+            </a>
+          </div>
         </nav>
       </header>
 
@@ -71,7 +75,7 @@ export default function Home() {
         <div aria-hidden className="absolute inset-0 -z-10 bg-[radial-gradient(60%_60%_at_70%_20%,rgba(99,102,241,0.18),transparent),radial-gradient(40%_50%_at_10%_80%,rgba(14,165,233,0.14),transparent)]" />
         <div className="mx-auto grid w-full max-w-6xl items-center gap-12 px-4 py-16 sm:py-20 lg:grid-cols-[1.1fr_1fr]">
           <div>
-            <p className="inline-flex items-center gap-2 rounded-full border border-indigo-200 bg-white/70 px-3 py-1 text-xs font-medium text-indigo-700">
+            <p className="inline-flex items-center gap-2 rounded-full border border-indigo-200 bg-surface/70 px-3 py-1 text-xs font-medium text-indigo-700">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" /> Free · No sign-up · Data stays in your browser
             </p>
             <h1 className="mt-5 text-4xl font-bold tracking-tight text-zinc-900 sm:text-5xl">
@@ -99,7 +103,7 @@ export default function Home() {
                 [String(Object.keys(LATIN_FONTS).length), "fonts"],
                 ["0", "sign-ups"],
               ].map(([value, label]) => (
-                <div key={label} className="rounded-lg border border-zinc-200 bg-white/70 px-2 py-3">
+                <div key={label} className="rounded-lg border border-zinc-200 bg-surface/70 px-2 py-3">
                   <dt className="sr-only">{label}</dt>
                   <dd className="text-2xl font-bold text-zinc-900">{value}</dd>
                   <dd className="text-xs text-zinc-500">{label}</dd>
@@ -117,7 +121,7 @@ export default function Home() {
                 ["professional", "modern", "left-1/2 top-0 -translate-x-1/2"],
               ] as const
             ).map(([type, id, pos]) => (
-              <div key={type} className={`absolute w-[58%] overflow-hidden rounded-lg bg-white shadow-2xl ring-1 ring-zinc-900/10 ${pos}`}>
+              <div key={type} className={`absolute w-[58%] overflow-hidden rounded-lg bg-surface shadow-2xl ring-1 ring-zinc-900/10 ${pos}`}>
                 <Image src={thumb(type, id)} alt="" width={420} height={594} className="h-auto w-full" priority />
               </div>
             ))}
@@ -139,7 +143,7 @@ export default function Home() {
                 <Link
                   key={type}
                   href={`/editor/${type}`}
-                  className={`group flex flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm ring-2 ring-transparent transition hover:-translate-y-1 hover:shadow-lg ${style.ring}`}
+                  className={`group flex flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-surface shadow-sm ring-2 ring-transparent transition hover:-translate-y-1 hover:shadow-lg ${style.ring}`}
                 >
                   <div className={`relative h-44 overflow-hidden bg-gradient-to-br ${style.gradient}`}>
                     <div className="absolute inset-x-10 top-6 overflow-hidden rounded-t-md shadow-xl transition group-hover:top-4">
@@ -160,7 +164,7 @@ export default function Home() {
                     </ul>
                     <div className="mt-6 flex items-center justify-between border-t border-zinc-100 pt-4">
                       <span className="text-xs text-zinc-500">{TEMPLATE_CATALOG[type].length} templates</span>
-                      <span className="text-sm font-semibold text-indigo-600 transition group-hover:translate-x-0.5">Start now →</span>
+                      <span className="text-sm font-semibold text-indigo-600 dark:text-indigo-400 transition group-hover:translate-x-0.5">Start now →</span>
                     </div>
                   </div>
                 </Link>
@@ -180,14 +184,14 @@ export default function Home() {
             <div key={type} className="mb-12 last:mb-0">
               <div className="mb-4 flex items-baseline justify-between">
                 <h3 className="text-lg font-semibold text-zinc-900">{DOCUMENT_TYPE_META[type].title}</h3>
-                <Link href={`/editor/${type}`} className="text-sm font-medium text-indigo-600 hover:underline">
+                <Link href={`/editor/${type}`} className="text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:underline">
                   Open editor →
                 </Link>
               </div>
               <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
                 {TEMPLATE_CATALOG[type].map((t) => (
                   <Link key={t.id} href={`/editor/${type}?template=${t.id}`} className="group" title={t.inspiredBy ? `Inspired by ${t.inspiredBy}` : undefined}>
-                    <div className="overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-sm transition group-hover:-translate-y-0.5 group-hover:shadow-md group-hover:ring-2 group-hover:ring-indigo-400">
+                    <div className="overflow-hidden rounded-lg border border-zinc-200 bg-surface shadow-sm transition group-hover:-translate-y-0.5 group-hover:shadow-md group-hover:ring-2 group-hover:ring-indigo-400">
                       <Image src={thumb(type, t.id)} alt={`${t.name} template`} width={420} height={594} className="h-auto w-full" />
                     </div>
                     <div className="mt-2 flex items-center gap-1.5">
@@ -212,8 +216,8 @@ export default function Home() {
           <SectionTitle eyebrow="Why this generator" title="Everything a good CV needs — nothing it doesn't" />
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {FEATURES.map((f) => (
-              <div key={f.title} className="rounded-xl border border-zinc-200 bg-white p-6 shadow-sm">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600">
+              <div key={f.title} className="rounded-xl border border-zinc-200 bg-surface p-6 shadow-sm">
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600 dark:text-indigo-400">
                   <Icon path={f.icon} />
                 </div>
                 <h3 className="mt-4 font-semibold text-zinc-900">{f.title}</h3>
@@ -246,7 +250,7 @@ export default function Home() {
           <div className="mt-12 flex flex-col items-center gap-4 rounded-2xl bg-gradient-to-r from-indigo-600 to-sky-500 px-6 py-10 text-center text-white">
             <h3 className="text-2xl font-bold">Ready to start?</h3>
             <p className="max-w-lg text-indigo-100">It takes about ten minutes, and your data never leaves this browser.</p>
-            <Link href="/editor/professional" className="btn border-white bg-white px-5 py-2.5 text-base text-indigo-700 hover:bg-indigo-50">
+            <Link href="/editor/professional" className="btn border-white bg-white px-5 py-2.5 text-base text-[#4338ca] hover:bg-[#eef2ff]">
               Create my CV
             </Link>
           </div>

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useFormContext, useWatch } from "react-hook-form";
 import { BANGLA_FONTS, fontOptions, LATIN_FONTS } from "@/lib/pdf/fonts-meta";
 import type { AnyDocument } from "@/lib/schemas";
@@ -20,7 +21,7 @@ export function DesignSettings({ extra }: { extra?: React.ReactNode }) {
     <SectionCard<AnyDocument> title="Design" description="Template, paper, fonts and colour — your content is kept when you switch.">
       <div>
         <p className="mb-1.5 text-xs font-medium text-zinc-700">Template</p>
-        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+        <div className="grid max-h-[26rem] grid-cols-2 gap-2 overflow-y-auto pr-1 sm:grid-cols-3">
           {templates.map((t) => {
             const active = t.id === templateId;
             return (
@@ -37,6 +38,13 @@ export function DesignSettings({ extra }: { extra?: React.ReactNode }) {
                 }}
                 className={`rounded-md border p-2 text-left transition ${active ? "border-indigo-500 bg-indigo-50 ring-2 ring-indigo-500/20" : "border-zinc-200 bg-white hover:border-zinc-300"}`}
               >
+                <Image
+                  src={`/templates/${type}-${t.id}.jpg`}
+                  alt=""
+                  width={210}
+                  height={297}
+                  className="mb-1.5 h-auto w-full rounded-sm border border-zinc-200"
+                />
                 <span className="flex items-center gap-1.5">
                   <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ backgroundColor: t.accent }} />
                   <span className="text-sm font-medium text-zinc-900">{t.name}</span>

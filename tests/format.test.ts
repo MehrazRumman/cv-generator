@@ -116,7 +116,28 @@ describe("long-word breaking", async () => {
     const parts = splitLongWord(email);
     expect(parts.join("")).toBe(email);
     expect(parts.length).toBeGreaterThan(3);
-    expect(Math.max(...parts.map((p) => p.length))).toBeLessThanOrEqual(16);
+    expect(Math.max(...parts.map((p) => p.length))).toBeLessThanOrEqual(20);
     expect(parts).toContain("lastname@");
+  });
+});
+
+describe("segment normalisation", async () => {
+  const { normalizeSegments } = await import("@/lib/format/citation");
+  it("merges same-style runs and moves leading punctuation onto the previous run", () => {
+    expect(
+      normalizeSegments([
+        { text: "Islam, F.", bold: true },
+        { text: ", & Hirst, G. (2023). " },
+        { text: "Journal", italic: true },
+        { text: ", " },
+        { text: "311–349" },
+        { text: ". https://doi.org/x" },
+      ]),
+    ).toEqual([
+      { text: "Islam, F.,", bold: true },
+      { text: " & Hirst, G. (2023). " },
+      { text: "Journal,", italic: true },
+      { text: " 311–349. https://doi.org/x" },
+    ]);
   });
 });

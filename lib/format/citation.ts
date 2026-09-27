@@ -229,3 +229,30 @@ export function formatCitation(p: Publication, style: CitationStyle, selves: Aut
 export function segmentsToText(segments: Segment[]): string {
   return segments.map((s) => s.text).join("");
 }
+
+/**
+ * Prepares segments for react-pdf, which treats a boundary between two text runs as a hyphenation
+ * point (and prints "-" if it breaks there). Adjacent runs with the same style are merged, and
+ * punctuation that starts a run (", " after an italic journal name, "." after a bold author) moves
+ * onto the previous run, so run boundaries fall on spaces.
+ */
+export function normalizeSegments(segments: Segment[]): Segment[] {
+  const out: Segment[] = [];
+  for (const seg of segments) {
+    if (!seg.text) continue;
+    let text = seg.text;
+    const prev = out[out.length - 1];
+    if (prev && !/\s$/.test(prev.text)) {
+      const punct = /^[.,;:!?)\]]+/.exec(text)?.[0] ?? "";
+      if (punct) {
+        prev.text += punct;
+        text = text.slice(punct.length);
+      }
+    }
+    if (!text) continue;
+    const last = out[out.length - 1];
+    if (last && !!last.bold === !!seg.bold && !!last.italic === !!seg.italic) last.text += text;
+    else out.push({ text, bold: seg.bold, italic: seg.italic });
+  }
+  return out;
+}

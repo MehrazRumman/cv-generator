@@ -1,7 +1,7 @@
 import { Document, Image, Link, Page, Text, View } from "@react-pdf/renderer";
 import type { Style } from "@react-pdf/types";
 import { Children, cloneElement, isValidElement, type ReactNode } from "react";
-import type { Segment } from "@/lib/format/citation";
+import { normalizeSegments, type Segment } from "@/lib/format/citation";
 import { fontStack } from "@/lib/pdf/fonts";
 import type { BanglaFontId, FontId, PaperSize } from "@/lib/schemas";
 
@@ -155,7 +155,7 @@ export function Rich({ segments, style, textIndent }: { segments: Segment[]; sty
   // react-pdf takes textIndent from the first run, and nested runs don't inherit it — so pass it to every run.
   return (
     <Text style={[...(Array.isArray(style) ? style : style ? [style] : []), textIndent ? { textIndent } : {}]}>
-      {segments.map((seg, i) =>
+      {normalizeSegments(segments).map((seg, i) =>
         seg.bold || seg.italic ? (
           <Text key={i} style={{ fontWeight: seg.bold ? 700 : undefined, fontStyle: seg.italic ? "italic" : undefined, textIndent }}>
             {seg.text}

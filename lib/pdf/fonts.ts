@@ -6,13 +6,14 @@ export { BANGLA_FONTS, LATIN_FONTS };
 
 let registeredBase: string | null = null;
 
-const LONG_WORD = 24;
-const CHUNK = 16;
+const LONG_WORD = 38;
+const CHUNK = 20;
 
 /**
- * Hyphenation policy. Ordinary words are never split (react-pdf would insert a "-"), and Bangla is
- * never split. Only overlong tokens — long emails, URLs, IDs — get break points, preferably after
- * / . @ - _ ? & =, so they wrap instead of overflowing their column.
+ * Hyphenation policy. react-pdf prints a "-" at every break inside a word, so ordinary words, DOIs and
+ * typical URLs (up to 38 characters) are never split — they wrap whole onto the next line — and Bangla
+ * is never split. Only tokens too long for any line get break points, preferably after / . @ - _ ? & =,
+ * so they wrap instead of overflowing their column.
  */
 export function splitLongWord(word: string): string[] {
   if (word.length <= LONG_WORD || /[\u0980-\u09FF]/.test(word)) return [word];

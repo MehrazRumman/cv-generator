@@ -11,6 +11,8 @@ import { buildFileName } from "@/lib/format/filename";
 import { generatePdf } from "@/lib/pdf/generate";
 import { SAMPLE_VARIANTS } from "@/lib/sample-data";
 import type { AnyDocument, DocumentType } from "@/lib/schemas";
+import { TEMPLATE_CATALOG } from "@/templates/catalog";
+import { Logo } from "../brand/Logo";
 import { documentOwnerName, downloadBlob, exportDocumentJson, importDocumentJson, repository } from "@/lib/storage";
 import { AcademicForm } from "../forms/academic/AcademicForm";
 import { BiodataForm } from "../forms/biodata/BiodataForm";
@@ -34,13 +36,21 @@ const pickDesign = (s: AnyDocument["settings"]) => ({
 
 type Notice = { kind: "info" | "error" | "success"; text: string } | null;
 
+/** Applies `?template=<id>` (links from the home page gallery), keeping the user's data. */
+function withRequestedTemplate(doc: AnyDocument): AnyDocument {
+  const id = new URLSearchParams(window.location.search).get("template");
+  const template = id ? TEMPLATE_CATALOG[doc.type].find((t) => t.id === id) : undefined;
+  if (!template || template.id === doc.settings.templateId) return doc;
+  return { ...doc, settings: { ...doc.settings, templateId: template.id, accentColor: template.accent } } as AnyDocument;
+}
+
 /** Loads the saved document (or an empty one), then mounts the form. */
 export function Editor({ type }: { type: DocumentType }) {
   const [initial, setInitial] = useState<AnyDocument | null>(null);
   useEffect(() => {
     let cancelled = false;
     repository.load(type).then((saved) => {
-      if (!cancelled) setInitial(saved ?? emptyDocument(type));
+      if (!cancelled) setInitial(withRequestedTemplate(saved ?? emptyDocument(type)));
     });
     return () => {
       cancelled = true;
@@ -170,8 +180,8 @@ function EditorForm({ type, initial }: { type: DocumentType; initial: AnyDocumen
         <div className="flex h-dvh flex-col">
           {/* Toolbar */}
           <header className="z-20 flex flex-wrap items-center gap-2 border-b border-zinc-200 bg-white px-3 py-2 sm:px-4">
-            <Link href="/" className="btn btn-ghost px-2" aria-label="Back to home">
-              ←
+            <Link href="/" className="flex items-center gap-2 rounded-md px-1 py-1 hover:bg-zinc-100" aria-label="Back to home">
+              <Logo size={26} />
             </Link>
             <div className="mr-auto min-w-0">
               <h1 className="truncate text-sm font-semibold text-zinc-900">{meta.title}</h1>

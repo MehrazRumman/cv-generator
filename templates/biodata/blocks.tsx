@@ -28,11 +28,15 @@ export interface BioKit {
     bulletText: Style;
     subheading: Style;
     sectionGap: Style;
+    /** Place/date/signature lines under the declaration; defaults to `paragraph`. */
+    signature?: Style;
   };
   /** Width of the label column in key–value rows. */
   labelWidth: number;
   /** Lay personal information out in two columns of key–value pairs. */
   twoColumnPersonal?: boolean;
+  /** Print the ":" between label and value (off for bordered/table layouts). Default true. */
+  colon?: boolean;
 }
 
 export interface KV {
@@ -65,7 +69,7 @@ function KVRow({ kit, row }: { kit: BioKit; row: KV }) {
   return (
     <View style={kit.s.kvRow} wrap={false}>
       <Text style={[kit.s.kvLabel, { width: kit.labelWidth }]}>{row.label}</Text>
-      <Text style={kit.s.kvColon}>:</Text>
+      {kit.colon === false ? null : <Text style={kit.s.kvColon}>:</Text>}
       <Text style={kit.s.kvValue}>{row.value}</Text>
     </View>
   );
@@ -263,6 +267,7 @@ const hobbies: Block = (kit, doc) => paragraphSection(kit, doc, "hobbies");
 const declaration: Block = (kit, doc) => {
   const { t, lang } = labelsFor(doc);
   const d = doc.data.declaration;
+  const sig = kit.s.signature ?? kit.s.paragraph;
   return (
     <View wrap={false} style={kit.s.sectionGap}>
       {kit.heading(t.sections.declaration)}
@@ -270,20 +275,20 @@ const declaration: Block = (kit, doc) => {
       <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "flex-end", marginTop: 30 }}>
         <View>
           {hasText(d.place) ? (
-            <Text style={kit.s.paragraph}>
+            <Text style={sig}>
               {t.fields.place}: {d.place}
             </Text>
           ) : null}
           {hasText(d.date) ? (
-            <Text style={kit.s.paragraph}>
+            <Text style={sig}>
               {t.fields.date}: {formatBiodataDate(d.date, lang)}
             </Text>
           ) : null}
         </View>
         <View style={{ width: 170, alignItems: "center" }}>
           <View style={{ width: "100%", borderTopWidth: 0.8, borderTopColor: "#444444", marginBottom: 3 }} />
-          <Text style={kit.s.paragraph}>{t.fields.signature}</Text>
-          <Text style={[kit.s.paragraph, { fontSize: 8.5 }]}>({doc.data.personal.fullName})</Text>
+          <Text style={sig}>{t.fields.signature}</Text>
+          <Text style={[sig, { fontSize: 8.5 }]}>({doc.data.personal.fullName})</Text>
         </View>
       </View>
     </View>

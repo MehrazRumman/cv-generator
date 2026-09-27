@@ -126,6 +126,29 @@ export const TEMPLATE_CATALOG: Record<DocumentType, TemplateInfo[]> = {
       atsFriendly: true,
       accent: "#333333",
     },
+    {
+      id: "bordered",
+      name: "Bordered",
+      description: "Everything in a ruled grid — the classic office format.",
+      atsFriendly: true,
+      inspiredBy: "Traditional Bangladeshi biodata forms",
+      accent: "#14532d",
+    },
+    {
+      id: "sidebar",
+      name: "Sidebar",
+      description: "Photo, contact and hobbies in a tinted column.",
+      atsFriendly: true,
+      inspiredBy: "AltaCV (LaTeX, LPPL)",
+      accent: "#6d28d9",
+    },
+    {
+      id: "heritage",
+      name: "Heritage",
+      description: "Cream paper, corner ornaments, pill headings.",
+      atsFriendly: true,
+      accent: "#9a3412",
+    },
   ],
   academic: [
     {

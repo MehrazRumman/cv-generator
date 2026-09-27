@@ -6,10 +6,13 @@ import { AcademicClassic } from "./academic/Classic";
 import { AcademicMinimal } from "./academic/Minimal";
 import { AcademicModern } from "./academic/Modern";
 import { AcademicTimeline } from "./academic/Timeline";
+import { BiodataBordered } from "./biodata/Bordered";
 import { BiodataClassic } from "./biodata/Classic";
 import { BiodataElegant } from "./biodata/Elegant";
+import { BiodataHeritage } from "./biodata/Heritage";
 import { BiodataMinimal } from "./biodata/Minimal";
 import { BiodataModern } from "./biodata/Modern";
+import { BiodataSidebar } from "./biodata/Sidebar";
 import { TEMPLATE_CATALOG } from "./catalog";
 import { Banner } from "./professional/Banner";
 import { Classic } from "./professional/Classic";
@@ -29,7 +32,7 @@ import type { TemplateComponent } from "./types";
  */
 const COMPONENTS: { [T in DocumentType]: Record<string, TemplateComponent<T>> } = {
   professional: { classic: Classic, modern: Modern, minimal: Minimal, timeline: Timeline, executive: Executive, compact: Compact, banner: Banner, engineering: Engineering, sidebar: Sidebar, "two-column": TwoColumn },
-  biodata: { classic: BiodataClassic, modern: BiodataModern, elegant: BiodataElegant, minimal: BiodataMinimal },
+  biodata: { classic: BiodataClassic, modern: BiodataModern, elegant: BiodataElegant, minimal: BiodataMinimal, bordered: BiodataBordered, sidebar: BiodataSidebar, heritage: BiodataHeritage },
   academic: { classic: AcademicClassic, modern: AcademicModern, timeline: AcademicTimeline, minimal: AcademicMinimal },
 };
 

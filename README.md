@@ -12,8 +12,8 @@ Build a **Professional CV**, a South Asian **Biodata** (marriage or job) or an *
 
 ## Features
 
-- **Three document types and 24 templates**, each type with its own form and sample data:
-  - **Professional CV (10 templates):** 8 of them ATS-friendly.
+- **Three document types and 33 templates**, each type with its own form and sample data:
+  - **Professional CV (19 templates):** 9 of them ATS-friendly. Nine photo-led designs (round photo, coloured sidebars and bands, icon headings, timelines, language bars) show your initials when no photo is uploaded.
   - **Biodata (7 templates):** marriage/job mode, English or Bangla headings.
   - **Academic CV (7 templates):** APA 7 or IEEE citations, with your name bolded automatically in author lists.
 - **Live preview.** The PDF is re-rendered about 0.4 s after you stop typing and shown with pdf.js (it works on phones too). On mobile, Form and Preview are tabs.
@@ -106,6 +106,12 @@ Rules that keep page breaks clean (see the comments in [templates/shared/kit.tsx
 - Don't use `letterSpacing` on Bangla text; it detaches vowel signs. The biodata templates use `tracking()` for this.
 - Avoid double spaces and run boundaries without a space. react-pdf prints a "-" if it breaks a line there. User text is cleaned automatically (`collapseSpaces`), and citation runs are normalised (`normalizeSegments`).
 - Use `headingFont(doc.settings)` for the name and section headings, so the heading-font setting applies.
+- Photo-led designs can build on [templates/professional/photo/parts.tsx](templates/professional/photo/parts.tsx):
+  - `Avatar` draws a round photo, or the initials when there's no photo.
+  - `Icon`, `IconBadge` and the `Side*` blocks provide icons and compact sidebar sections.
+  - `fitText` sizes names that sit inside fixed-height bands so they never overflow.
+  - Set `featuresPhoto` (and optionally `fonts`) in the catalog.
+- For a timeline, pass `rail` in the kit (a left border and a dot marker). Entries keep the line continuous without breaking pagination.
 
 ## Bangla support: a note on fonts
 
@@ -137,6 +143,7 @@ The layouts are original react-pdf implementations, modelled on the look of thes
 | Professional / Academic — Minimal | [JSON Resume](https://jsonresume.org/themes/) minimalist themes (MIT) |
 | Professional — Executive, Academic — Classic | Harvard Office of Career Services résumé / CV guides |
 | Biodata — Bordered | The traditional Bangladeshi office biodata form |
+| Professional — Navy Sidebar, Pastel Split, Gray Column, Geometric, Photo Header, Diagonal, Soft Panel, Navy Header, Bold Pills | Original designs in the style of popular photo résumé layouts (dark or pastel sidebars, header bands, geometric accents); no third-party artwork is copied |
 
 Fonts are licensed under the SIL Open Font License; see [public/fonts/LICENSE.md](public/fonts/LICENSE.md).
 

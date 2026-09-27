@@ -33,6 +33,8 @@ for (const type of types) {
     // Each template in its own default colour, as the user first sees it.
     doc.settings.templateId = job.template.id;
     doc.settings.accentColor = job.template.accent;
+    if (job.template.fonts) Object.assign(doc.settings, job.template.fonts);
+    if (job.template.featuresPhoto && doc.type === "professional") doc.sections.photo = true;
     const file = path.join(outDir, `${type}-${job.template.id}${job.variant ? `-sample${job.variant + 1}` : ""}.pdf`);
     const started = Date.now();
     await renderToFile(renderDocument(doc), file);

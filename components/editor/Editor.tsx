@@ -42,7 +42,12 @@ function withRequestedTemplate(doc: AnyDocument): AnyDocument {
   const id = new URLSearchParams(window.location.search).get("template");
   const template = id ? TEMPLATE_CATALOG[doc.type].find((t) => t.id === id) : undefined;
   if (!template || template.id === doc.settings.templateId) return doc;
-  return { ...doc, settings: { ...doc.settings, templateId: template.id, accentColor: template.accent } } as AnyDocument;
+  const sections = template.featuresPhoto && doc.type === "professional" ? { ...doc.sections, photo: true } : doc.sections;
+  return {
+    ...doc,
+    sections,
+    settings: { ...doc.settings, templateId: template.id, accentColor: template.accent, ...(template.fonts ?? {}) },
+  } as AnyDocument;
 }
 
 /** Loads the saved document (or an empty one), then mounts the form. */

@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useFormContext, useWatch } from "react-hook-form";
 import { BANGLA_FONTS, fontOptions, LATIN_FONTS } from "@/lib/pdf/fonts-meta";
 import type { AnyDocument } from "@/lib/schemas";
-import { TEMPLATE_CATALOG } from "@/templates/catalog";
+import { DEFAULT_TEMPLATE_FONTS, TEMPLATE_CATALOG } from "@/templates/catalog";
 import { createFields } from "./fields";
 import { SectionCard } from "./SectionCard";
 
@@ -15,6 +15,8 @@ export function DesignSettings({ extra }: { extra?: React.ReactNode }) {
   const type = useWatch({ control, name: "type" });
   const templateId = useWatch({ control, name: "settings.templateId" });
   const accent = useWatch({ control, name: "settings.accentColor" });
+  const fontId = useWatch({ control, name: "settings.fontId" });
+  const headingFontId = useWatch({ control, name: "settings.headingFontId" });
   const templates = TEMPLATE_CATALOG[type];
 
   return (
@@ -35,6 +37,15 @@ export function DesignSettings({ extra }: { extra?: React.ReactNode }) {
                   const customised = current !== undefined && accent.toLowerCase() !== current.accent.toLowerCase();
                   setValue("settings.templateId", t.id, { shouldDirty: true });
                   if (!customised) setValue("settings.accentColor", t.accent, { shouldDirty: true });
+                  // Same rule for fonts: adopt the template's suggestion unless the user picked their own.
+                  const currentFonts = current?.fonts ?? DEFAULT_TEMPLATE_FONTS;
+                  if (fontId === currentFonts.fontId && headingFontId === currentFonts.headingFontId) {
+                    const next = t.fonts ?? DEFAULT_TEMPLATE_FONTS;
+                    setValue("settings.fontId", next.fontId, { shouldDirty: true });
+                    setValue("settings.headingFontId", next.headingFontId, { shouldDirty: true });
+                  }
+                  // Photo-led designs need the photo section on.
+                  if (t.featuresPhoto && type === "professional") setValue("sections.photo", true, { shouldDirty: true });
                 }}
                 className={`rounded-md border p-2 text-left transition ${active ? "border-indigo-500 bg-indigo-50 ring-2 ring-indigo-500/20" : "border-zinc-200 bg-surface hover:border-zinc-300"}`}
               >
@@ -51,8 +62,11 @@ export function DesignSettings({ extra }: { extra?: React.ReactNode }) {
                 </span>
                 <span className="mt-0.5 block text-[11px] leading-snug text-zinc-500">{t.description}</span>
                 {type === "professional" ? (
-                  <span className={`mt-1 inline-block rounded px-1 text-[10px] font-medium ${t.atsFriendly ? "bg-emerald-50 text-emerald-700" : "bg-amber-50 text-amber-700"}`}>
-                    {t.atsFriendly ? "ATS-friendly" : "Not ATS-optimised"}
+                  <span className="mt-1 flex flex-wrap gap-1">
+                    <span className={`inline-block rounded px-1 text-[10px] font-medium ${t.atsFriendly ? "bg-emerald-50 text-emerald-700" : "bg-amber-50 text-amber-700"}`}>
+                      {t.atsFriendly ? "ATS-friendly" : "Not ATS-optimised"}
+                    </span>
+                    {t.featuresPhoto ? <span className="inline-block rounded bg-indigo-50 px-1 text-[10px] font-medium text-indigo-700">Photo</span> : null}
                   </span>
                 ) : null}
               </button>

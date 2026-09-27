@@ -298,6 +298,6 @@ export const ACADEMIC_ORDER: AcademicSection[] = [
   "referees",
 ];
 
-export function renderAcademicSections(kit: Kit, x: AcademicExtras, doc: PreparedAcademic): ReactNode {
-  return ACADEMIC_ORDER.filter((k) => doc.show[k]).map((k) => <Fragment key={k}>{BLOCKS[k](kit, x, doc)}</Fragment>);
+export function renderAcademicSections(kit: Kit, x: AcademicExtras, doc: PreparedAcademic, order: AcademicSection[] = ACADEMIC_ORDER): ReactNode {
+  return order.filter((k) => doc.show[k]).map((k) => <Fragment key={k}>{BLOCKS[k](kit, x, doc)}</Fragment>);
 }

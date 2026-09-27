@@ -183,6 +183,30 @@ export const TEMPLATE_CATALOG: Record<DocumentType, TemplateInfo[]> = {
       inspiredBy: "JSON Resume minimalist themes (MIT)",
       accent: "#7a4b9c",
     },
+    {
+      id: "banner",
+      name: "Banner",
+      description: "Full-width colour header with profile links.",
+      atsFriendly: true,
+      inspiredBy: "JSON Resume “flat” theme (MIT)",
+      accent: "#1e3a8a",
+    },
+    {
+      id: "compact",
+      name: "Compact",
+      description: "Dense, tinted heading bands — for long publication lists.",
+      atsFriendly: true,
+      inspiredBy: "sb2nov/resume (LaTeX, MIT)",
+      accent: "#0f766e",
+    },
+    {
+      id: "sidebar",
+      name: "Sidebar",
+      description: "Profiles, interests and skills in a tinted column.",
+      atsFriendly: false,
+      inspiredBy: "AltaCV (LaTeX, LPPL)",
+      accent: "#9d174d",
+    },
   ],
 };
 

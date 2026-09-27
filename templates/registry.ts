@@ -2,9 +2,12 @@ import type { DocumentProps } from "@react-pdf/renderer";
 import type { ReactElement } from "react";
 import { prepareAcademic, prepareBiodata, prepareProfessional } from "@/lib/documents/prepare";
 import type { AnyDocument, DocumentType } from "@/lib/schemas";
+import { AcademicBanner } from "./academic/Banner";
 import { AcademicClassic } from "./academic/Classic";
+import { AcademicCompact } from "./academic/Compact";
 import { AcademicMinimal } from "./academic/Minimal";
 import { AcademicModern } from "./academic/Modern";
+import { AcademicSidebar } from "./academic/Sidebar";
 import { AcademicTimeline } from "./academic/Timeline";
 import { BiodataBordered } from "./biodata/Bordered";
 import { BiodataClassic } from "./biodata/Classic";
@@ -33,7 +36,7 @@ import type { TemplateComponent } from "./types";
 const COMPONENTS: { [T in DocumentType]: Record<string, TemplateComponent<T>> } = {
   professional: { classic: Classic, modern: Modern, minimal: Minimal, timeline: Timeline, executive: Executive, compact: Compact, banner: Banner, engineering: Engineering, sidebar: Sidebar, "two-column": TwoColumn },
   biodata: { classic: BiodataClassic, modern: BiodataModern, elegant: BiodataElegant, minimal: BiodataMinimal, bordered: BiodataBordered, sidebar: BiodataSidebar, heritage: BiodataHeritage },
-  academic: { classic: AcademicClassic, modern: AcademicModern, timeline: AcademicTimeline, minimal: AcademicMinimal },
+  academic: { classic: AcademicClassic, modern: AcademicModern, timeline: AcademicTimeline, minimal: AcademicMinimal, banner: AcademicBanner, compact: AcademicCompact, sidebar: AcademicSidebar },
 };
 
 export const TEMPLATES = TEMPLATE_CATALOG;

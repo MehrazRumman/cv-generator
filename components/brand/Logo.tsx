@@ -1,0 +1,20 @@
+/** App mark (same artwork as app/icon.svg, which Next.js serves as the browser-tab icon). */
+export function Logo({ size = 28, className }: { size?: number; className?: string }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64" className={className} aria-hidden>
+      <defs>
+        <linearGradient id="logo-g" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stopColor="#4f46e5" />
+          <stop offset="1" stopColor="#0ea5e9" />
+        </linearGradient>
+      </defs>
+      <rect width="64" height="64" rx="14" fill="url(#logo-g)" />
+      <path d="M19 12h19l9 9v29a3 3 0 0 1-3 3H19a3 3 0 0 1-3-3V15a3 3 0 0 1 3-3z" fill="#fff" />
+      <path d="M38 12v7a2 2 0 0 0 2 2h7z" fill="#c7d2fe" />
+      <circle cx="26" cy="25" r="4.5" fill="#4f46e5" />
+      <rect x="22" y="34" width="20" height="3" rx="1.5" fill="#4f46e5" />
+      <rect x="22" y="40" width="16" height="2.6" rx="1.3" fill="#a5b4fc" />
+      <rect x="22" y="45" width="18" height="2.6" rx="1.3" fill="#a5b4fc" />
+    </svg>
+  );
+}

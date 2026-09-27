@@ -29,8 +29,11 @@ export function DesignSettings({ extra }: { extra?: React.ReactNode }) {
                 type="button"
                 title={t.inspiredBy ? `Inspired by ${t.inspiredBy}` : undefined}
                 onClick={() => {
+                  // Adopt the new template's colour only if the user hasn't picked their own.
+                  const current = templates.find((c) => c.id === templateId);
+                  const customised = current !== undefined && accent.toLowerCase() !== current.accent.toLowerCase();
                   setValue("settings.templateId", t.id, { shouldDirty: true });
-                  setValue("settings.accentColor", t.accent, { shouldDirty: true });
+                  if (!customised) setValue("settings.accentColor", t.accent, { shouldDirty: true });
                 }}
                 className={`rounded-md border p-2 text-left transition ${active ? "border-indigo-500 bg-indigo-50 ring-2 ring-indigo-500/20" : "border-zinc-200 bg-white hover:border-zinc-300"}`}
               >

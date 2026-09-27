@@ -6,6 +6,28 @@ export { BANGLA_FONTS, LATIN_FONTS };
 
 let registeredBase: string | null = null;
 
+const LONG_WORD = 24;
+const CHUNK = 16;
+
+/**
+ * Hyphenation policy. Ordinary words are never split (react-pdf would insert a "-"), and Bangla is
+ * never split. Only overlong tokens — long emails, URLs, IDs — get break points, preferably after
+ * / . @ - _ ? & =, so they wrap instead of overflowing their column.
+ */
+export function splitLongWord(word: string): string[] {
+  if (word.length <= LONG_WORD || /[\u0980-\u09FF]/.test(word)) return [word];
+  const out: string[] = [];
+  for (const part of word.split(/(?<=[/.@_\-?&=])/)) {
+    let rest = part;
+    while (rest.length > CHUNK) {
+      out.push(rest.slice(0, CHUNK));
+      rest = rest.slice(CHUNK);
+    }
+    if (rest) out.push(rest);
+  }
+  return out;
+}
+
 function register<Id extends string>(option: FontOption<Id>, base: string) {
   const src = (weight: number, italic: boolean) => `${base}/${option.id}-${weight}${italic ? "-italic" : ""}.ttf`;
   const fonts = option.weights.flatMap((weight) => {
@@ -28,8 +50,7 @@ export function registerFonts(base = "/fonts"): void {
   registeredBase = base;
   Object.values(LATIN_FONTS).forEach((f) => register(f, base));
   Object.values(BANGLA_FONTS).forEach((f) => register(f, base));
-  // Never split words with an inserted hyphen: names, emails and Bangla words must stay intact.
-  Font.registerHyphenationCallback((word) => [word]);
+  Font.registerHyphenationCallback(splitLongWord);
 }
 
 /** Latin first; any glyph it lacks (Bangla) falls through to the Bangla font. */

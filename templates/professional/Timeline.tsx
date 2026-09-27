@@ -1,7 +1,7 @@
 import { Text, View } from "@react-pdf/renderer";
 import { hasText } from "@/lib/format/text";
 import type { PreparedProfessional } from "@/lib/documents/prepare";
-import { accentOf, PdfDocument, Photo, tint, type Kit } from "../shared/kit";
+import { accentOf, fitFontSize, PdfDocument, Photo, tint, type Kit } from "../shared/kit";
 import { baseKitStyles, PAGE_MARGIN } from "../shared/presets";
 import { contactItems, ContactLine, renderSections } from "./blocks";
 
@@ -37,7 +37,7 @@ export function Timeline({ doc }: { doc: PreparedProfessional }) {
         </View>
         <View style={{ width: 200, alignItems: "flex-end" }}>
           {contactItems(doc).map((c) => (
-            <ContactLine key={c.key} items={[c]} separator="" style={{ fontSize: 8.8, color: p.muted }} align="flex-end" />
+            <ContactLine key={c.key} items={[c]} separator="" style={{ fontSize: fitFontSize(c.text, 200, 8.8), color: p.muted }} align="flex-end" />
           ))}
         </View>
         {doc.show.photo && doc.data.photo ? (

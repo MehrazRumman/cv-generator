@@ -274,3 +274,12 @@ export function tint(hex: string, amount: number): string {
 
 /** Validated accent colour, falling back to a neutral navy if the stored value is malformed. */
 export const accentOf = (hex: string) => (/^#[0-9a-fA-F]{6}$/.test(hex) ? hex : "#1f4e79");
+
+/**
+ * Font size that lets a single-line item (email, URL) fit `width` points, estimated from an average
+ * glyph width of ~0.53em. Used for narrow columns such as sidebars.
+ */
+export function fitFontSize(text: string, width: number, size: number, min = 6.5): number {
+  const estimate = text.length * size * 0.53;
+  return estimate <= width ? size : Math.max(min, Math.floor((width / (text.length * 0.53)) * 10) / 10);
+}

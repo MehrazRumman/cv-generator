@@ -104,3 +104,19 @@ describe("citations", () => {
     expect(segmentsToText(formatCitation(three, "apa", me))).toMatch(/^Islam, F\., Hirst, G\., & Chowdhury, S\. \(2023\)/);
   });
 });
+
+describe("long-word breaking", async () => {
+  const { splitLongWord } = await import("@/lib/pdf/fonts");
+  it("leaves normal and Bangla words whole", () => {
+    expect(splitLongWord("engineering")).toEqual(["engineering"]);
+    expect(splitLongWord("বিশ্ববিদ্যালয়বিশ্ববিদ্যালয়বিশ্ববিদ্যালয়")).toHaveLength(1);
+  });
+  it("splits long emails and URLs at natural points without losing characters", () => {
+    const email = "averyveryverylongemailaddress.firstname.lastname@subdomain.example.com";
+    const parts = splitLongWord(email);
+    expect(parts.join("")).toBe(email);
+    expect(parts.length).toBeGreaterThan(3);
+    expect(Math.max(...parts.map((p) => p.length))).toBeLessThanOrEqual(16);
+    expect(parts).toContain("lastname@");
+  });
+});

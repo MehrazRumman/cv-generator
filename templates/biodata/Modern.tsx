@@ -51,8 +51,8 @@ export function BiodataModern({ doc }: { doc: PreparedBiodata }) {
       settings={doc.settings}
       pageStyle={{ paddingTop: 36, paddingBottom: 44, paddingHorizontal: 40, color: text }}
     >
-      <View style={{ marginHorizontal: -40, marginTop: -36, height: BAND, backgroundColor: accent, paddingHorizontal: 40, flexDirection: "row", alignItems: "center" }}>
-        <View style={{ flex: 1 }}>
+      <View style={{ marginHorizontal: -40, marginTop: -36, minHeight: BAND, backgroundColor: accent, paddingHorizontal: 40, paddingVertical: 16, flexDirection: "row", alignItems: "center" }}>
+        <View style={{ flex: 1, paddingRight: h.photo ? 120 : 0 }}>
           <Text style={{ fontSize: 9, color: tint(accent, 0.6), letterSpacing: tracking(3, lang), textTransform: "uppercase" }}>{h.title}</Text>
           <Text style={{ fontSize: 22, fontWeight: 700, color: "#ffffff", marginTop: 4 }}>{h.name}</Text>
           {h.hasSubtitle ? <Text style={{ fontSize: 10.5, color: tint(accent, 0.75), marginTop: 3 }}>{h.subtitle}</Text> : null}

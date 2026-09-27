@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useRef, useState, type ComponentType } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type ComponentType } from "react";
 import { FormProvider, useForm, type FieldErrors } from "react-hook-form";
 import { emptyDocument } from "@/lib/documents/defaults";
 import { DOCUMENT_TYPE_META } from "@/lib/documents/meta";
@@ -63,8 +63,14 @@ function EditorForm({ type, initial }: { type: DocumentType; initial: AnyDocumen
   const [downloading, setDownloading] = useState(false);
   const [expandAll, setExpandAll] = useState(0);
   const [saveState, setSaveState] = useState<"saved" | "saving" | "error">("saved");
+  // Bumped when the whole document is replaced (sample, import, reset) to remount the form and
+  // discard per-field UI state such as expanded rows and half-typed values.
+  const [formKey, setFormKey] = useState(0);
   const fileInput = useRef<HTMLInputElement>(null);
   const Form = FORMS[type];
+  // Memoised so autosave/preview state changes here don't re-render every field on each keystroke;
+  // fields subscribe to the form store themselves.
+  const formElement = useMemo(() => <Form key={formKey} />, [Form, formKey]);
   const meta = DOCUMENT_TYPE_META[type];
 
   // Autosave + preview: every change is debounced, snapshotted, saved and rendered.
@@ -100,6 +106,7 @@ function EditorForm({ type, initial }: { type: DocumentType; initial: AnyDocumen
   const replaceDocument = useCallback(
     (doc: AnyDocument, message: string) => {
       reset(doc);
+      setFormKey((k) => k + 1);
       setPreviewDoc(doc);
       void repository.save(doc);
       setNotice({ kind: "success", text: message });
@@ -250,7 +257,7 @@ function EditorForm({ type, initial }: { type: DocumentType; initial: AnyDocumen
               onSubmit={(e) => e.preventDefault()}
               className={`min-h-0 w-full overflow-y-auto p-3 sm:p-4 md:block md:w-[46%] md:max-w-2xl md:border-r md:border-zinc-200 ${tab === "form" ? "block" : "hidden"}`}
             >
-              <Form />
+              {formElement}
               <p className="py-6 text-center text-xs text-zinc-400">Empty sections are never printed. Use the switches to hide sections you don&apos;t need.</p>
             </form>
             <div className={`min-h-0 flex-1 md:block ${tab === "preview" ? "block" : "hidden"}`}>

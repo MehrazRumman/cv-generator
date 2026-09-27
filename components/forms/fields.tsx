@@ -241,15 +241,24 @@ export function createFields<T extends FieldValues>() {
       fieldState,
     } = useController<T>({ name });
     const value = asString(field.value);
+    // Year and month are kept locally so a month picked before the year (or a half-typed year) isn't lost.
     const [yearText, setYearText] = useState(value.slice(0, 4));
+    const [month, setMonth] = useState(value.length >= 7 ? value.slice(5, 7) : "");
     const [lastValue, setLastValue] = useState(value);
-    const month = value.length >= 7 ? value.slice(5, 7) : "";
-    // Follow outside changes (sample data, import) without clobbering a partially typed year.
+    // Follow outside changes (sample data, import) that don't come from this input.
     if (value !== lastValue) {
       setLastValue(value);
-      if (value.slice(0, 4) !== yearText && /^(\d{4})?$/.test(value.slice(0, 4))) setYearText(value.slice(0, 4));
+      const emitted = yearText === "" ? "" : month && /^\d{4}$/.test(yearText) ? `${yearText}-${month}` : yearText;
+      if (value !== emitted) {
+        setYearText(value.slice(0, 4));
+        setMonth(value.length >= 7 ? value.slice(5, 7) : "");
+      }
     }
-    const emit = (y: string, m: string) => field.onChange(y === "" ? "" : m && /^\d{4}$/.test(y) ? `${y}-${m}` : y);
+    const emit = (y: string, m: string) => {
+      const next = y === "" ? "" : m && /^\d{4}$/.test(y) ? `${y}-${m}` : y;
+      setLastValue(next);
+      field.onChange(next);
+    };
     return (
       <FieldShell id={id} label={label} hint={hint} error={fieldState.error?.message} className={className}>
         <div className="flex gap-1.5">
@@ -258,7 +267,10 @@ export function createFields<T extends FieldValues>() {
             className="input w-[42%] px-1.5"
             value={month}
             disabled={disabled}
-            onChange={(e) => emit(yearText, e.target.value)}
+            onChange={(e) => {
+              setMonth(e.target.value);
+              emit(yearText, e.target.value);
+            }}
             onBlur={field.onBlur}
           >
             <option value="">Month</option>

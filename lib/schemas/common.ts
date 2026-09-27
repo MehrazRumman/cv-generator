@@ -60,7 +60,8 @@ export function buildCommon(r: Rules) {
   /** Cropped image stored as a data URL (JPEG, ~600px) so it survives in localStorage/JSON. */
   const photo = z
     .object({
-      dataUrl: z.string().startsWith("data:image/"),
+      // JPEG/PNG only: the PDF renderer can't embed other formats (the cropper always outputs JPEG).
+      dataUrl: z.string().regex(/^data:image\/(jpeg|jpg|png);base64,/, "Photo must be a JPEG or PNG image"),
       aspect: z.enum(PHOTO_ASPECTS),
     })
     .nullable();

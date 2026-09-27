@@ -7,6 +7,7 @@ import {
   type ProfessionalDocument,
 } from "@/lib/schemas";
 import { todayIso } from "@/lib/format/dates";
+import { TEMPLATE_CATALOG } from "@/templates/catalog";
 import { emptyParent, newSkillGroup } from "./factories";
 
 export const DEFAULT_DECLARATION =
@@ -24,7 +25,7 @@ export function emptyProfessional(): ProfessionalDocument {
     schemaVersion: SCHEMA_VERSION,
     type: "professional",
     updatedAt: new Date().toISOString(),
-    settings: { ...baseSettings, templateId: "classic" },
+    settings: { ...baseSettings, templateId: "classic", accentColor: TEMPLATE_CATALOG.professional[0].accent },
     sections: {
       photo: false,
       summary: true,
@@ -57,7 +58,7 @@ export function emptyBiodata(): BiodataDocument {
     schemaVersion: SCHEMA_VERSION,
     type: "biodata",
     updatedAt: new Date().toISOString(),
-    settings: { ...baseSettings, templateId: "classic", accentColor: "#7a1f3d", labelLanguage: "en" },
+    settings: { ...baseSettings, templateId: "classic", accentColor: TEMPLATE_CATALOG.biodata[0].accent, labelLanguage: "en" },
     sections: {
       photo: true,
       personal: true,
@@ -100,7 +101,14 @@ export function emptyAcademic(): AcademicDocument {
     schemaVersion: SCHEMA_VERSION,
     type: "academic",
     updatedAt: new Date().toISOString(),
-    settings: { ...baseSettings, templateId: "classic", fontId: "source-serif", banglaFontId: "noto-serif-bengali", citationStyle: "apa" },
+    settings: {
+      ...baseSettings,
+      templateId: "classic",
+      accentColor: TEMPLATE_CATALOG.academic[0].accent,
+      fontId: "source-serif",
+      banglaFontId: "noto-serif-bengali",
+      citationStyle: "apa",
+    },
     sections: {
       researchInterests: true,
       education: true,

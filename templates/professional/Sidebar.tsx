@@ -2,7 +2,7 @@ import { Text, View } from "@react-pdf/renderer";
 import { formatPartialDate } from "@/lib/format/dates";
 import { hasText } from "@/lib/format/text";
 import type { PreparedProfessional } from "@/lib/documents/prepare";
-import { accentOf, PdfDocument, PdfLink, Photo, tint, type Kit } from "../shared/kit";
+import { accentOf, fitFontSize, PdfDocument, PdfLink, Photo, tint, type Kit } from "../shared/kit";
 import { baseKitStyles } from "../shared/presets";
 import { contactItems, LEVEL_LABEL, renderSections } from "./blocks";
 
@@ -46,10 +46,10 @@ export function Sidebar({ doc }: { doc: PreparedProfessional }) {
           {contactItems(doc).map((c) =>
             c.href ? (
               <PdfLink key={c.key} href={c.href}>
-                <Text style={[side.text, { marginBottom: 3 }]}>{c.text}</Text>
+                <Text style={[side.text, { marginBottom: 3, fontSize: fitFontSize(c.text, SIDEBAR - 36, side.text.fontSize) }]}>{c.text}</Text>
               </PdfLink>
             ) : (
-              <Text key={c.key} style={[side.text, { marginBottom: 3 }]}>
+              <Text key={c.key} style={[side.text, { marginBottom: 3, fontSize: fitFontSize(c.text, SIDEBAR - 36, side.text.fontSize) }]}>
                 {c.text}
               </Text>
             ),

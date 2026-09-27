@@ -11,13 +11,16 @@ import { BiodataElegant } from "./biodata/Elegant";
 import { BiodataMinimal } from "./biodata/Minimal";
 import { BiodataModern } from "./biodata/Modern";
 import { TEMPLATE_CATALOG } from "./catalog";
+import { Banner } from "./professional/Banner";
 import { Classic } from "./professional/Classic";
 import { Compact } from "./professional/Compact";
+import { Engineering } from "./professional/Engineering";
 import { Executive } from "./professional/Executive";
 import { Minimal } from "./professional/Minimal";
 import { Modern } from "./professional/Modern";
 import { Sidebar } from "./professional/Sidebar";
 import { Timeline } from "./professional/Timeline";
+import { TwoColumn } from "./professional/TwoColumn";
 import type { TemplateComponent } from "./types";
 
 /**
@@ -25,7 +28,7 @@ import type { TemplateComponent } from "./types";
  * and add its metadata to `catalog.ts`.
  */
 const COMPONENTS: { [T in DocumentType]: Record<string, TemplateComponent<T>> } = {
-  professional: { classic: Classic, modern: Modern, minimal: Minimal, timeline: Timeline, executive: Executive, compact: Compact, sidebar: Sidebar },
+  professional: { classic: Classic, modern: Modern, minimal: Minimal, timeline: Timeline, executive: Executive, compact: Compact, banner: Banner, engineering: Engineering, sidebar: Sidebar, "two-column": TwoColumn },
   biodata: { classic: BiodataClassic, modern: BiodataModern, elegant: BiodataElegant, minimal: BiodataMinimal },
   academic: { classic: AcademicClassic, modern: AcademicModern, timeline: AcademicTimeline, minimal: AcademicMinimal },
 };

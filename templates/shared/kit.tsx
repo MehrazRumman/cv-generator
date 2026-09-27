@@ -30,8 +30,11 @@ export interface Kit {
   /** Section heading. Rendered with `minPresenceAhead` so it never sits alone at a page bottom. */
   Heading: (props: { title: string }) => ReactNode;
   bulletChar: string;
-  /** "stacked": title/date on one row. "dateColumn": dates in a left gutter (moderncv style). */
-  entryLayout: "stacked" | "dateColumn";
+  /**
+   * "stacked": title/date on one row. "dateBelow": date on its own line under the subtitle (narrow
+   * columns). "dateColumn": dates in a left gutter (moderncv style).
+   */
+  entryLayout: "stacked" | "dateBelow" | "dateColumn";
   dateColumnWidth: number;
 }
 
@@ -185,7 +188,7 @@ export interface EntryProps {
 export function Entry({ kit, title, subtitle, date, meta, bullets = [], children, lead }: EntryProps) {
   const { s } = kit;
   const [first, ...rest] = bullets;
-  const stackedLead = kit.entryLayout === "stacked" ? lead : null;
+  const stackedLead = kit.entryLayout !== "dateColumn" ? lead : null;
   // Only one unbreakable level: when the date-column layout already wraps lead + entry, the head flows inside it.
   const nested = kit.entryLayout === "dateColumn" && lead != null;
   const head = (
@@ -203,6 +206,7 @@ export function Entry({ kit, title, subtitle, date, meta, bullets = [], children
         <>
           <Text style={s.entryTitle}>{title}</Text>
           {subtitle ? <Text style={s.entrySubtitle}>{subtitle}</Text> : null}
+          {kit.entryLayout === "dateBelow" && date ? <Text style={[s.entryDate, { textAlign: "left", marginLeft: 0 }]}>{date}</Text> : null}
         </>
       )}
       {meta ? <Text style={s.entryMeta}>{meta}</Text> : null}
@@ -247,6 +251,16 @@ export function Entry({ kit, title, subtitle, date, meta, bullets = [], children
 
 /** "Label: value" line used for skills and similar groups. */
 export function LabeledLine({ kit, label, value }: { kit: Kit; label: string; value: string }) {
+  // In narrow columns the label gets its own line; mixing a bold run and a long value there makes
+  // react-pdf's line breaker produce ragged, awkward breaks.
+  if (kit.entryLayout === "dateBelow") {
+    return (
+      <View style={{ marginBottom: 4 }} wrap={false}>
+        <Text style={[kit.s.paragraph, kit.s.label]}>{label}</Text>
+        <Text style={kit.s.paragraph}>{value}</Text>
+      </View>
+    );
+  }
   return (
     <Text style={[kit.s.paragraph, { marginBottom: 2 }]}>
       <Text style={kit.s.label}>{label}: </Text>

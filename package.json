@@ -11,7 +11,8 @@
     "test": "vitest run",
     "render-samples": "tsx scripts/render-samples.tsx",
     "predev": "node scripts/copy-pdf-worker.mjs",
-    "prebuild": "node scripts/copy-pdf-worker.mjs"
+    "prebuild": "node scripts/copy-pdf-worker.mjs",
+    "thumbnails": "npm run render-samples && swift scripts/pdf-thumbnails.swift sample-output public/templates 420"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

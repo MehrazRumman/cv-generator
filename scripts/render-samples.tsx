@@ -25,13 +25,15 @@ const types = DOCUMENT_TYPES.filter((t) => !only || t === only);
 for (const type of types) {
   // Every template with the first sample, plus the remaining samples with the default template.
   const jobs = [
-    ...TEMPLATE_CATALOG[type].map((t) => ({ template: t.id, variant: 0 })),
-    ...SAMPLE_VARIANTS[type].slice(1).map((_, i) => ({ template: TEMPLATE_CATALOG[type][0].id, variant: i + 1 })),
+    ...TEMPLATE_CATALOG[type].map((t) => ({ template: t, variant: 0 })),
+    ...SAMPLE_VARIANTS[type].slice(1).map((_, i) => ({ template: TEMPLATE_CATALOG[type][0], variant: i + 1 })),
   ];
   for (const job of jobs) {
     const doc = SAMPLE_VARIANTS[type][job.variant].create();
-    doc.settings.templateId = job.template;
-    const file = path.join(outDir, `${type}-${job.template}${job.variant ? `-sample${job.variant + 1}` : ""}.pdf`);
+    // Each template in its own default colour, as the user first sees it.
+    doc.settings.templateId = job.template.id;
+    doc.settings.accentColor = job.template.accent;
+    const file = path.join(outDir, `${type}-${job.template.id}${job.variant ? `-sample${job.variant + 1}` : ""}.pdf`);
     const started = Date.now();
     await renderToFile(renderDocument(doc), file);
     console.log(`✓ ${path.relative(root, file)} (${Date.now() - started} ms)`);

@@ -45,6 +45,8 @@ export function PdfPreview({ doc, debounceMs = 450 }: { doc: AnyDocument | null;
   const containerRef = useRef<HTMLDivElement>(null);
   const pagesRef = useRef<HTMLDivElement>(null);
   const [status, setStatus] = useState<"idle" | "rendering" | "error">("idle");
+  // The document the canvases currently show; while it differs from `doc`, the preview is stale.
+  const [renderedDoc, setRenderedDoc] = useState<AnyDocument | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [pageCount, setPageCount] = useState(0);
   const [width, setWidth] = useState(0);
@@ -74,6 +76,7 @@ export function PdfPreview({ doc, debounceMs = 450 }: { doc: AnyDocument | null;
         if (run !== runRef.current || !pagesRef.current) return;
         pagesRef.current.replaceChildren(...canvases);
         setPageCount(canvases.length);
+        setRenderedDoc(doc);
         setError(null);
         setStatus("idle");
       } catch (e) {
@@ -93,12 +96,12 @@ export function PdfPreview({ doc, debounceMs = 450 }: { doc: AnyDocument | null;
           Preview{pageCount ? ` · ${pageCount} page${pageCount === 1 ? "" : "s"}` : ""}
         </span>
         <span aria-live="polite" className="flex items-center gap-1.5">
-          {status === "rendering" ? (
+          {status === "rendering" || (status === "idle" && doc !== renderedDoc) ? (
             <>
               <span className="h-2 w-2 animate-pulse rounded-full bg-indigo-500" /> Updating…
             </>
           ) : status === "error" ? (
-            <span className="text-red-600">Preview error</span>
+            <span className="text-red-600 dark:text-red-400">Preview error</span>
           ) : (
             <span className="text-zinc-400">Up to date</span>
           )}

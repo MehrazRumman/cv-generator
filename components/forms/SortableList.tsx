@@ -55,14 +55,14 @@ function SortableItem({ id, index, count, title, onMove, onRemove, children, ini
         </button>
         <button
           type="button"
-          className="icon-btn hover:bg-red-50 hover:text-red-600"
+          className="icon-btn hover:bg-red-50 hover:text-red-600 dark:text-red-400"
           onClick={() => onRemove(index)}
           aria-label={`Remove ${title}`}
         >
           ✕
         </button>
       </div>
-      {open ? <div className="space-y-3 border-t border-zinc-200 bg-white px-3 py-3">{children}</div> : null}
+      {open ? <div className="space-y-3 border-t border-zinc-200 bg-surface px-3 py-3">{children}</div> : null}
     </li>
   );
 }

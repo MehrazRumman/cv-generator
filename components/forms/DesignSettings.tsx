@@ -36,7 +36,7 @@ export function DesignSettings({ extra }: { extra?: React.ReactNode }) {
                   setValue("settings.templateId", t.id, { shouldDirty: true });
                   if (!customised) setValue("settings.accentColor", t.accent, { shouldDirty: true });
                 }}
-                className={`rounded-md border p-2 text-left transition ${active ? "border-indigo-500 bg-indigo-50 ring-2 ring-indigo-500/20" : "border-zinc-200 bg-white hover:border-zinc-300"}`}
+                className={`rounded-md border p-2 text-left transition ${active ? "border-indigo-500 bg-indigo-50 ring-2 ring-indigo-500/20" : "border-zinc-200 bg-surface hover:border-zinc-300"}`}
               >
                 <Image
                   src={`/templates/${type}-${t.id}.jpg`}
@@ -80,7 +80,7 @@ export function DesignSettings({ extra }: { extra?: React.ReactNode }) {
               type="color"
               value={/^#[0-9a-f]{6}$/i.test(accent) ? accent : "#1f4e79"}
               onChange={(e) => setValue("settings.accentColor", e.target.value, { shouldDirty: true })}
-              className="h-8 w-12 cursor-pointer rounded border border-zinc-300 bg-white p-0.5"
+              className="h-8 w-12 cursor-pointer rounded border border-zinc-300 bg-surface p-0.5"
             />
             <span className="font-mono text-xs text-zinc-500">{accent}</span>
           </div>

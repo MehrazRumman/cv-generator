@@ -53,7 +53,7 @@ export function SectionCard<T extends FieldValues>({
   }
 
   return (
-    <section className="rounded-lg border border-zinc-200 bg-white shadow-xs">
+    <section className="rounded-lg border border-zinc-200 bg-surface shadow-xs">
       <header className="flex items-center gap-3 px-4 py-3">
         <button
           type="button"

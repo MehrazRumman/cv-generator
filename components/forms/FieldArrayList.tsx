@@ -50,7 +50,7 @@ export function FieldArrayList<T extends FieldValues, N extends FieldArrayPath<T
         addLabel={addLabel}
         emptyText={emptyText}
       />
-      {error ? <p className="text-xs text-red-600">{error}</p> : null}
+      {error ? <p className="text-xs text-red-600 dark:text-red-400">{error}</p> : null}
     </>
   );
 }

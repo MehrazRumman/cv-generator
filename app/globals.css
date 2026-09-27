@@ -1,5 +1,14 @@
 @import "tailwindcss";
 
+/* `dark:` utilities follow the .dark class on <html> (set by the theme toggle), not the OS setting. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* Card / panel background ("bg-surface"); white in light mode. */
+  --color-surface: #ffffff;
+  --color-page: #f6f7f9;
+}
+
 @theme inline {
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 }
@@ -8,22 +17,59 @@
   color-scheme: light;
 }
 
+/*
+ * Dark theme. The UI is built from Tailwind's zinc neutrals, so dark mode re-maps that scale
+ * (light shades become dark and vice versa) instead of annotating every class. Accent tints
+ * (the -50 backgrounds) become translucent and the -700/-800 text shades become light.
+ */
+.dark {
+  color-scheme: dark;
+  --color-surface: oklch(21% 0.006 286);
+  --color-page: oklch(15% 0.005 286);
+  --color-zinc-50: oklch(17.5% 0.005 286);
+  --color-zinc-100: oklch(25% 0.006 286);
+  --color-zinc-200: oklch(31% 0.007 286);
+  --color-zinc-300: oklch(39% 0.01 286);
+  --color-zinc-400: oklch(56% 0.014 286);
+  --color-zinc-500: oklch(66% 0.014 286);
+  --color-zinc-600: oklch(75% 0.012 286);
+  --color-zinc-700: oklch(84% 0.008 286);
+  --color-zinc-800: oklch(91% 0.005 286);
+  --color-zinc-900: oklch(96% 0.003 286);
+  --color-zinc-950: oklch(98.5% 0 0);
+  --color-indigo-50: rgb(99 102 241 / 0.16);
+  --color-indigo-200: rgb(129 140 248 / 0.4);
+  --color-indigo-700: #a5b4fc;
+  --color-emerald-50: rgb(16 185 129 / 0.15);
+  --color-emerald-700: #6ee7b7;
+  --color-emerald-800: #a7f3d0;
+  --color-amber-50: rgb(245 158 11 / 0.15);
+  --color-amber-700: #fcd34d;
+  --color-red-50: rgb(239 68 68 / 0.15);
+  --color-red-700: #fca5a5;
+  --color-red-800: #fecaca;
+  --color-sky-50: rgb(14 165 233 / 0.15);
+  --color-sky-800: #bae6fd;
+  --color-rose-50: rgb(244 63 94 / 0.15);
+  --color-rose-700: #fda4af;
+}
+
 body {
-  background: #f6f7f9;
-  color: #16181d;
+  background: var(--color-page);
+  color: var(--color-zinc-900);
   /* Inter for Latin text; Hind Siliguri picks up any বাংলা characters. */
   font-family: var(--font-inter), var(--font-hind-siliguri), ui-sans-serif, system-ui, sans-serif;
 }
 
 /* Form controls share one look. */
 .input {
-  @apply w-full rounded-md border border-zinc-300 bg-white px-2.5 py-1.5 text-sm text-zinc-900 shadow-xs outline-none transition placeholder:text-zinc-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 disabled:bg-zinc-100 disabled:text-zinc-500;
+  @apply w-full rounded-md border border-zinc-300 bg-surface px-2.5 py-1.5 text-sm text-zinc-900 shadow-xs outline-none transition placeholder:text-zinc-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 disabled:bg-zinc-100 disabled:text-zinc-500;
 }
 .input[aria-invalid="true"] {
   @apply border-red-500 focus:border-red-500 focus:ring-red-500/20;
 }
 .btn {
-  @apply inline-flex items-center justify-center gap-1.5 rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-sm font-medium text-zinc-700 shadow-xs transition hover:bg-zinc-50 active:bg-zinc-100 disabled:cursor-not-allowed disabled:opacity-50;
+  @apply inline-flex items-center justify-center gap-1.5 rounded-md border border-zinc-300 bg-surface px-3 py-1.5 text-sm font-medium text-zinc-700 shadow-xs transition hover:bg-zinc-50 active:bg-zinc-100 disabled:cursor-not-allowed disabled:opacity-50;
 }
 .btn-primary {
   @apply border-indigo-600 bg-indigo-600 text-white hover:bg-indigo-500 active:bg-indigo-700;

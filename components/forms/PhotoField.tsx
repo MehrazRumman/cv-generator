@@ -98,13 +98,13 @@ export function PhotoField<T extends FieldValues>({ name, defaultAspect = "passp
             {photo ? "Replace photo" : "Upload photo"}
           </button>
           {photo ? (
-            <button type="button" className="btn btn-ghost text-red-600" onClick={() => onChange(null)}>
+            <button type="button" className="btn btn-ghost text-red-600 dark:text-red-400" onClick={() => onChange(null)}>
               Remove
             </button>
           ) : null}
         </div>
         <p className="text-xs text-zinc-500">JPG or PNG. You can crop to square or passport (35×45 mm) size.</p>
-        {error ? <p className="text-xs text-red-600">{error}</p> : null}
+        {error ? <p className="text-xs text-red-600 dark:text-red-400">{error}</p> : null}
         <input
           ref={inputRef}
           type="file"
@@ -119,8 +119,8 @@ export function PhotoField<T extends FieldValues>({ name, defaultAspect = "passp
 
       {source ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4" role="dialog" aria-modal="true" aria-label="Crop photo">
-          <div className="w-full max-w-lg overflow-hidden rounded-xl bg-white shadow-2xl">
-            <div className="relative h-80 bg-zinc-900">
+          <div className="w-full max-w-lg overflow-hidden rounded-xl bg-surface shadow-2xl">
+            <div className="relative h-80 bg-black">
               <Cropper
                 image={source}
                 crop={crop}

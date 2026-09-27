@@ -31,7 +31,7 @@ export function FieldShell({
       ) : null}
       {children}
       {error ? (
-        <p id={`${id}-error`} className="mt-1 text-xs text-red-600" role="alert">
+        <p id={`${id}-error`} className="mt-1 text-xs text-red-600 dark:text-red-400" role="alert">
           {error}
         </p>
       ) : hint ? (

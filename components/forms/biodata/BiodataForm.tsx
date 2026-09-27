@@ -28,7 +28,7 @@ function ModeSwitch() {
   const { setValue } = useFormContext<BiodataDocument>();
   const mode = useWatch<BiodataDocument, "data.mode">({ name: "data.mode" });
   return (
-    <div className="rounded-lg border border-zinc-200 bg-white p-3 shadow-xs">
+    <div className="rounded-lg border border-zinc-200 bg-surface p-3 shadow-xs">
       <p className="mb-2 text-xs font-medium text-zinc-700">Biodata for</p>
       <div className="grid grid-cols-2 gap-1 rounded-md bg-zinc-100 p-1" role="radiogroup" aria-label="Biodata type">
         {(
@@ -43,7 +43,7 @@ function ModeSwitch() {
             role="radio"
             aria-checked={mode === o.value}
             onClick={() => setValue("data.mode", o.value, { shouldDirty: true })}
-            className={`rounded px-3 py-1.5 text-left transition ${mode === o.value ? "bg-white shadow-sm" : "text-zinc-600 hover:text-zinc-900"}`}
+            className={`rounded px-3 py-1.5 text-left transition ${mode === o.value ? "bg-surface shadow-sm" : "text-zinc-600 hover:text-zinc-900"}`}
           >
             <span className="block text-sm font-medium">{o.label}</span>
             <span className="block text-[11px] text-zinc-500">{o.hint}</span>

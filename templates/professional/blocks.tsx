@@ -169,7 +169,7 @@ const languages: Block = (kit, doc) => (
     <Text style={kit.s.paragraph}>
       {doc.data.languages.map((l, i) => (
         <Text key={l.id}>
-          {i > 0 ? "  ·  " : ""}
+          {i > 0 ? " · " : ""}
           <Text style={kit.s.label}>{l.name}</Text> ({LEVEL_LABEL[l.level]})
         </Text>
       ))}

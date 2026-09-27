@@ -25,12 +25,26 @@ export type PreparedAcademic = Prepared<AcademicDocument, AcademicSection>;
 
 const anyText = (...values: string[]) => values.some(hasText);
 
+/**
+ * Collapses runs of spaces in every string. react-pdf treats "  " between words as a hyphenation
+ * point and prints a stray "-" if it breaks the line there, so double spaces typed by the user
+ * must never reach the PDF.
+ */
+export function collapseSpaces<T>(value: T): T {
+  if (typeof value === "string") return value.replace(/ {2,}/g, " ") as T;
+  if (Array.isArray(value)) return value.map(collapseSpaces) as T;
+  if (value !== null && typeof value === "object") {
+    return Object.fromEntries(Object.entries(value).map(([k, v]) => [k, collapseSpaces(v)])) as T;
+  }
+  return value;
+}
+
 function withBullets<T extends { bullets: string[] }>(entry: T): T {
   return { ...entry, bullets: cleanList(entry.bullets) };
 }
 
 export function prepareProfessional(doc: ProfessionalDocument): PreparedProfessional {
-  const d = doc.data;
+  const d = collapseSpaces(doc.data);
   const data: ProfessionalDocument["data"] = {
     ...d,
     experience: d.experience.filter((e) => anyText(e.position, e.organization)).map(withBullets),
@@ -63,7 +77,7 @@ export function prepareProfessional(doc: ProfessionalDocument): PreparedProfessi
 }
 
 export function prepareBiodata(doc: BiodataDocument): PreparedBiodata {
-  const d = doc.data;
+  const d = collapseSpaces(doc.data);
   const data: BiodataDocument["data"] = {
     ...d,
     education: d.education.filter((e) => anyText(e.degree, e.institution)),
@@ -97,7 +111,7 @@ export function prepareBiodata(doc: BiodataDocument): PreparedBiodata {
 }
 
 export function prepareAcademic(doc: AcademicDocument): PreparedAcademic {
-  const d = doc.data;
+  const d = collapseSpaces(doc.data);
   const data: AcademicDocument["data"] = {
     ...d,
     authorAliases: cleanList(d.authorAliases),

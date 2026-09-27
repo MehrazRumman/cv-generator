@@ -40,7 +40,7 @@ export function Compact({ doc }: { doc: PreparedProfessional }) {
         <View style={{ flex: 1 }}>
           <Text style={{ ...hf, fontSize: 20, fontWeight: 700, color: accent }}>
             {h.fullName}
-            {hasText(h.jobTitle) ? <Text style={{ fontSize: 11, fontWeight: 400, color: p.muted }}>{`  ·  ${h.jobTitle}`}</Text> : null}
+            {hasText(h.jobTitle) ? <Text style={{ fontSize: 11, fontWeight: 400, color: p.muted }}>{` · ${h.jobTitle}`}</Text> : null}
           </Text>
           <ContactLine items={contactItems(doc)} separator="  ·  " style={{ fontSize: 8.5, color: p.muted, marginTop: 3 }} align="flex-start" />
         </View>

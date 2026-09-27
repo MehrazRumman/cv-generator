@@ -129,3 +129,15 @@ describe("migrations", () => {
     }
   });
 });
+
+describe("text clean-up", () => {
+  it("collapses double spaces that would print stray hyphens", () => {
+    const doc = emptyProfessional();
+    doc.data.header.location = "Dhaka,   Bangladesh";
+    doc.data.experience = [{ ...newExperience(), position: "Lead  Engineer", bullets: ["Did  a   thing"] }];
+    const d = prepareProfessional(doc).data;
+    expect(d.header.location).toBe("Dhaka, Bangladesh");
+    expect(d.experience[0].position).toBe("Lead Engineer");
+    expect(d.experience[0].bullets).toEqual(["Did a thing"]);
+  });
+});

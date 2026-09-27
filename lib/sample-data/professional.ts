@@ -1,5 +1,6 @@
 import { emptyProfessional } from "@/lib/documents/defaults";
 import type { ProfessionalDocument } from "@/lib/schemas";
+import { SAMPLE_PHOTO } from "./photo";
 
 /** Fictional person — for trying templates quickly. */
 export function sampleProfessional(): ProfessionalDocument {
@@ -18,7 +19,8 @@ export function sampleProfessional(): ProfessionalDocument {
         github: "github.com/ayesharahman",
         portfolio: "",
       },
-      photo: null,
+      // Included but switched off (sections.photo); photo-led templates turn it on when picked.
+      photo: { dataUrl: SAMPLE_PHOTO, aspect: "passport" },
       summary:
         "Backend-focused software engineer with 7+ years of experience building payment and logistics platforms used by millions. Led teams of up to six engineers, cut infrastructure costs by 38% through service consolidation, and introduced testing practices that halved production incidents. Comfortable across Go, TypeScript and cloud infrastructure, and passionate about mentoring junior developers.",
       experience: [

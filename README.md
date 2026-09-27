@@ -2,6 +2,8 @@
 
 Build a **Professional CV**, a South Asian **Biodata** (marriage or job) or an **Academic CV** in the browser: fill in a form, watch the PDF update live, and download it. Text in the PDF is real, selectable text (ATS-readable), and Bangla (বাংলা) renders correctly.
 
+![Home page (dark theme)](docs/screenshots/home-dark.png)
+
 ![Professional CV editor](docs/screenshots/professional-editor.png)
 
 | Biodata in Bangla | Academic CV |
@@ -10,11 +12,16 @@ Build a **Professional CV**, a South Asian **Biodata** (marriage or job) or an *
 
 ## Features
 
-- **Three document types**, each with its own form and sample data: Professional CV (7 templates), Biodata (4 templates, marriage/job mode, English or Bangla headings) and Academic CV (4 templates, APA 7 or IEEE citations, your name bolded automatically in author lists).
+- **Three document types and 24 templates**, each type with its own form and sample data:
+  - **Professional CV (10 templates):** 8 of them ATS-friendly.
+  - **Biodata (7 templates):** marriage/job mode, English or Bangla headings.
+  - **Academic CV (7 templates):** APA 7 or IEEE citations, with your name bolded automatically in author lists.
 - **Live preview.** The PDF is re-rendered about 0.4 s after you stop typing and shown with pdf.js (it works on phones too). On mobile, Form and Preview are tabs.
 - **Repeatable sections.** Add, remove and reorder entries by dragging or with the ↑/↓ buttons.
 - **Section switches.** Any section can be hidden, and empty sections are never printed.
-- **Switch template, font, paper size (A4 / US Letter) or accent colour** without re-entering anything.
+- **Switch template, fonts, paper size (A4 / US Letter) or accent colour** without re-entering anything. Template thumbnails appear on the home page and in the editor.
+- **24 fonts in four categories** (sans-serif, serif, slab, monospace), including metric-compatible stand-ins for Calibri (Carlito) and Times New Roman (Tinos). You can use a **separate heading font**, e.g. Playfair Display headings with a Lato body, and pick one of **3 Bangla fonts**.
+- **Dark theme by default**, with a light theme one click away. The choice is remembered.
 - **Photo upload with cropping** to square or passport (35×45 mm) size.
 - **Validation** with clear messages, e.g. a required name or an invalid email. Download is blocked until the fields shown in red are fixed. Errors in hidden sections are ignored.
 - **Nothing leaves your browser.** Autosave goes to `localStorage`, and there is **Export/Import as JSON**.
@@ -36,6 +43,7 @@ npm run dev          # http://localhost:3000
 | `npm run typecheck` | `tsc --noEmit` |
 | `npm run lint` | ESLint |
 | `npm run render-samples [type]` | Renders every template with its sample data to `sample-output/*.pdf` (a quick visual check, no browser needed) |
+| `npm run thumbnails` | Re-renders the samples and regenerates `public/templates/*.jpg` thumbnails (macOS only; uses PDFKit via Swift) |
 
 `predev` / `prebuild` copy the pdf.js worker into `public/pdf.worker.min.mjs`. That file is generated, so it isn't committed.
 
@@ -90,20 +98,27 @@ public/fonts/               TTF fonts (OFL, see LICENSE.md)
    Biodata templates build a `BioKit` and call `renderBiodataSections`. Academic templates call `renderAcademicSections`.
 2. **Register it** in [templates/registry.ts](templates/registry.ts) (`COMPONENTS[type][id]`).
 3. **Describe it** in [templates/catalog.ts](templates/catalog.ts) with an id, name, description, `atsFriendly`, a default `accent` and optionally `inspiredBy`. It then appears in the template picker.
-4. Run `npm run render-samples <type>` and check `sample-output/<type>-<id>.pdf`.
+4. Run `npm run render-samples <type>` and check `sample-output/<type>-<id>.pdf`. Then run `npm run thumbnails` to create its picture for the home page and the template picker.
 
 Rules that keep page breaks clean (see the comments in [templates/shared/kit.tsx](templates/shared/kit.tsx)):
 - Render sections as **fragments, not wrapping `<View>`s**. react-pdf mis-paginates when an unbreakable block is the first child of a nested breakable view: it keeps the block on the page and squashes the text.
 - Use `<Section>` and `<Entry>`. They keep each heading together with its first entry, and each entry head together with its first bullet.
 - Don't use `letterSpacing` on Bangla text; it detaches vowel signs. The biodata templates use `tracking()` for this.
+- Avoid double spaces and run boundaries without a space. react-pdf prints a "-" if it breaks a line there. User text is cleaned automatically (`collapseSpaces`), and citation runs are normalised (`normalizeSegments`).
+- Use `headingFont(doc.settings)` for the name and section headings, so the heading-font setting applies.
 
 ## Bangla support: a note on fonts
 
-The spec asked for **Noto Sans Bengali**, but react-pdf's shaping engine (fontkit) renders many of its conjuncts wrongly (জন্ম, স্ত্রী, বিশ্ববিদ্যালয়, reph forms). This happens with both the Google Fonts and the upstream notofonts builds. The app therefore uses fonts that shape correctly under react-pdf:
+The spec asked for **Noto Sans Bengali**, but react-pdf's shaping engine (fontkit) renders many of its conjuncts wrongly (জন্ম, স্ত্রী, বিশ্ববিদ্যালয়, reph forms). This happens with both the Google Fonts and the upstream notofonts builds. The app therefore offers only Bangla fonts that were checked to shape correctly under react-pdf:
 - **Hind Siliguri** (sans), the default
+- **Mina** (sans)
 - **Noto Serif Bengali** (serif)
 
-Every template uses the font stack `[English font, Bangla font]`, so mixed Bangla and English text in any field renders with the right glyphs. Tiro Bangla was also tested but excluded, because it crashes the renderer.
+Every template uses the font stack `[English font, Bangla font]`, so mixed Bangla and English text in any field renders with the right glyphs.
+
+These fonts were tested and excluded:
+- **Tiro Bangla** and **Baloo Da 2** crash the renderer.
+- **Anek Bangla** drops the u-kar (ু).
 
 ## Template credits
 
@@ -114,9 +129,23 @@ The layouts are original react-pdf implementations, modelled on the look of thes
 | Professional — Classic | [Jake's Resume](https://github.com/jakegut/resume) (MIT) |
 | Professional / Academic — Modern | [Awesome-CV](https://github.com/posquit0/Awesome-CV) (LPPL 1.3c) |
 | Professional / Academic — Timeline | [moderncv](https://github.com/moderncv/moderncv) "classic" style (LPPL) |
-| Professional — Compact | [sb2nov/resume](https://github.com/sb2nov/resume) (MIT) |
-| Professional — Sidebar | [AltaCV](https://github.com/liantze/AltaCV) (LPPL) / [Deedy-Resume](https://github.com/deedy/Deedy-Resume) (Apache-2.0) |
+| Professional / Academic — Compact | [sb2nov/resume](https://github.com/sb2nov/resume) (MIT) |
+| Professional / Biodata / Academic — Sidebar | [AltaCV](https://github.com/liantze/AltaCV) (LPPL) |
+| Professional — Two-Column | [Deedy-Resume](https://github.com/deedy/Deedy-Resume) (Apache-2.0) |
+| Professional — Engineering | [RenderCV](https://github.com/rendercv/rendercv) "engineeringresumes" theme (MIT) |
+| Professional / Academic — Banner | [JSON Resume](https://jsonresume.org/themes/) "flat" theme (MIT) |
 | Professional / Academic — Minimal | [JSON Resume](https://jsonresume.org/themes/) minimalist themes (MIT) |
 | Professional — Executive, Academic — Classic | Harvard Office of Career Services résumé / CV guides |
+| Biodata — Bordered | The traditional Bangladeshi office biodata form |
 
 Fonts are licensed under the SIL Open Font License; see [public/fonts/LICENSE.md](public/fonts/LICENSE.md).
+
+## Deploying to Vercel
+
+The app is a static-friendly Next.js site with no backend, database or environment variables, so it deploys to Vercel as is:
+
+1. Push the repository to GitHub (done).
+2. On [vercel.com/new](https://vercel.com/new), import `MehrazRumman/cv-generator`. Keep the detected **Next.js** preset and the default build command (`npm run build`).
+3. Deploy. `prebuild` copies the pdf.js worker automatically. PDFs are generated in the visitor's browser, so there are no serverless functions to size or pay for.
+
+Every later push to `main` redeploys automatically.

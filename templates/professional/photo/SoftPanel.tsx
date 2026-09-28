@@ -3,7 +3,7 @@ import { hasText } from "@/lib/format/text";
 import type { PreparedProfessional } from "@/lib/documents/prepare";
 import { accentOf, headingFont, PdfDocument, tint, type Kit, trackFor } from "../../shared/kit";
 import { baseKitStyles } from "../../shared/presets";
-import { renderSections } from "../blocks";
+import { contactItems, renderSections } from "../blocks";
 import { Avatar, fitText, SideContact, SideEducation, SideLanguages, SideSkills, type SideStyle } from "./parts";
 
 const LEFT = 182;
@@ -39,6 +39,8 @@ export function SoftPanel({ doc }: { doc: PreparedProfessional }) {
     gap: 15,
   };
   const h = doc.data.header;
+  // The rounded panel is drawn only when something goes in it, so an empty CV has no stray box.
+  const hasSide = contactItems(doc).length > 0 || doc.show.education || doc.show.skills || doc.show.languages;
   return (
     <PdfDocument title={`${h.fullName} — CV`} author={h.fullName} settings={doc.settings} pageStyle={{ paddingTop: 30, paddingBottom: 42, paddingHorizontal: 32, color: p.text }}>
       {/* Page-1 header band and overlapping photo */}
@@ -51,7 +53,7 @@ export function SoftPanel({ doc }: { doc: PreparedProfessional }) {
         ) : null}
       </View>
       <View style={{ flexDirection: "row", marginTop: 30 }}>
-        <View style={{ width: LEFT, backgroundColor: panel, borderRadius: 14, paddingHorizontal: 16, paddingTop: 34, paddingBottom: 10 }}>
+        <View style={{ width: LEFT, backgroundColor: hasSide ? panel : undefined, borderRadius: 14, paddingHorizontal: 16, paddingTop: 34, paddingBottom: 10 }}>
           <SideContact doc={doc} st={st} width={LEFT - 32} />
           <SideEducation doc={doc} st={st} />
           <SideSkills doc={doc} st={st} />

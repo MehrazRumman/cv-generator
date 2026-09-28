@@ -150,8 +150,10 @@ export function formatBiodataPartial(value: string, lang: LabelLanguage): string
   const m = /^(\d{4})(?:-(\d{2}))?$/.exec(value.trim());
   if (!m) return value.trim();
   const [, y, mo] = m;
-  if (!mo) return localizeDigits(y, lang);
-  const month = lang === "bn" ? MONTHS_BN[Number(mo) - 1] : MONTHS_EN[Number(mo) - 1].slice(0, 3);
+  const idx = Number(mo) - 1;
+  // No month, or an impossible one from an imported file ("2024-13"): print the year alone.
+  if (!mo || idx < 0 || idx > 11) return localizeDigits(y, lang);
+  const month = lang === "bn" ? MONTHS_BN[idx] : MONTHS_EN[idx].slice(0, 3);
   return localizeDigits(`${month} ${y}`, lang);
 }
 

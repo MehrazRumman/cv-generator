@@ -72,7 +72,8 @@ export const TEMPLATES = TEMPLATE_CATALOG;
 
 function component<T extends DocumentType>(type: T, id: string): TemplateComponent<T> {
   const byId = COMPONENTS[type];
-  return byId[id] ?? byId[TEMPLATE_CATALOG[type][0].id];
+  // Own keys only: an imported id such as "constructor" must fall back too, not hit Object.prototype.
+  return Object.hasOwn(byId, id) ? byId[id] : byId[TEMPLATE_CATALOG[type][0].id];
 }
 
 /**

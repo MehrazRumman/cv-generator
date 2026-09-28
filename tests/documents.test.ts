@@ -141,3 +141,15 @@ describe("text clean-up", () => {
     expect(d.experience[0].bullets).toEqual(["Did a thing"]);
   });
 });
+
+describe("template registry", async () => {
+  const { renderDocument } = await import("@/templates/registry");
+  const { isValidElement } = await import("react");
+  it("falls back to the default template for unknown ids, including Object.prototype keys", () => {
+    for (const id of ["no-such-template", "constructor", "toString"]) {
+      const doc = SAMPLE_VARIANTS.professional[0].create();
+      doc.settings.templateId = id;
+      expect(isValidElement(renderDocument(doc)), id).toBe(true);
+    }
+  });
+});

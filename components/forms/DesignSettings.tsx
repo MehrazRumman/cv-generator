@@ -24,7 +24,7 @@ export function DesignSettings({ extra }: { extra?: React.ReactNode }) {
       <div>
         <p className="mb-1.5 text-xs font-medium text-zinc-700">Template</p>
         <div className="grid max-h-[26rem] grid-cols-2 gap-2 overflow-y-auto pr-1 sm:grid-cols-3">
-          {templates.map((t) => {
+          {templates.map((t, i) => {
             const active = t.id === templateId;
             return (
               <button
@@ -54,6 +54,8 @@ export function DesignSettings({ extra }: { extra?: React.ReactNode }) {
                   alt=""
                   width={210}
                   height={297}
+                  // The first row is visible straight away (and is often the page's largest image).
+                  loading={i < 3 ? "eager" : "lazy"}
                   className="mb-1.5 h-auto w-full rounded-sm border border-zinc-200"
                 />
                 <span className="flex items-center gap-1.5">

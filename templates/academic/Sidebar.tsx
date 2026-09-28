@@ -1,7 +1,7 @@
 import { Text, View } from "@react-pdf/renderer";
 import { hasText } from "@/lib/format/text";
 import type { PreparedAcademic } from "@/lib/documents/prepare";
-import { accentOf, fitFontSize, headingFont, PdfDocument, PdfLink, tint, type Kit, untracked } from "../shared/kit";
+import { accentOf, fitFontSize, headingFont, PdfDocument, PdfLink, tint, type Kit, untracked, fitWords } from "../shared/kit";
 import { baseKitStyles } from "../shared/presets";
 import { academicLinks, ACADEMIC_TITLES, renderAcademicSections, type AcademicExtras } from "./blocks";
 
@@ -91,7 +91,7 @@ export function AcademicSidebar({ doc }: { doc: PreparedAcademic }) {
           ) : null}
         </View>
         <View style={{ flex: 1, paddingLeft: 22, paddingRight: 34 }}>
-          <Text style={{ ...hf, fontSize: 24, fontWeight: 700, color: "#1d1d1d" }}>{h.fullName}</Text>
+          <Text style={{ ...hf, fontSize: fitWords(h.fullName, 595 - SIDEBAR - 56, 24), fontWeight: 700, color: "#1d1d1d" }}>{h.fullName}</Text>
           {hasText(h.designation) ? <Text style={{ fontSize: 11.5, color: accent, marginTop: 2 }}>{h.designation}</Text> : null}
           {hasText(h.department) || hasText(h.institution) ? (
             <Text style={{ fontSize: 9.5, color: p.muted, marginTop: 1 }}>{[h.department, h.institution].filter(hasText).join(", ")}</Text>

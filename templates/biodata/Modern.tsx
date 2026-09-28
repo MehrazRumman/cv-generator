@@ -1,7 +1,7 @@
 import { Text, View } from "@react-pdf/renderer";
 import { hasText } from "@/lib/format/text";
 import type { PreparedBiodata } from "@/lib/documents/prepare";
-import { accentOf, headingFont, PdfDocument, Photo, tint } from "../shared/kit";
+import { accentOf, headingFont, PdfDocument, Photo, tint, fitWords } from "../shared/kit";
 import { renderBiodataSections, type BioKit } from "./blocks";
 import { headerInfo } from "./header";
 import { tracking } from "./labels";
@@ -55,7 +55,7 @@ export function BiodataModern({ doc }: { doc: PreparedBiodata }) {
       <View style={{ marginHorizontal: -40, marginTop: -36, minHeight: BAND, backgroundColor: accent, paddingHorizontal: 40, paddingVertical: 16, flexDirection: "row", alignItems: "center" }}>
         <View style={{ flex: 1, paddingRight: h.photo ? 120 : 0 }}>
           <Text style={{ ...hf, fontSize: 9, color: tint(accent, 0.6), letterSpacing: tracking(3, lang), textTransform: "uppercase" }}>{h.title}</Text>
-          <Text style={{ ...hf, fontSize: 22, fontWeight: 700, color: "#ffffff", marginTop: 4 }}>{h.name}</Text>
+          <Text style={{ ...hf, fontSize: fitWords(h.name, 395, 22), fontWeight: 700, color: "#ffffff", marginTop: 4 }}>{h.name}</Text>
           {h.hasSubtitle ? <Text style={{ fontSize: 10.5, color: tint(accent, 0.75), marginTop: 3 }}>{h.subtitle}</Text> : null}
           {hasText(h.contact) ? <Text style={{ fontSize: 9.5, color: "#ffffff", marginTop: 7 }}>{h.contact}</Text> : null}
         </View>

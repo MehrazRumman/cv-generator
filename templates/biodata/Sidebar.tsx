@@ -1,7 +1,7 @@
 import { Text, View } from "@react-pdf/renderer";
 import { hasText } from "@/lib/format/text";
 import type { PreparedBiodata } from "@/lib/documents/prepare";
-import { accentOf, fitFontSize, headingFont, PdfDocument, Photo, tint } from "../shared/kit";
+import { accentOf, fitFontSize, headingFont, PdfDocument, Photo, tint, fitWords } from "../shared/kit";
 import { labelsFor, renderBiodataSections, type BioKit } from "./blocks";
 import { headerInfo } from "./header";
 import { tracking } from "./labels";
@@ -90,7 +90,7 @@ export function BiodataSidebar({ doc }: { doc: PreparedBiodata }) {
         </View>
         <View style={{ flex: 1, paddingLeft: 22, paddingRight: 36 }}>
           <Text style={{ ...hf, fontSize: 9, color: accent, letterSpacing: tracking(2.5, lang), textTransform: "uppercase", fontWeight: 700 }}>{h.title}</Text>
-          <Text style={{ ...hf, fontSize: 23, fontWeight: 700, color: "#1a1a1a", marginTop: 4 }}>{h.name}</Text>
+          <Text style={{ ...hf, fontSize: fitWords(h.name, 595 - SIDEBAR - 58, 23), fontWeight: 700, color: "#1a1a1a", marginTop: 4 }}>{h.name}</Text>
           {h.hasSubtitle ? <Text style={{ fontSize: 10.5, color: "#555555", marginTop: 2 }}>{h.subtitle}</Text> : null}
           {renderBiodataSections(kit, doc, ["contact", "hobbies"])}
         </View>

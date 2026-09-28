@@ -1,7 +1,7 @@
 import { Text, View } from "@react-pdf/renderer";
 import { hasText } from "@/lib/format/text";
 import type { PreparedBiodata } from "@/lib/documents/prepare";
-import { accentOf, headingFont, PdfDocument, Photo } from "../shared/kit";
+import { accentOf, headingFont, PdfDocument, Photo, fitWords } from "../shared/kit";
 import { renderBiodataSections, type BioKit } from "./blocks";
 import { headerInfo } from "./header";
 import { tracking } from "./labels";
@@ -46,7 +46,7 @@ export function BiodataMinimal({ doc }: { doc: PreparedBiodata }) {
       <View style={{ flexDirection: "row", alignItems: "flex-start" }}>
         <View style={{ flex: 1 }}>
           <Text style={{ ...hf, fontSize: 9, color: muted, letterSpacing: tracking(2.5, lang), textTransform: "uppercase" }}>{h.title}</Text>
-          <Text style={{ ...hf, fontSize: 22, fontWeight: 600, color: "#111111", marginTop: 6 }}>{h.name}</Text>
+          <Text style={{ ...hf, fontSize: fitWords(h.name, 375, 22), fontWeight: 600, color: "#111111", marginTop: 6 }}>{h.name}</Text>
           {h.hasSubtitle ? <Text style={{ fontSize: 10.5, color: accent, marginTop: 3 }}>{h.subtitle}</Text> : null}
           {hasText(h.contact) ? <Text style={{ fontSize: 9.5, color: muted, marginTop: 8 }}>{h.contact}</Text> : null}
         </View>

@@ -1,7 +1,7 @@
 import { Text, View } from "@react-pdf/renderer";
 import { hasText } from "@/lib/format/text";
 import type { PreparedBiodata } from "@/lib/documents/prepare";
-import { accentOf, headingFont, PdfDocument, Photo, tint } from "../shared/kit";
+import { accentOf, headingFont, PdfDocument, Photo, tint, fitWords } from "../shared/kit";
 import { renderBiodataSections, type BioKit } from "./blocks";
 import { headerInfo } from "./header";
 import { tracking } from "./labels";
@@ -52,7 +52,7 @@ export function BiodataBordered({ doc }: { doc: PreparedBiodata }) {
       <View style={{ flexDirection: "row", borderWidth: 1.2, borderColor: accent }}>
         <View style={{ flex: 1, padding: 12, justifyContent: "center" }}>
           <Text style={{ ...hf, fontSize: 11, color: accent, fontWeight: 700, letterSpacing: tracking(3, lang), textTransform: "uppercase" }}>{h.title}</Text>
-          <Text style={{ ...hf, fontSize: 21, fontWeight: 700, marginTop: 6 }}>{h.name}</Text>
+          <Text style={{ ...hf, fontSize: fitWords(h.name, 381, 21), fontWeight: 700, marginTop: 6 }}>{h.name}</Text>
           {h.hasSubtitle ? <Text style={{ fontSize: 10.5, color: "#444444", marginTop: 3 }}>{h.subtitle}</Text> : null}
           {hasText(h.contact) ? <Text style={{ fontSize: 9.8, color: "#444444", marginTop: 5 }}>{h.contact}</Text> : null}
         </View>

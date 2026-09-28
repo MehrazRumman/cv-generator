@@ -1,7 +1,7 @@
 import { Path, Svg, Text, View } from "@react-pdf/renderer";
 import { hasText } from "@/lib/format/text";
 import type { PreparedBiodata } from "@/lib/documents/prepare";
-import { accentOf, headingFont, PdfDocument, Photo, tint } from "../shared/kit";
+import { accentOf, headingFont, PdfDocument, Photo, tint, fitWords } from "../shared/kit";
 import { renderBiodataSections, type BioKit } from "./blocks";
 import { headerInfo } from "./header";
 import { tracking } from "./labels";
@@ -87,7 +87,7 @@ export function BiodataHeritage({ doc }: { doc: PreparedBiodata }) {
       </View>
       <View style={{ flexDirection: "row", alignItems: "center", marginTop: 12, paddingHorizontal: 22 }}>
         <View style={{ flex: 1 }}>
-          <Text style={{ ...hf, fontSize: 20, fontWeight: 700, color: text }}>{h.name}</Text>
+          <Text style={{ ...hf, fontSize: fitWords(h.name, 347, 20), fontWeight: 700, color: text }}>{h.name}</Text>
           {h.hasSubtitle ? <Text style={{ fontSize: 10.5, color: accent, marginTop: 3 }}>{h.subtitle}</Text> : null}
           {hasText(h.contact) ? <Text style={{ fontSize: 9.6, color: "#5d524b", marginTop: 6 }}>{h.contact}</Text> : null}
         </View>

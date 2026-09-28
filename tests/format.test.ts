@@ -39,6 +39,15 @@ describe("file names", () => {
 });
 
 describe("authors", () => {
+  it("makes initials from full, initialled and hyphenated given names without crashing mid-typing", () => {
+    expect(initials("Mehraz Abdul")).toBe("M. A.");
+    expect(initials("M.A.")).toBe("M. A.");
+    expect(initials("Jean-Paul")).toBe("J.-P.");
+    expect(initials("M.-A.")).toBe("M.-A.");
+    expect(initials("Jean-")).toBe("J.");
+    expect(initials("-Marie")).toBe("M.");
+    expect(initials("  ")).toBe("");
+  });
   it("parses both name orders and round-trips", () => {
     const authors = parseAuthorList("Islam, Farhana; Graeme Hirst;  ; Smith, J. A.");
     expect(authors).toEqual([
@@ -154,5 +163,15 @@ describe("header text fitting", async () => {
     const size = fitWords("Maximiliana Wolfeschlegelsteinhausen-Bergerdorff", 174, 21);
     expect(size).toBeLessThan(21);
     expect("Wolfeschlegelsteinhausen-Bergerdorff".length * size * 0.6).toBeLessThanOrEqual(174);
+  });
+});
+
+describe("biodata dates", async () => {
+  const { formatBiodataPartial } = await import("@/templates/biodata/labels");
+  it("localises months and falls back to the year for impossible months", () => {
+    expect(formatBiodataPartial("2021-02", "en")).toBe("Feb 2021");
+    expect(formatBiodataPartial("2021-02", "bn")).toBe("ফেব্রুয়ারি ২০২১");
+    expect(formatBiodataPartial("2024-13", "en")).toBe("2024");
+    expect(formatBiodataPartial("2024-00", "bn")).toBe("২০২৪");
   });
 });

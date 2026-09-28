@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { SignOutButton } from "@/components/auth/SignOutButton";
 import { Logo } from "@/components/brand/Logo";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { DOCUMENT_TYPE_META } from "@/lib/documents/meta";
@@ -63,6 +64,7 @@ export default function Home() {
           </div>
           <div className="ml-auto flex items-center gap-2 sm:ml-0">
             <ThemeToggle />
+            <SignOutButton />
             <a href={REPO_URL} className="btn" target="_blank" rel="noreferrer">
               GitHub
             </a>

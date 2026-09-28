@@ -14,6 +14,7 @@ import type { AnyDocument, DocumentType } from "@/lib/schemas";
 import { TEMPLATE_CATALOG } from "@/templates/catalog";
 import { Logo } from "../brand/Logo";
 import { ThemeToggle } from "../theme/ThemeToggle";
+import { SignOutButton } from "../auth/SignOutButton";
 import { documentOwnerName, downloadBlob, exportDocumentJson, importDocumentJson, repository } from "@/lib/storage";
 import { AcademicForm } from "../forms/academic/AcademicForm";
 import { BiodataForm } from "../forms/biodata/BiodataForm";
@@ -247,6 +248,7 @@ function EditorForm({ type, initial }: { type: DocumentType; initial: AnyDocumen
               Reset
             </button>
             <ThemeToggle />
+            <SignOutButton />
             <button type="button" className="btn btn-primary" disabled={downloading} onClick={handleSubmit(onValid, onInvalid)}>
               {downloading ? "Preparing…" : "Download PDF"}
             </button>

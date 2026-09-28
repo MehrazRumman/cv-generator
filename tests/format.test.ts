@@ -141,3 +141,18 @@ describe("segment normalisation", async () => {
     ]);
   });
 });
+
+describe("header text fitting", async () => {
+  const { trackFor } = await import("@/lib/pdf/fonts");
+  const { fitWords } = await import("@/templates/shared/kit");
+  it("drops letter-spacing for Bangla only", () => {
+    expect(trackFor("Ayesha Rahman", 2)).toBe(2);
+    expect(trackFor("আয়েশা রহমান", 2)).toBe(0);
+  });
+  it("keeps ordinary names at full size and shrinks one that can't fit a line", () => {
+    expect(fitWords("Ayesha Rahman", 174, 21)).toBe(21);
+    const size = fitWords("Maximiliana Wolfeschlegelsteinhausen-Bergerdorff", 174, 21);
+    expect(size).toBeLessThan(21);
+    expect("Wolfeschlegelsteinhausen-Bergerdorff".length * size * 0.6).toBeLessThanOrEqual(174);
+  });
+});

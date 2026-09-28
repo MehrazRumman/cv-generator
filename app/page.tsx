@@ -122,7 +122,7 @@ export default function Home() {
               ] as const
             ).map(([type, id, pos]) => (
               <div key={type} className={`absolute w-[58%] overflow-hidden rounded-lg bg-surface shadow-2xl ring-1 ring-zinc-900/10 ${pos}`}>
-                <Image src={thumb(type, id)} alt="" width={420} height={594} className="h-auto w-full" priority />
+                <Image src={thumb(type, id)} alt="" width={420} height={594} className="h-auto w-full" preload />
               </div>
             ))}
           </div>

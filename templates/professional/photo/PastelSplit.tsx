@@ -1,7 +1,7 @@
 import { Polygon, Svg, Text, View } from "@react-pdf/renderer";
 import { hasText } from "@/lib/format/text";
 import type { PreparedProfessional } from "@/lib/documents/prepare";
-import { accentOf, headingFont, PdfDocument, tint, type Kit } from "../../shared/kit";
+import { accentOf, headingFont, PdfDocument, tint, type Kit, trackFor } from "../../shared/kit";
 import { baseKitStyles } from "../../shared/presets";
 import { renderSections } from "../blocks";
 import { Avatar, fitText, SideContact, SideLanguages, SideSummary, type SideStyle } from "./parts";
@@ -76,11 +76,11 @@ export function PastelSplit({ doc }: { doc: PreparedProfessional }) {
         </View>
         <View style={{ flex: 1, paddingLeft: 40, paddingRight: 36 }}>
           <View style={{ height: BAND - 30, justifyContent: "center", paddingLeft: 18 }}>
-            <Text style={{ ...hf, fontSize: fitText(h.fullName, NAME_W, 26, { upper: true, tracking: 1.5 }), fontWeight: 700, color: "#2b2b2b", textTransform: "uppercase", letterSpacing: 1.5, lineHeight: 1.05 }}>
+            <Text style={{ ...hf, fontSize: fitText(h.fullName, NAME_W, 26, { upper: true, tracking: 1.5 }), fontWeight: 700, color: "#2b2b2b", textTransform: "uppercase", letterSpacing: trackFor(h.fullName, 1.5), lineHeight: 1.05 }}>
               {h.fullName}
             </Text>
             {hasText(h.jobTitle) ? (
-              <Text style={{ fontSize: fitText(h.jobTitle, NAME_W, 11, { lines: 1, tracking: 1, min: 8 }), color: "#4a4a4a", marginTop: 5, letterSpacing: 1 }}>{h.jobTitle}</Text>
+              <Text style={{ fontSize: fitText(h.jobTitle, NAME_W, 11, { lines: 1, tracking: 1, min: 8 }), color: "#4a4a4a", marginTop: 5, letterSpacing: trackFor(h.jobTitle, 1) }}>{h.jobTitle}</Text>
             ) : null}
           </View>
           {renderSections(kit, doc, ["education", "experience", "skills", "projects", "certifications", "references"])}

@@ -1,7 +1,7 @@
 import { Text, View } from "@react-pdf/renderer";
 import { hasText } from "@/lib/format/text";
 import type { PreparedProfessional } from "@/lib/documents/prepare";
-import { accentOf, headingFont, PdfDocument, tint, type Kit } from "../../shared/kit";
+import { accentOf, headingFont, PdfDocument, tint, type Kit, trackFor } from "../../shared/kit";
 import { baseKitStyles } from "../../shared/presets";
 import { renderSections } from "../blocks";
 import { Avatar, fitText, SideContact, SideEducation, SideLanguages, SideSkills, type SideStyle } from "./parts";
@@ -45,9 +45,9 @@ export function SoftPanel({ doc }: { doc: PreparedProfessional }) {
       <View style={{ position: "absolute", top: 34, left: 150, right: 0, height: BAND, backgroundColor: panel }} />
       <Avatar doc={doc} size={130} ring={5} ringColor="#ffffff" fallbackBg={accent} style={{ position: "absolute", top: 24, left: 40 }} />
       <View style={{ height: BAND - 4, justifyContent: "center", paddingLeft: 170 }}>
-        <Text style={{ ...hf, fontSize: fitText(h.fullName, NAME_W, 24, { upper: true, tracking: 4 }), color: "#2b2b2b", textTransform: "uppercase", letterSpacing: 4 }}>{h.fullName}</Text>
+        <Text style={{ ...hf, fontSize: fitText(h.fullName, NAME_W, 24, { upper: true, tracking: 4 }), color: "#2b2b2b", textTransform: "uppercase", letterSpacing: trackFor(h.fullName, 4) }}>{h.fullName}</Text>
         {hasText(h.jobTitle) ? (
-          <Text style={{ fontSize: fitText(h.jobTitle, NAME_W, 10.5, { lines: 1, tracking: 1.2, min: 8 }), color: p.muted, marginTop: 5, letterSpacing: 1.2 }}>{h.jobTitle}</Text>
+          <Text style={{ fontSize: fitText(h.jobTitle, NAME_W, 10.5, { lines: 1, tracking: 1.2, min: 8 }), color: p.muted, marginTop: 5, letterSpacing: trackFor(h.jobTitle, 1.2) }}>{h.jobTitle}</Text>
         ) : null}
       </View>
       <View style={{ flexDirection: "row", marginTop: 30 }}>

@@ -1,7 +1,7 @@
 import { Text, View } from "@react-pdf/renderer";
 import { hasText } from "@/lib/format/text";
 import type { PreparedProfessional } from "@/lib/documents/prepare";
-import { accentOf, headingFont, PdfDocument, tint, type Kit } from "../../shared/kit";
+import { accentOf, headingFont, PdfDocument, tint, type Kit, trackFor } from "../../shared/kit";
 import { baseKitStyles } from "../../shared/presets";
 import { renderSections } from "../blocks";
 import { Avatar, fitText, IconBadge, SECTION_ICON, SideContact, SideLanguages, SideReferences, SideSkills, type SideStyle } from "./parts";
@@ -55,11 +55,11 @@ export function NavyHeader({ doc }: { doc: PreparedProfessional }) {
       <View style={{ flexDirection: "row", height: BAND }}>
         <View style={{ width: LEFT }} />
         <View style={{ flex: 1, justifyContent: "center", paddingLeft: 14 }}>
-          <Text style={{ ...hf, fontSize: fitText(h.fullName, NAME_W, 26, { upper: true, tracking: 1 }), fontWeight: 700, color: "#ffffff", textTransform: "uppercase", letterSpacing: 1 }}>
+          <Text style={{ ...hf, fontSize: fitText(h.fullName, NAME_W, 26, { upper: true, tracking: 1 }), fontWeight: 700, color: "#ffffff", textTransform: "uppercase", letterSpacing: trackFor(h.fullName, 1) }}>
             {h.fullName}
           </Text>
           {hasText(h.jobTitle) ? (
-            <Text style={{ fontSize: fitText(h.jobTitle, NAME_W, 10.5, { upper: true, tracking: 2, min: 7.5 }), color: tint(accent, 0.7), textTransform: "uppercase", letterSpacing: 2, marginTop: 4 }}>
+            <Text style={{ fontSize: fitText(h.jobTitle, NAME_W, 10.5, { upper: true, tracking: 2, min: 7.5 }), color: tint(accent, 0.7), textTransform: "uppercase", letterSpacing: trackFor(h.jobTitle, 2), marginTop: 4 }}>
               {h.jobTitle}
             </Text>
           ) : null}

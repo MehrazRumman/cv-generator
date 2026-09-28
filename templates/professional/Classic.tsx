@@ -1,7 +1,7 @@
 import { Text, View } from "@react-pdf/renderer";
 import { hasText } from "@/lib/format/text";
 import type { PreparedProfessional } from "@/lib/documents/prepare";
-import { headingFont, PdfDocument, Photo, type Kit } from "../shared/kit";
+import { headingFont, PdfDocument, Photo, type Kit, trackFor } from "../shared/kit";
 import { baseKitStyles, PAGE_MARGIN } from "../shared/presets";
 import { contactItems, ContactLine, renderSections } from "./blocks";
 
@@ -28,7 +28,7 @@ export function Classic({ doc }: { doc: PreparedProfessional }) {
     <PdfDocument title={`${h.fullName} — CV`} author={h.fullName} settings={doc.settings} pageStyle={{ ...PAGE_MARGIN, color: p.text }}>
       <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 4 }}>
         <View style={{ flex: 1, alignItems: "center" }}>
-          <Text style={{ ...hf, fontSize: 24, fontWeight: 700, letterSpacing: 0.5 }}>{h.fullName}</Text>
+          <Text style={{ ...hf, fontSize: 24, fontWeight: 700, letterSpacing: trackFor(h.fullName, 0.5) }}>{h.fullName}</Text>
           {hasText(h.jobTitle) ? <Text style={{ fontSize: 11.5, marginTop: 3 }}>{h.jobTitle}</Text> : null}
           <ContactLine items={contactItems(doc)} separator="  |  " style={{ fontSize: 9.5, marginTop: 5, textAlign: "center", color: p.text }} />
         </View>

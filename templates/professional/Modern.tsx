@@ -1,7 +1,7 @@
 import { Text, View } from "@react-pdf/renderer";
 import { hasText } from "@/lib/format/text";
 import type { PreparedProfessional } from "@/lib/documents/prepare";
-import { accentOf, headingFont, PdfDocument, Photo, type Kit } from "../shared/kit";
+import { accentOf, headingFont, PdfDocument, Photo, type Kit, trackFor } from "../shared/kit";
 import { baseKitStyles, PAGE_MARGIN } from "../shared/presets";
 import { contactItems, ContactLine, renderSections } from "./blocks";
 
@@ -41,7 +41,7 @@ export function Modern({ doc }: { doc: PreparedProfessional }) {
             <Text style={{ fontWeight: 700, color: "#222222" }}>{last}</Text>
           </Text>
           {hasText(h.jobTitle) ? (
-            <Text style={{ fontSize: 9.5, color: accent, textTransform: "uppercase", letterSpacing: 1.6, marginTop: 4 }}>{h.jobTitle}</Text>
+            <Text style={{ fontSize: 9.5, color: accent, textTransform: "uppercase", letterSpacing: trackFor(h.jobTitle, 1.6), marginTop: 4 }}>{h.jobTitle}</Text>
           ) : null}
           <ContactLine items={contactItems(doc)} separator="  |  " style={{ fontSize: 8.8, color: p.muted, marginTop: 6 }} />
         </View>

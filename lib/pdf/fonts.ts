@@ -7,6 +7,12 @@ export { BANGLA_FONTS, LATIN_FONTS };
 let registeredBase: string | null = null;
 
 const LONG_WORD = 38;
+const BANGLA = /[\u0980-\u09FF]/;
+
+export const hasBangla = (text: string) => BANGLA.test(text);
+
+/** Letter spacing for user-typed text: none for Bangla, where spacing pulls vowel signs and conjuncts apart. */
+export const trackFor = (text: string, value: number) => (hasBangla(text) ? 0 : value);
 const CHUNK = 20;
 
 /**
@@ -16,7 +22,7 @@ const CHUNK = 20;
  * so they wrap instead of overflowing their column.
  */
 export function splitLongWord(word: string): string[] {
-  if (word.length <= LONG_WORD || /[\u0980-\u09FF]/.test(word)) return [word];
+  if (word.length <= LONG_WORD || hasBangla(word)) return [word];
   const out: string[] = [];
   for (const part of word.split(/(?<=[/.@_\-?&=])/)) {
     let rest = part;

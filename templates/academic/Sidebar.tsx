@@ -1,7 +1,7 @@
 import { Text, View } from "@react-pdf/renderer";
 import { hasText } from "@/lib/format/text";
 import type { PreparedAcademic } from "@/lib/documents/prepare";
-import { accentOf, fitFontSize, headingFont, PdfDocument, PdfLink, tint, type Kit } from "../shared/kit";
+import { accentOf, fitFontSize, headingFont, PdfDocument, PdfLink, tint, type Kit, untracked } from "../shared/kit";
 import { baseKitStyles } from "../shared/presets";
 import { academicLinks, ACADEMIC_TITLES, renderAcademicSections, type AcademicExtras } from "./blocks";
 
@@ -73,7 +73,7 @@ export function AcademicSidebar({ doc }: { doc: PreparedAcademic }) {
           {doc.show.skills
             ? d.skills.map((g) => (
                 <View key={g.id} wrap={false}>
-                  <Text style={side.heading}>{g.category}</Text>
+                  <Text style={[side.heading, untracked(g.category)]}>{g.category}</Text>
                   <Text style={side.text}>{g.items.join(", ")}</Text>
                 </View>
               ))

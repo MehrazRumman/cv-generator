@@ -2,8 +2,13 @@ import { Document, Image, Link, Page, Text, View } from "@react-pdf/renderer";
 import type { Style } from "@react-pdf/types";
 import { Children, cloneElement, isValidElement, type ReactNode } from "react";
 import { normalizeSegments, type Segment } from "@/lib/format/citation";
-import { fontStack } from "@/lib/pdf/fonts";
+import { fontStack, hasBangla, trackFor } from "@/lib/pdf/fonts";
 import type { BanglaFontId, FontId, PaperSize } from "@/lib/schemas";
+
+export { trackFor };
+
+/** Cancels a style's letter spacing when the text is Bangla (see trackFor). */
+export const untracked = (text: string): Style => (hasBangla(text) ? { letterSpacing: 0 } : {});
 
 /* ------------------------------------------------------------------ */
 /* Kit: the per-template style sheet that shared section renderers use  */
@@ -217,14 +222,14 @@ export function Entry({ kit, title, subtitle, date, meta, bullets = [], children
       {kit.entryLayout === "stacked" ? (
         <>
           <View style={s.entryHead}>
-            <Text style={[s.entryTitle, { flex: 1 }]}>{title}</Text>
+            <Text style={[s.entryTitle, { flex: 1 }, untracked(title)]}>{title}</Text>
             {date ? <Text style={s.entryDate}>{date}</Text> : null}
           </View>
           {subtitle ? <Text style={s.entrySubtitle}>{subtitle}</Text> : null}
         </>
       ) : (
         <>
-          <Text style={s.entryTitle}>{title}</Text>
+          <Text style={[s.entryTitle, untracked(title)]}>{title}</Text>
           {subtitle ? <Text style={s.entrySubtitle}>{subtitle}</Text> : null}
           {kit.entryLayout === "dateBelow" && date ? <Text style={[s.entryDate, { textAlign: "left", marginLeft: 0 }]}>{date}</Text> : null}
         </>

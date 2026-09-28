@@ -2,7 +2,7 @@ import { Text, View } from "@react-pdf/renderer";
 import { formatPartialDate } from "@/lib/format/dates";
 import { hasText } from "@/lib/format/text";
 import type { PreparedProfessional } from "@/lib/documents/prepare";
-import { accentOf, fitFontSize, headingFont, PdfDocument, PdfLink, Photo, tint, type Kit } from "../shared/kit";
+import { accentOf, fitFontSize, headingFont, PdfDocument, PdfLink, Photo, tint, type Kit, untracked } from "../shared/kit";
 import { baseKitStyles } from "../shared/presets";
 import { contactItems, LEVEL_LABEL, renderSections } from "./blocks";
 
@@ -58,7 +58,7 @@ export function Sidebar({ doc }: { doc: PreparedProfessional }) {
           {doc.show.skills
             ? d.skills.map((g) => (
                 <View key={g.id} wrap={false}>
-                  <Text style={side.heading}>{g.category}</Text>
+                  <Text style={[side.heading, untracked(g.category)]}>{g.category}</Text>
                   {g.items.map((item, i) => (
                     <Text key={i} style={[side.text, { marginBottom: 1.5 }]}>
                       {item}

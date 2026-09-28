@@ -1,7 +1,7 @@
 import { Text, View } from "@react-pdf/renderer";
 import { hasText } from "@/lib/format/text";
 import type { PreparedProfessional } from "@/lib/documents/prepare";
-import { accentOf, headingFont, PdfDocument, tint, type Kit } from "../../shared/kit";
+import { accentOf, headingFont, PdfDocument, tint, type Kit, trackFor, fitWords } from "../../shared/kit";
 import { baseKitStyles, PAGE_MARGIN } from "../../shared/presets";
 import { contactItems, renderSections } from "../blocks";
 import { Avatar, ContactRows, type SideStyle } from "./parts";
@@ -31,7 +31,7 @@ export function PhotoHeader({ doc }: { doc: PreparedProfessional }) {
       <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 8, paddingBottom: 14, borderBottomWidth: 2, borderBottomColor: accent }}>
         <Avatar doc={doc} size={96} ring={3} ringColor={accent} gap={3} fallbackBg={accent} />
         <View style={{ flex: 1, marginLeft: 20 }}>
-          <Text style={{ ...hf, fontSize: 24, fontWeight: 700, color: accent, textTransform: "uppercase", letterSpacing: 0.8 }}>{h.fullName}</Text>
+          <Text style={{ ...hf, fontSize: fitWords(h.fullName, 391, 24, { upper: true, tracking: 0.8 }), fontWeight: 700, color: accent, textTransform: "uppercase", letterSpacing: trackFor(h.fullName, 0.8) }}>{h.fullName}</Text>
           {hasText(h.jobTitle) ? <Text style={{ fontSize: 11.5, color: p.muted, marginTop: 2, marginBottom: 7 }}>{h.jobTitle}</Text> : null}
           <View style={{ flexDirection: "row" }}>
             <View style={{ width: "50%", paddingRight: 8 }}>

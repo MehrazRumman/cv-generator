@@ -2,7 +2,7 @@ import { Text, View } from "@react-pdf/renderer";
 import { formatPartialDate } from "@/lib/format/dates";
 import { hasText } from "@/lib/format/text";
 import type { PreparedProfessional } from "@/lib/documents/prepare";
-import { accentOf, fitFontSize, headingFont, PdfDocument, PdfLink, Photo, tint, type Kit, untracked } from "../shared/kit";
+import { accentOf, fitFontSize, headingFont, PdfDocument, PdfLink, Photo, tint, type Kit, untracked, fitWords } from "../shared/kit";
 import { baseKitStyles } from "../shared/presets";
 import { contactItems, LEVEL_LABEL, renderSections } from "./blocks";
 
@@ -93,7 +93,7 @@ export function Sidebar({ doc }: { doc: PreparedProfessional }) {
         </View>
 
         <View style={{ flex: 1, paddingLeft: 22, paddingRight: 32 }}>
-          <Text style={{ ...hf, fontSize: 26, fontWeight: 700, color: "#1d1d1d" }}>{h.fullName}</Text>
+          <Text style={{ ...hf, fontSize: fitWords(h.fullName, 595 - SIDEBAR - 54, 26), fontWeight: 700, color: "#1d1d1d" }}>{h.fullName}</Text>
           {hasText(h.jobTitle) ? <Text style={{ fontSize: 12, color: accent, marginTop: 2, marginBottom: 4 }}>{h.jobTitle}</Text> : <View style={{ height: 4 }} />}
           {renderSections(kit, doc, ["summary", "experience", "projects", "education", "references"])}
         </View>

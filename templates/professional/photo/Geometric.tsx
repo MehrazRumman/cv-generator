@@ -1,7 +1,7 @@
 import { Polygon, Svg, Text, View } from "@react-pdf/renderer";
 import { hasText } from "@/lib/format/text";
 import type { PreparedProfessional } from "@/lib/documents/prepare";
-import { accentOf, headingFont, PdfDocument, tint, type Kit } from "../../shared/kit";
+import { accentOf, headingFont, PdfDocument, tint, type Kit, fitWords } from "../../shared/kit";
 import { baseKitStyles } from "../../shared/presets";
 import { renderSections } from "../blocks";
 import { Avatar, Icon, SECTION_ICON, SideContact, SideLanguages, SideSkills, SideSummary, splitName, type IconName, type SideStyle } from "./parts";
@@ -44,6 +44,8 @@ export function Geometric({ doc }: { doc: PreparedProfessional }) {
   };
   const h = doc.data.header;
   const { first, last } = splitName(h.fullName);
+  // Beside the photo, left of the corner shapes.
+  const nameSize = fitWords(h.fullName, 595 - 72 - 90 - 128 - 22, 28);
   return (
     <PdfDocument title={`${h.fullName} — CV`} author={h.fullName} settings={doc.settings} pageStyle={{ paddingTop: 36, paddingBottom: 60, paddingHorizontal: 36, color: p.text }}
       background={
@@ -61,8 +63,8 @@ export function Geometric({ doc }: { doc: PreparedProfessional }) {
       <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 16, paddingRight: 90 }}>
         <Avatar doc={doc} size={128} ring={6} ringColor={GOLD} gap={0} fallbackBg={accent} />
         <View style={{ marginLeft: 22, flex: 1 }}>
-          <Text style={{ ...hf, fontSize: 28, fontWeight: 700, color: accent, lineHeight: 1.05 }}>{first}</Text>
-          {last ? <Text style={{ ...hf, fontSize: 28, fontWeight: 700, color: accent, lineHeight: 1.05 }}>{last}</Text> : null}
+          <Text style={{ ...hf, fontSize: nameSize, fontWeight: 700, color: accent, lineHeight: 1.05 }}>{first}</Text>
+          {last ? <Text style={{ ...hf, fontSize: nameSize, fontWeight: 700, color: accent, lineHeight: 1.05 }}>{last}</Text> : null}
           {hasText(h.jobTitle) ? <Text style={{ fontSize: 11, color: p.muted, marginTop: 6 }}>{h.jobTitle}</Text> : null}
         </View>
       </View>

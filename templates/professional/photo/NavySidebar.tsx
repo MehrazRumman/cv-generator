@@ -1,12 +1,14 @@
 import { Text, View } from "@react-pdf/renderer";
 import { hasText } from "@/lib/format/text";
 import type { PreparedProfessional } from "@/lib/documents/prepare";
-import { accentOf, headingFont, PdfDocument, tint, type Kit } from "../../shared/kit";
+import { accentOf, headingFont, PdfDocument, tint, type Kit, trackFor, fitWords } from "../../shared/kit";
 import { baseKitStyles } from "../../shared/presets";
 import { renderSections } from "../blocks";
 import { Avatar, SideContact, SideEducation, SideLanguages, SideSkills, splitName, type SideStyle } from "./parts";
 
 const SIDE = 190;
+/** Width of the name beside the side column. */
+const NAME_W = 595 - SIDE - 24 - 34;
 
 /** Dark column with a round photo, contact icons, education, skills and languages; experience on the right. */
 export function NavySidebar({ doc }: { doc: PreparedProfessional }) {
@@ -55,12 +57,12 @@ export function NavySidebar({ doc }: { doc: PreparedProfessional }) {
         </View>
         <View style={{ flex: 1, paddingLeft: 24, paddingRight: 34 }}>
           <View style={{ marginTop: 26, marginBottom: 12 }}>
-            <Text style={{ ...hf, fontSize: 25, color: "#1f1f1f", textTransform: "uppercase", letterSpacing: 1 }}>
+            <Text style={{ ...hf, fontSize: fitWords(h.fullName, NAME_W, 25, { upper: true, tracking: 1 }), color: "#1f1f1f", textTransform: "uppercase", letterSpacing: trackFor(h.fullName, 1) }}>
               <Text style={{ fontWeight: 700 }}>{first} </Text>
               <Text>{last}</Text>
             </Text>
             {hasText(h.jobTitle) ? (
-              <Text style={{ fontSize: 10.5, color: p.muted, textTransform: "uppercase", letterSpacing: 2, marginTop: 4 }}>{h.jobTitle}</Text>
+              <Text style={{ fontSize: 10.5, color: p.muted, textTransform: "uppercase", letterSpacing: trackFor(h.jobTitle, 2), marginTop: 4 }}>{h.jobTitle}</Text>
             ) : null}
           </View>
           {renderSections(kit, doc, ["summary", "experience", "projects", "certifications", "references"])}

@@ -1,7 +1,7 @@
 import { Text, View } from "@react-pdf/renderer";
 import { hasText } from "@/lib/format/text";
 import type { PreparedProfessional } from "@/lib/documents/prepare";
-import { accentOf, headingFont, PdfDocument, Photo, type Kit } from "../shared/kit";
+import { accentOf, headingFont, PdfDocument, Photo, type Kit, trackFor, fitWords } from "../shared/kit";
 import { baseKitStyles, PAGE_MARGIN } from "../shared/presets";
 import { contactItems, ContactLine, renderSections } from "./blocks";
 
@@ -36,8 +36,8 @@ export function Executive({ doc }: { doc: PreparedProfessional }) {
         <View style={{ borderTopWidth: 0.6, borderColor: accent, position: "absolute", top: 2, left: 0, right: 0 }} />
         <View style={{ flexDirection: "row", alignItems: "center" }}>
           <View style={{ flex: 1, alignItems: "center" }}>
-            <Text style={{ ...hf, fontSize: 24, letterSpacing: 3, textTransform: "uppercase", color: "#111111" }}>{h.fullName}</Text>
-            {hasText(h.jobTitle) ? <Text style={{ fontSize: 10.5, color: accent, marginTop: 4, letterSpacing: 1 }}>{h.jobTitle}</Text> : null}
+            <Text style={{ ...hf, fontSize: fitWords(h.fullName, 507, 24, { upper: true, tracking: 3 }), letterSpacing: trackFor(h.fullName, 3), textTransform: "uppercase", color: "#111111" }}>{h.fullName}</Text>
+            {hasText(h.jobTitle) ? <Text style={{ fontSize: 10.5, color: accent, marginTop: 4, letterSpacing: trackFor(h.jobTitle, 1) }}>{h.jobTitle}</Text> : null}
             <ContactLine items={contactItems(doc)} separator="   •   " style={{ fontSize: 8.8, color: p.muted, marginTop: 6 }} />
           </View>
           {doc.show.photo && doc.data.photo ? (

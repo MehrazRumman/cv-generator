@@ -1,7 +1,7 @@
 import { Text, View } from "@react-pdf/renderer";
 import { hasText } from "@/lib/format/text";
 import type { PreparedProfessional } from "@/lib/documents/prepare";
-import { accentOf, fitFontSize, headingFont, PdfDocument, Photo, tint, type Kit } from "../shared/kit";
+import { accentOf, fitFontSize, headingFont, PdfDocument, Photo, tint, type Kit, fitWords } from "../shared/kit";
 import { baseKitStyles, PAGE_MARGIN } from "../shared/presets";
 import { contactItems, ContactLine, renderSections } from "./blocks";
 
@@ -33,7 +33,7 @@ export function Timeline({ doc }: { doc: PreparedProfessional }) {
     <PdfDocument title={`${h.fullName} — CV`} author={h.fullName} settings={doc.settings} pageStyle={{ ...PAGE_MARGIN, color: p.text }}>
       <View style={{ flexDirection: "row", alignItems: "flex-end", marginBottom: 8 }}>
         <View style={{ flex: 1 }}>
-          <Text style={{ ...hf, fontSize: 28, color: accent }}>{h.fullName}</Text>
+          <Text style={{ ...hf, fontSize: fitWords(h.fullName, 595 - 88 - 200, 28), color: accent }}>{h.fullName}</Text>
           {hasText(h.jobTitle) ? <Text style={{ fontSize: 13, color: p.muted, fontStyle: "italic", marginTop: 2 }}>{h.jobTitle}</Text> : null}
         </View>
         <View style={{ width: 200, alignItems: "flex-end" }}>

@@ -1,12 +1,14 @@
 import { Text, View } from "@react-pdf/renderer";
 import { hasText } from "@/lib/format/text";
 import type { PreparedProfessional } from "@/lib/documents/prepare";
-import { accentOf, headingFont, PdfDocument, tint, type Kit } from "../../shared/kit";
+import { accentOf, headingFont, PdfDocument, tint, type Kit, trackFor, fitWords } from "../../shared/kit";
 import { baseKitStyles } from "../../shared/presets";
 import { renderSections } from "../blocks";
 import { Avatar, SideContact, SideEducation, SideLanguages, SideSkills, type SideStyle } from "./parts";
 
 const SIDE = 186;
+/** Width of the name beside the side column. */
+const NAME_W = 595 - SIDE - 24 - 34;
 
 /** Light grey column with a ringed photo; letter-spaced accent headings and a dotted timeline for experience. */
 export function GrayColumn({ doc }: { doc: PreparedProfessional }) {
@@ -55,8 +57,8 @@ export function GrayColumn({ doc }: { doc: PreparedProfessional }) {
         </View>
         <View style={{ flex: 1, paddingLeft: 24, paddingRight: 34 }}>
           <View style={{ marginTop: 24, marginBottom: 14 }}>
-            <Text style={{ ...hf, fontSize: 21, fontWeight: 700, color: accent, textTransform: "uppercase", letterSpacing: 2 }}>{h.fullName}</Text>
-            {hasText(h.jobTitle) ? <Text style={{ fontSize: 10.5, color: p.muted, letterSpacing: 1.5, marginTop: 4 }}>{h.jobTitle}</Text> : null}
+            <Text style={{ ...hf, fontSize: fitWords(h.fullName, NAME_W, 21, { upper: true, tracking: 2 }), fontWeight: 700, color: accent, textTransform: "uppercase", letterSpacing: trackFor(h.fullName, 2) }}>{h.fullName}</Text>
+            {hasText(h.jobTitle) ? <Text style={{ fontSize: 10.5, color: p.muted, letterSpacing: trackFor(h.jobTitle, 1.5), marginTop: 4 }}>{h.jobTitle}</Text> : null}
           </View>
           {renderSections(kit, doc, ["summary", "experience", "projects", "certifications", "references"])}
         </View>

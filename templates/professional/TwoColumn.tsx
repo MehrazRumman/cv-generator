@@ -1,7 +1,7 @@
 import { Text, View } from "@react-pdf/renderer";
 import type { PreparedProfessional } from "@/lib/documents/prepare";
 import { hasText } from "@/lib/format/text";
-import { accentOf, headingFont, PdfDocument, Photo, type Kit } from "../shared/kit";
+import { accentOf, headingFont, PdfDocument, Photo, type Kit, trackFor, fitWords } from "../shared/kit";
 import { baseKitStyles } from "../shared/presets";
 import { contactItems, ContactLine, renderSections } from "./blocks";
 
@@ -42,11 +42,11 @@ export function TwoColumn({ doc }: { doc: PreparedProfessional }) {
     >
       <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center", marginBottom: 10 }}>
         <View style={{ alignItems: "center" }}>
-          <Text style={{ ...hf, fontSize: 30, letterSpacing: 2, textTransform: "uppercase" }}>
+          <Text style={{ ...hf, fontSize: fitWords(h.fullName, 519, 30, { upper: true, tracking: 2 }), letterSpacing: trackFor(h.fullName, 2), textTransform: "uppercase" }}>
             <Text style={{ color: "#8a8a8a" }}>{parts.join(" ")} </Text>
             <Text style={{ fontWeight: 700, color: "#1d1d1d" }}>{last}</Text>
           </Text>
-          {hasText(h.jobTitle) ? <Text style={{ fontSize: 10.5, color: accent, marginTop: 2, letterSpacing: 1 }}>{h.jobTitle}</Text> : null}
+          {hasText(h.jobTitle) ? <Text style={{ fontSize: 10.5, color: accent, marginTop: 2, letterSpacing: trackFor(h.jobTitle, 1) }}>{h.jobTitle}</Text> : null}
           <ContactLine items={contactItems(doc)} separator="  |  " style={{ fontSize: 8.8, color: p.muted, marginTop: 5 }} />
         </View>
         {doc.show.photo && doc.data.photo ? (

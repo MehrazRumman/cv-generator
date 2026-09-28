@@ -1,7 +1,7 @@
 import { Polygon, Svg, Text, View } from "@react-pdf/renderer";
 import { hasText } from "@/lib/format/text";
 import type { PreparedProfessional } from "@/lib/documents/prepare";
-import { accentOf, headingFont, PdfDocument, tint, type Kit } from "../../shared/kit";
+import { accentOf, headingFont, PdfDocument, tint, type Kit, fitWords } from "../../shared/kit";
 import { baseKitStyles } from "../../shared/presets";
 import { renderSections } from "../blocks";
 import { Avatar, Icon, SECTION_ICON, SideContact, SideLanguages, SideSkills, SideSummary, type IconName, type SideStyle } from "./parts";
@@ -53,7 +53,7 @@ export function Diagonal({ doc }: { doc: PreparedProfessional }) {
         <View style={{ width: LEFT, paddingRight: 16 }}>
           <Avatar doc={doc} size={124} ring={4} ringColor="#ffffff" fallbackBg={tint(accent, 0.3)} style={{ alignSelf: "center", marginTop: 6 }} />
           <View style={{ alignItems: "center", marginTop: 12, marginBottom: 18 }}>
-            <Text style={{ ...hf, fontSize: 21, color: accent, textAlign: "center" }}>{h.fullName}</Text>
+            <Text style={{ ...hf, fontSize: fitWords(h.fullName, LEFT - 16, 21), color: accent, textAlign: "center" }}>{h.fullName}</Text>
             {hasText(h.jobTitle) ? <Text style={{ fontSize: 10, color: p.muted, marginTop: 3, textAlign: "center" }}>{h.jobTitle}</Text> : null}
           </View>
           <SideContact doc={doc} st={st} width={LEFT - 16} />

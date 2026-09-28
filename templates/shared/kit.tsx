@@ -342,3 +342,14 @@ export function fitFontSize(text: string, width: number, size: number, min = 6.5
   const estimate = text.length * size * 0.53;
   return estimate <= width ? size : Math.max(min, Math.floor((width / (text.length * 0.53)) * 10) / 10);
 }
+
+/**
+ * Font size at which every word of `text` fits `width` points on one line. Names wrap only at spaces,
+ * so one long word (a double-barrelled surname) would otherwise run off the page or under the next
+ * column. Estimated from the character count: capitals ≈ 0.72em wide, mixed case ≈ 0.6em.
+ */
+export function fitWords(text: string, width: number, size: number, { upper = false, tracking = 0, min = 8 } = {}): number {
+  const longest = Math.max(1, ...text.trim().split(/\s+/).map((w) => w.length));
+  const fitting = ((width * 0.95) / longest - tracking) / (upper ? 0.72 : 0.6);
+  return Math.max(min, Math.min(size, Math.floor(fitting * 10) / 10));
+}

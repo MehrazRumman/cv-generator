@@ -31,6 +31,7 @@ const pickDesign = (s: AnyDocument["settings"]) => ({
   templateId: s.templateId,
   paperSize: s.paperSize,
   fontId: s.fontId,
+  headingFontId: s.headingFontId,
   banglaFontId: s.banglaFontId,
   accentColor: s.accentColor,
 });

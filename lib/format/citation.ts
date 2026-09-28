@@ -38,17 +38,22 @@ export function authorListToString(authors: Author[]): string {
   return authors.map((a) => (a.given ? `${a.family}, ${a.given}` : a.family)).join("; ");
 }
 
-/** "Mehraz Abdul" → "M. A."; already-initialled input ("M.A.") is normalised the same way. */
+/**
+ * "Mehraz Abdul" → "M. A."; already-initialled input ("M.A.", "M.-A.") is normalised the same way.
+ * Stray hyphens (half-typed "Jean-") are ignored rather than producing empty initials.
+ */
 export function initials(given: string): string {
   return given
+    .replace(/\.?\s*-\s*/g, "-") // "M.-A." / "Jean - Paul" → one hyphenated token
     .split(/[\s.]+/)
-    .filter(Boolean)
     .map((part) =>
       part
         .split("-")
-        .map((p) => `${p[0].toUpperCase()}.`)
+        .filter(Boolean)
+        .map((p) => `${Array.from(p)[0].toUpperCase()}.`)
         .join("-"),
     )
+    .filter(Boolean)
     .join(" ");
 }
 

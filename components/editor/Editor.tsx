@@ -92,29 +92,42 @@ function EditorForm({ type, initial }: { type: DocumentType; initial: AnyDocumen
   const formElement = useMemo(() => <Form key={formKey} />, [Form, formKey]);
   const meta = DOCUMENT_TYPE_META[type];
 
+  const saveFailed = useCallback((e: unknown) => {
+    setSaveState("error");
+    setNotice({ kind: "error", text: e instanceof Error ? e.message : "Couldn't save." });
+  }, []);
+
   // Autosave + preview: every change is debounced, snapshotted, saved and rendered.
   useEffect(() => {
     let timer: ReturnType<typeof setTimeout> | undefined;
+    const commit = () => {
+      timer = undefined;
+      const snapshot = structuredClone({ ...getValues(), updatedAt: new Date().toISOString() });
+      setPreviewDoc(snapshot);
+      repository
+        .save(snapshot)
+        .then(() => setSaveState("saved"))
+        .catch(saveFailed);
+    };
+    // Save a pending edit right away when the tab closes or the editor unmounts (e.g. the logo link),
+    // so the last keystrokes before leaving aren't lost to the debounce.
+    const flush = () => {
+      if (timer === undefined) return;
+      clearTimeout(timer);
+      commit();
+    };
     const sub = watch(() => {
       setSaveState("saving");
       clearTimeout(timer);
-      timer = setTimeout(() => {
-        const snapshot = structuredClone({ ...getValues(), updatedAt: new Date().toISOString() });
-        setPreviewDoc(snapshot);
-        repository
-          .save(snapshot)
-          .then(() => setSaveState("saved"))
-          .catch((e: unknown) => {
-            setSaveState("error");
-            setNotice({ kind: "error", text: e instanceof Error ? e.message : "Couldn't save." });
-          });
-      }, 350);
+      timer = setTimeout(commit, 350);
     });
+    window.addEventListener("pagehide", flush);
     return () => {
-      clearTimeout(timer);
+      window.removeEventListener("pagehide", flush);
+      flush();
       sub.unsubscribe();
     };
-  }, [watch, getValues]);
+  }, [watch, getValues, saveFailed]);
 
   useEffect(() => {
     if (!notice || notice.kind === "error") return;
@@ -127,10 +140,13 @@ function EditorForm({ type, initial }: { type: DocumentType; initial: AnyDocumen
       reset(doc);
       setFormKey((k) => k + 1);
       setPreviewDoc(doc);
-      void repository.save(doc);
       setNotice({ kind: "success", text: message });
+      repository
+        .save(doc)
+        .then(() => setSaveState("saved"))
+        .catch(saveFailed);
     },
-    [reset],
+    [reset, saveFailed],
   );
 
   const onValid = async (values: AnyDocument) => {
@@ -162,7 +178,12 @@ function EditorForm({ type, initial }: { type: DocumentType; initial: AnyDocumen
     if (result.doc.type === type) {
       replaceDocument(result.doc, "Imported.");
     } else {
-      await repository.save(result.doc);
+      // The other editor loads from storage, so it must be saved before switching.
+      try {
+        await repository.save(result.doc);
+      } catch (e) {
+        return saveFailed(e);
+      }
       router.push(`/editor/${result.doc.type}`);
     }
   };

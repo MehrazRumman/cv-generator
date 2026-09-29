@@ -13,7 +13,7 @@ const hindSiliguri = Hind_Siliguri({
 
 export const metadata: Metadata = {
   title: "CV Generator — CV, Biodata & Academic CV",
-  description: "Build a professional CV, Europass CV, South Asian biodata or academic CV with live preview and PDF download.",
+  description: "Build a professional CV, Europass CV, South Asian biodata, academic CV or Bangladeshi political CV with live preview and PDF download.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { emptyAcademic, emptyBiodata, emptyProfessional } from "@/lib/documents/defaults";
-import { newExperience } from "@/lib/documents/factories";
-import { prepareAcademic, prepareBiodata, prepareProfessional } from "@/lib/documents/prepare";
+import { emptyAcademic, emptyBiodata, emptyEuropass, emptyProfessional } from "@/lib/documents/defaults";
+import { newEuropassAdditional, newEuropassLanguage, newExperience } from "@/lib/documents/factories";
+import { prepareAcademic, prepareBiodata, prepareEuropass, prepareProfessional } from "@/lib/documents/prepare";
 import { documentResolver } from "@/lib/documents/validation";
 import { SAMPLE_VARIANTS } from "@/lib/sample-data";
-import { biodataSchema, documentSchemas, DOCUMENT_TYPES, draftSchemas, professionalSchema } from "@/lib/schemas";
+import { biodataSchema, documentSchemas, DOCUMENT_TYPES, draftSchemas, europassSchema, professionalSchema } from "@/lib/schemas";
 import { parseAnyDocument } from "@/lib/storage/migrate";
 
 const resolve = (doc: Parameters<typeof documentResolver>[0]) =>
@@ -43,6 +43,52 @@ describe("empty sections are never shown", () => {
     doc.data.mode = "job";
     expect(prepareBiodata(doc).show.expectations).toBe(false);
     expect(prepareBiodata(doc).show.declaration).toBe(true);
+  });
+});
+
+describe("europass", () => {
+  it("hides every section of an empty Europass CV", () => {
+    const show = prepareEuropass(emptyEuropass()).show;
+    expect(Object.values(show).every((v) => v === false)).toBe(true);
+  });
+
+  it("shows languages with only a mother tongue and drops unnamed language rows", () => {
+    const doc = emptyEuropass();
+    doc.data.languages.motherTongues = ["Bangla", " "];
+    doc.data.languages.other = [newEuropassLanguage()];
+    const prepared = prepareEuropass(doc);
+    expect(prepared.show.languages).toBe(true);
+    expect(prepared.data.languages).toEqual({ motherTongues: ["Bangla"], other: [] });
+  });
+
+  it("groups additional information by category, case-insensitively and in first-seen order", async () => {
+    const { groupByCategory } = await import("@/templates/europass/blocks");
+    const entry = (category: string, title: string) => ({ ...newEuropassAdditional(category), title });
+    const groups = groupByCategory([entry("Publications", "A"), entry("Honours and awards", "B"), entry("publications ", "C")]);
+    expect(groups.map((g) => [g.category, g.items.map((i) => i.title)])).toEqual([
+      ["Publications", ["A", "C"]],
+      ["Honours and awards", ["B"]],
+    ]);
+  });
+
+  it("only accepts CEFR levels and requires a category and title for additional entries", () => {
+    const doc = emptyEuropass();
+    doc.data.header.fullName = "A";
+    doc.data.languages.other = [{ ...newEuropassLanguage(), name: "English", reading: "C3" as "C2" }];
+    doc.data.additional = [newEuropassAdditional("")];
+    const issues = europassSchema.safeParse(doc).error?.issues.map((i) => i.path.join(".")) ?? [];
+    expect(issues).toContain("data.languages.other.0.reading");
+    expect(issues).toContain("data.additional.0.category");
+    expect(issues).toContain("data.additional.0.title");
+  });
+
+  it("ignores errors in switched-off Europass sections", async () => {
+    const doc = emptyEuropass();
+    doc.data.header.fullName = "A";
+    doc.data.additional = [newEuropassAdditional()];
+    expect(Object.keys((await resolve(doc)).errors)).toContain("data");
+    doc.sections.additional = false;
+    expect((await resolve(doc)).errors).toEqual({});
   });
 });
 
@@ -145,6 +191,17 @@ describe("text clean-up", () => {
 describe("template registry", async () => {
   const { renderDocument } = await import("@/templates/registry");
   const { isValidElement } = await import("react");
+  const { TEMPLATE_CATALOG } = await import("@/templates/catalog");
+  it("renders every template of every type", () => {
+    for (const type of DOCUMENT_TYPES) {
+      for (const t of TEMPLATE_CATALOG[type]) {
+        const doc = SAMPLE_VARIANTS[type][0].create();
+        doc.settings.templateId = t.id;
+        expect(isValidElement(renderDocument(doc)), `${type}/${t.id}`).toBe(true);
+      }
+    }
+  });
+
   it("falls back to the default template for unknown ids, including Object.prototype keys", () => {
     for (const id of ["no-such-template", "constructor", "toString"]) {
       const doc = SAMPLE_VARIANTS.professional[0].create();

@@ -67,9 +67,6 @@ export default function Home() {
           <div className="ml-auto flex items-center gap-2 sm:ml-0">
             <ThemeToggle />
             <SignOutButton />
-            <a href={REPO_URL} className="btn" target="_blank" rel="noreferrer">
-              GitHub
-            </a>
           </div>
         </nav>
       </header>

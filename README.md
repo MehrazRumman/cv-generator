@@ -1,6 +1,6 @@
 # CV Generator
 
-Build a **Professional CV**, a **Europass CV**, a South Asian **Biodata** (marriage or job) or an **Academic CV** in the browser: fill in a form, watch the PDF update live, and download it. Text in the PDF is real, selectable text (ATS-readable), and Bangla (বাংলা) renders correctly.
+Build a **Professional CV**, a **Europass CV**, a South Asian **Biodata** (marriage or job), an **Academic CV** or a Bangladeshi **Political CV** in the browser: fill in a form, watch the PDF update live, and download it. Text in the PDF is real, selectable text (ATS-readable), and Bangla (বাংলা) renders correctly.
 
 ![Home page (dark theme)](docs/screenshots/home-dark.png)
 
@@ -12,11 +12,12 @@ Build a **Professional CV**, a **Europass CV**, a South Asian **Biodata** (marri
 
 ## Features
 
-- **Four document types and 36 templates**, each type with its own form and sample data:
+- **Five document types and 42 templates**, each type with its own form and sample data:
   - **Professional CV (19 templates):** 9 of them ATS-friendly. Nine photo-led designs (round photo, coloured sidebars and bands, icon headings, timelines, language bars) show your initials when no photo is uploaded.
-  - **Europass CV (3 templates):** the European CV structure, with the CEFR language self-assessment grid (A1–C2 for listening, reading, spoken production, spoken interaction and writing), EQF levels for education, digital skills, driving licence and categorised additional information. Dates print the European way (`08/2021 – Current`).
+  - **Europass CV (6 templates):** the European CV structure, with the CEFR language self-assessment grid (A1–C2 for listening, reading, spoken production, spoken interaction and writing), EQF levels for education, digital skills, driving licence and categorised additional information. Dates print the European way (`08/2021 – Current`).
   - **Biodata (7 templates):** marriage/job mode, English or Bangla headings.
   - **Academic CV (7 templates):** APA 7 or IEEE citations, with your name bolded automatically in author lists.
+  - **Political CV (3 templates):** a Bangladeshi party nomination CV (রাজনৈতিক জীবনবৃত্তান্ত) themed for **BNP**, **Awami League** or **Jamaat-e-Islami** (or any other party): party colours and the election symbol (sheaf of paddy, boat, scales), party position, seat sought, positions held, elections contested, movements, cases, education, profession, social work and a signed declaration. Headings in Bangla or English.
 - **Live preview.** The PDF is re-rendered about 0.4 s after you stop typing and shown with pdf.js (it works on phones too). On mobile, Form and Preview are tabs.
 - **Repeatable sections.** Add, remove and reorder entries by dragging or with the ↑/↓ buttons.
 - **Section switches.** Any section can be hidden, and empty sections are never printed.
@@ -55,7 +56,7 @@ app/                        Home page and /editor/[type] (the editor runs client
 components/
   editor/Editor.tsx         Toolbar, autosave, download, import/export, mobile tabs
   forms/                    Typed field components, SectionCard, SortableList, PhotoField
-  forms/{professional,europass,biodata,academic}/   One form per document type
+  forms/{professional,europass,biodata,academic,political}/   One form per document type
   preview/PdfPreview.tsx    Debounced render → pdf.js canvases
 lib/
   schemas/                  Zod schemas + TypeScript types (shared pieces in common.ts)
@@ -68,7 +69,7 @@ templates/
   catalog.ts                Template names, descriptions and default colours (no react-pdf imports)
   registry.ts               Template id → component; renderDocument()
   shared/                   Kit: Section, Entry, Bullets, Rich text, PdfDocument
-  {professional,europass,biodata,academic}/   The templates and each type's section renderers (blocks.tsx)
+  {professional,europass,biodata,academic,political}/   The templates and each type's section renderers (blocks.tsx)
 public/fonts/               TTF fonts (OFL, see LICENSE.md)
 ```
 
@@ -96,7 +97,7 @@ public/fonts/               TTF fonts (OFL, see LICENSE.md)
    }
    ```
 
-   Biodata templates build a `BioKit` and call `renderBiodataSections`. Academic templates call `renderAcademicSections`, Europass templates `renderEuropassSections`.
+   Biodata templates build a `BioKit` and call `renderBiodataSections`. Academic templates call `renderAcademicSections`, Europass templates `renderEuropassSections`, political templates `renderPoliticalSections` (with a `BioKit`).
 2. **Register it** in [templates/registry.ts](templates/registry.ts) (`COMPONENTS[type][id]`).
 3. **Describe it** in [templates/catalog.ts](templates/catalog.ts) with an id, name, description, `atsFriendly`, a default `accent` and optionally `inspiredBy`. It then appears in the template picker.
 4. Run `npm run render-samples <type>` and check `sample-output/<type>-<id>.pdf`. Then run `npm run thumbnails` to create its picture for the home page and the template picker.
@@ -144,6 +145,7 @@ The layouts are original react-pdf implementations, modelled on the look of thes
 | Professional / Academic — Minimal | [JSON Resume](https://jsonresume.org/themes/) minimalist themes (MIT) |
 | Professional — Executive, Academic — Classic | Harvard Office of Career Services résumé / CV guides |
 | Biodata — Bordered | The traditional Bangladeshi office biodata form |
+| Political — party symbols | Simple original drawings of the Election Commission symbols (sheaf of paddy, boat, scales); no party logos are bundled — users can upload their party's logo in the form |
 | Europass — Classic, Modern | The structure of the [Europass CV](https://europass.europa.eu/) (traditional and current layouts); no Europass or EU logos are used, and the app is not affiliated with the European Union |
 | Professional — Navy Sidebar, Pastel Split, Gray Column, Geometric, Photo Header, Diagonal, Soft Panel, Navy Header, Bold Pills | Original designs in the style of popular photo résumé layouts (dark or pastel sidebars, header bands, geometric accents); no third-party artwork is copied |
 

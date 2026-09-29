@@ -348,6 +348,31 @@ export const TEMPLATE_CATALOG: Record<DocumentType, TemplateInfo[]> = {
       accent: "#9d174d",
     },
   ],
+  // One shared neutral accent: a party's colour (set by the party picker) then counts as the user's
+  // own choice and survives template switches.
+  political: [
+    {
+      id: "classic",
+      name: "Classic",
+      description: "Emblem, party and title across the top; heading bands.",
+      atsFriendly: true,
+      accent: "#1f3a5f",
+    },
+    {
+      id: "banner",
+      name: "Banner",
+      description: "Party-colour band, emblem in a disc, overlapping photo.",
+      atsFriendly: true,
+      accent: "#1f3a5f",
+    },
+    {
+      id: "framed",
+      name: "Framed",
+      description: "Double page frame, centred emblem — formal office style.",
+      atsFriendly: true,
+      accent: "#1f3a5f",
+    },
+  ],
 };
 
 export function templateInfo(type: DocumentType, id: string): TemplateInfo {

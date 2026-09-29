@@ -212,6 +212,30 @@ export const TEMPLATE_CATALOG: Record<DocumentType, TemplateInfo[]> = {
       accent: "#333333",
       fonts: { fontId: "source-sans", headingFontId: "same" },
     },
+    {
+      id: "banner",
+      name: "Banner",
+      description: "Colour header band with photo; underlined headings.",
+      atsFriendly: true,
+      accent: "#1f4e8c",
+      fonts: { fontId: "lato", headingFontId: "montserrat" },
+    },
+    {
+      id: "timeline",
+      name: "Timeline",
+      description: "Entries on a vertical rail with a dot per role.",
+      atsFriendly: true,
+      accent: "#0f7a6c",
+      fonts: { fontId: "open-sans", headingFontId: "same" },
+    },
+    {
+      id: "sidebar",
+      name: "Sidebar",
+      description: "Details, contact and digital skills in a tinted column.",
+      atsFriendly: false,
+      accent: "#6d3fa0",
+      fonts: { fontId: "nunito-sans", headingFontId: "same" },
+    },
   ],
   biodata: [
     {

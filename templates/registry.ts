@@ -17,9 +17,12 @@ import { BiodataMinimal } from "./biodata/Minimal";
 import { BiodataModern } from "./biodata/Modern";
 import { BiodataSidebar } from "./biodata/Sidebar";
 import { TEMPLATE_CATALOG } from "./catalog";
+import { EuropassBanner } from "./europass/Banner";
 import { EuropassClassic } from "./europass/Classic";
 import { EuropassMinimal } from "./europass/Minimal";
 import { EuropassModern } from "./europass/Modern";
+import { EuropassSidebar } from "./europass/Sidebar";
+import { EuropassTimeline } from "./europass/Timeline";
 import { Banner } from "./professional/Banner";
 import { Classic } from "./professional/Classic";
 import { Compact } from "./professional/Compact";
@@ -67,7 +70,14 @@ const COMPONENTS: { [T in DocumentType]: Record<string, TemplateComponent<T>> } 
     "navy-header": NavyHeader,
     "bold-pills": BoldPills,
   },
-  europass: { classic: EuropassClassic, modern: EuropassModern, minimal: EuropassMinimal },
+  europass: {
+    classic: EuropassClassic,
+    modern: EuropassModern,
+    minimal: EuropassMinimal,
+    banner: EuropassBanner,
+    timeline: EuropassTimeline,
+    sidebar: EuropassSidebar,
+  },
   biodata: { classic: BiodataClassic, modern: BiodataModern, elegant: BiodataElegant, minimal: BiodataMinimal, bordered: BiodataBordered, sidebar: BiodataSidebar, heritage: BiodataHeritage },
   academic: { classic: AcademicClassic, modern: AcademicModern, timeline: AcademicTimeline, minimal: AcademicMinimal, banner: AcademicBanner, compact: AcademicCompact, sidebar: AcademicSidebar },
 };

@@ -9,6 +9,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { renderToFile } from "@react-pdf/renderer";
 import { registerFonts } from "../lib/pdf/fonts";
+import { setPartyLogoBase } from "../lib/pdf/party-logos";
 import { SAMPLE_VARIANTS } from "../lib/sample-data";
 import { DOCUMENT_TYPES, type DocumentType } from "../lib/schemas";
 import { TEMPLATE_CATALOG } from "../templates/catalog";
@@ -18,6 +19,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const outDir = path.join(root, "sample-output");
 mkdirSync(outDir, { recursive: true });
 registerFonts(path.join(root, "public", "fonts"));
+setPartyLogoBase(path.join(root, "public", "parties"));
 
 const only = process.argv[2] as DocumentType | undefined;
 const types = DOCUMENT_TYPES.filter((t) => !only || t === only);

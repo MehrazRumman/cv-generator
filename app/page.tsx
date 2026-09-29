@@ -15,6 +15,7 @@ const TYPE_STYLE: Record<DocumentType, { gradient: string; ring: string; chip: s
   professional: { gradient: "from-indigo-500 to-sky-500", ring: "hover:ring-indigo-300", chip: "bg-indigo-50 text-indigo-700", cover: "modern" },
   europass: { gradient: "from-blue-700 to-amber-400", ring: "hover:ring-sky-300", chip: "bg-sky-50 text-sky-800", cover: "classic" },
   biodata: { gradient: "from-rose-500 to-amber-500", ring: "hover:ring-rose-300", chip: "bg-rose-50 text-rose-700", cover: "classic" },
+  political: { gradient: "from-slate-700 to-emerald-600", ring: "hover:ring-emerald-300", chip: "bg-emerald-50 text-emerald-700", cover: "classic" },
   academic: { gradient: "from-emerald-500 to-teal-500", ring: "hover:ring-emerald-300", chip: "bg-emerald-50 text-emerald-700", cover: "classic" },
 };
 
@@ -82,7 +83,7 @@ export default function Home() {
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" /> Free · No sign-up · Data stays in your browser
             </p>
             <h1 className="mt-5 text-4xl font-bold tracking-tight text-zinc-900 sm:text-5xl">
-              Your CV, Europass, Biodata or Academic CV —{" "}
+              Your CV, Europass, Biodata, Academic or Political CV —{" "}
               <span className="bg-gradient-to-r from-indigo-600 to-sky-500 bg-clip-text text-transparent">ready in minutes.</span>
             </h1>
             <p className="mt-5 max-w-xl text-lg text-zinc-600">
@@ -101,6 +102,9 @@ export default function Home() {
               </Link>
               <Link href="/editor/academic" className="btn px-5 py-2.5 text-base">
                 Academic CV
+              </Link>
+              <Link href="/editor/political" className="btn px-5 py-2.5 text-base">
+                Political CV
               </Link>
             </div>
             <dl className="mt-10 grid max-w-md grid-cols-3 gap-4 text-center">
@@ -141,7 +145,7 @@ export default function Home() {
           <SectionTitle eyebrow="Step 1" title="What would you like to create?">
             Each type has its own form, sample data and templates. Switch templates any time — your content stays.
           </SectionTitle>
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {DOCUMENT_TYPES.map((type) => {
               const meta = DOCUMENT_TYPE_META[type];
               const style = TYPE_STYLE[type];
@@ -240,7 +244,7 @@ export default function Home() {
           <SectionTitle eyebrow="How it works" title="Three steps to a finished PDF" />
           <ol className="grid gap-6 md:grid-cols-3">
             {[
-              ["Pick a document", "CV, Europass CV, biodata or academic CV. Load sample data to see how it looks."],
+              ["Pick a document", "CV, Europass CV, biodata, academic or political CV. Load sample data to see how it looks."],
               ["Fill in the form", "Add, reorder and hide sections. The preview updates as you type."],
               ["Download the PDF", "Named like Name_CV_2026-09-28.pdf and ready to send."],
             ].map(([title, text], i) => (

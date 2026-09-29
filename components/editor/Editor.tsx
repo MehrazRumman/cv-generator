@@ -6,6 +6,7 @@ import { useCallback, useEffect, useMemo, useRef, useState, type ComponentType }
 import { FormProvider, useForm, type FieldErrors } from "react-hook-form";
 import { emptyDocument } from "@/lib/documents/defaults";
 import { DOCUMENT_TYPE_META } from "@/lib/documents/meta";
+import { isPartyAccent } from "@/lib/documents/parties";
 import { documentResolver } from "@/lib/documents/validation";
 import { buildFileName } from "@/lib/format/filename";
 import { generatePdf } from "@/lib/pdf/generate";
@@ -19,6 +20,7 @@ import { documentOwnerName, downloadBlob, exportDocumentJson, importDocumentJson
 import { AcademicForm } from "../forms/academic/AcademicForm";
 import { BiodataForm } from "../forms/biodata/BiodataForm";
 import { EuropassForm } from "../forms/europass/EuropassForm";
+import { PoliticalForm } from "../forms/political/PoliticalForm";
 import { ProfessionalForm } from "../forms/professional/ProfessionalForm";
 import { ExpandAllContext } from "../forms/SectionCard";
 import { PdfPreview } from "../preview/PdfPreview";
@@ -28,6 +30,7 @@ const FORMS: Record<DocumentType, ComponentType> = {
   europass: EuropassForm,
   biodata: BiodataForm,
   academic: AcademicForm,
+  political: PoliticalForm,
 };
 
 const pickDesign = (s: AnyDocument["settings"]) => ({
@@ -200,9 +203,12 @@ function EditorForm({ type, initial }: { type: DocumentType; initial: AnyDocumen
     if (!variant) return;
     if (!window.confirm("Replace your current data with sample data? (Export first if you want to keep it.)")) return;
     // Keep the design the user already picked (template, paper, fonts, colour).
-    const { settings } = getValues();
+    const current = getValues();
     const sample = variant.create();
-    const merged = { ...sample, settings: { ...sample.settings, ...pickDesign(settings) } } as AnyDocument;
+    const design = pickDesign(current.settings);
+    // A party colour that was set automatically follows the sample's party.
+    if (current.type === "political" && isPartyAccent(current)) design.accentColor = sample.settings.accentColor;
+    const merged = { ...sample, settings: { ...sample.settings, ...design } } as AnyDocument;
     replaceDocument(merged, `Loaded sample: ${variant.label}.`);
   };
 

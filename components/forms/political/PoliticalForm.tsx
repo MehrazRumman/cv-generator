@@ -99,7 +99,7 @@ export function PoliticalForm() {
         }
       />
 
-      <Card title="Party & emblem" description="The drawn election symbol is used unless you upload the party's logo.">
+      <Card title="Party & logo" description="The party's official logo is printed in the header; upload one to replace it.">
         <F.Text
           name="data.partyName"
           label={party === "other" ? "Party name" : "Party name (optional)"}

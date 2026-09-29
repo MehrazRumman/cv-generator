@@ -24,18 +24,22 @@ const types = DOCUMENT_TYPES.filter((t) => !only || t === only);
 
 for (const type of types) {
   // Every template with the first sample, plus the remaining samples with the default template.
+  // Political samples are one per party: pair each template with a different party so the gallery shows all of them.
+  const pairVariants = type === "political";
   const jobs = [
-    ...TEMPLATE_CATALOG[type].map((t) => ({ template: t, variant: 0 })),
-    ...SAMPLE_VARIANTS[type].slice(1).map((_, i) => ({ template: TEMPLATE_CATALOG[type][0], variant: i + 1 })),
+    ...TEMPLATE_CATALOG[type].map((t, i) => ({ template: t, variant: pairVariants ? i % SAMPLE_VARIANTS[type].length : 0 })),
+    ...(pairVariants ? [] : SAMPLE_VARIANTS[type].slice(1).map((_, i) => ({ template: TEMPLATE_CATALOG[type][0], variant: i + 1 }))),
   ];
   for (const job of jobs) {
     const doc = SAMPLE_VARIANTS[type][job.variant].create();
     // Each template in its own default colour, as the user first sees it.
     doc.settings.templateId = job.template.id;
-    doc.settings.accentColor = job.template.accent;
+    // (Political samples keep their party's colour.)
+    if (doc.type !== "political") doc.settings.accentColor = job.template.accent;
     if (job.template.fonts) Object.assign(doc.settings, job.template.fonts);
     if (job.template.featuresPhoto && doc.type === "professional") doc.sections.photo = true;
-    const file = path.join(outDir, `${type}-${job.template.id}${job.variant ? `-sample${job.variant + 1}` : ""}.pdf`);
+    const sampleSuffix = job.variant && !pairVariants ? `-sample${job.variant + 1}` : "";
+    const file = path.join(outDir, `${type}-${job.template.id}${sampleSuffix}.pdf`);
     const started = Date.now();
     await renderToFile(renderDocument(doc), file);
     console.log(`✓ ${path.relative(root, file)} (${Date.now() - started} ms)`);

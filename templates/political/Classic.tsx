@@ -28,7 +28,7 @@ export function PoliticalClassic({ doc }: { doc: PreparedPolitical }) {
   return (
     <PdfDocument title={`${h.name} — ${h.title}`} author={h.name} settings={doc.settings} pageStyle={{ paddingTop: 34, paddingBottom: 44, paddingHorizontal: 42, color: text }}>
       <View style={{ flexDirection: "row", alignItems: "center" }}>
-        <View style={{ width: 84, alignItems: "flex-start" }}>{hasEmblem(doc) ? <PartyEmblem doc={doc} size={64} color={accent} /> : null}</View>
+        <View style={{ width: 84, alignItems: "flex-start" }}>{hasEmblem(doc) ? <PartyEmblem doc={doc} size={64} /> : null}</View>
         <View style={{ flex: 1, alignItems: "center", paddingHorizontal: 8 }}>
           {hasText(h.party) ? (
             <Text style={{ ...hf, fontSize: 13, fontWeight: 700, color: accent, textAlign: "center", letterSpacing: trackFor(h.party, 0.3) }}>{h.party}</Text>

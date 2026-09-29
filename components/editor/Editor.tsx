@@ -18,12 +18,14 @@ import { SignOutButton } from "../auth/SignOutButton";
 import { documentOwnerName, downloadBlob, exportDocumentJson, importDocumentJson, repository } from "@/lib/storage";
 import { AcademicForm } from "../forms/academic/AcademicForm";
 import { BiodataForm } from "../forms/biodata/BiodataForm";
+import { EuropassForm } from "../forms/europass/EuropassForm";
 import { ProfessionalForm } from "../forms/professional/ProfessionalForm";
 import { ExpandAllContext } from "../forms/SectionCard";
 import { PdfPreview } from "../preview/PdfPreview";
 
 const FORMS: Record<DocumentType, ComponentType> = {
   professional: ProfessionalForm,
+  europass: EuropassForm,
   biodata: BiodataForm,
   academic: AcademicForm,
 };

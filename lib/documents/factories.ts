@@ -4,6 +4,9 @@ import type {
   BiodataData,
   BiodataEducation,
   Certification,
+  EuropassAdditional,
+  EuropassData,
+  EuropassLanguage,
   Experience,
   ProfessionalData,
   Project,
@@ -154,3 +157,27 @@ export const newMembership = (): AcademicData["memberships"][number] => ({
 });
 
 export const emptyParent = (): BiodataData["family"]["father"] => ({ name: "", occupation: "" });
+
+export const newEuropassExperience = (): EuropassData["experience"][number] => ({ ...newExperience(), sector: "" });
+
+export const newEuropassEducation = (): EuropassData["education"][number] => ({ ...newEducation(), eqfLevel: "", subjects: [] });
+
+export const newEuropassLanguage = (): EuropassLanguage => ({
+  id: newId(),
+  name: "",
+  listening: "",
+  reading: "",
+  spokenProduction: "",
+  spokenInteraction: "",
+  writing: "",
+  certificate: "",
+});
+
+export const newEuropassAdditional = (category = ""): EuropassAdditional => ({
+  id: newId(),
+  category,
+  title: "",
+  organization: "",
+  date: "",
+  description: "",
+});

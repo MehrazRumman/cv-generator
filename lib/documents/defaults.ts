@@ -4,6 +4,7 @@ import {
   type BiodataDocument,
   type DocumentOf,
   type DocumentType,
+  type EuropassDocument,
   type ProfessionalDocument,
 } from "@/lib/schemas";
 import { todayIso } from "@/lib/format/dates";
@@ -50,6 +51,55 @@ export function emptyProfessional(): ProfessionalDocument {
       projects: [],
       languages: [],
       references: { mode: "on-request", items: [] },
+    },
+  };
+}
+
+export function emptyEuropass(): EuropassDocument {
+  return {
+    schemaVersion: SCHEMA_VERSION,
+    type: "europass",
+    updatedAt: new Date().toISOString(),
+    settings: { ...baseSettings, templateId: "classic", accentColor: TEMPLATE_CATALOG.europass[0].accent, fontId: "open-sans" },
+    sections: {
+      photo: true,
+      aboutMe: true,
+      experience: true,
+      education: true,
+      languages: true,
+      digitalSkills: true,
+      skills: true,
+      drivingLicence: true,
+      additional: true,
+      hobbies: true,
+    },
+    data: {
+      header: {
+        fullName: "",
+        headline: "",
+        dateOfBirth: "",
+        nationality: "",
+        gender: "",
+        phone: "",
+        email: "",
+        address: "",
+        website: "",
+        linkedin: "",
+      },
+      photo: null,
+      aboutMe: "",
+      experience: [],
+      education: [],
+      languages: { motherTongues: [], other: [] },
+      digitalSkills: [],
+      skills: [
+        newSkillGroup("Communication and interpersonal skills"),
+        newSkillGroup("Organisational skills"),
+        newSkillGroup("Job-related skills"),
+      ],
+      drivingLicence: [],
+      additional: [],
+      hobbies: [],
     },
   };
 }
@@ -156,6 +206,7 @@ export function emptyAcademic(): AcademicDocument {
 
 const factories: { [T in DocumentType]: () => DocumentOf<T> } = {
   professional: emptyProfessional,
+  europass: emptyEuropass,
   biodata: emptyBiodata,
   academic: emptyAcademic,
 };

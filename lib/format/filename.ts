@@ -3,6 +3,7 @@ import { todayIso } from "./dates";
 
 const DOC_TYPE_LABEL: Record<DocumentType, string> = {
   professional: "CV",
+  europass: "Europass_CV",
   biodata: "Biodata",
   academic: "Academic_CV",
 };

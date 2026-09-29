@@ -5,6 +5,8 @@ import {
   type AcademicSection,
   type BiodataDocument,
   type BiodataSection,
+  type EuropassDocument,
+  type EuropassSection,
   type ProfessionalDocument,
   type ProfessionalSection,
 } from "@/lib/schemas";
@@ -22,6 +24,7 @@ export type Prepared<D extends { data: unknown; sections: Record<string, boolean
 export type PreparedProfessional = Prepared<ProfessionalDocument, ProfessionalSection>;
 export type PreparedBiodata = Prepared<BiodataDocument, BiodataSection>;
 export type PreparedAcademic = Prepared<AcademicDocument, AcademicSection>;
+export type PreparedEuropass = Prepared<EuropassDocument, EuropassSection>;
 
 const anyText = (...values: string[]) => values.some(hasText);
 
@@ -70,6 +73,42 @@ export function prepareProfessional(doc: ProfessionalDocument): PreparedProfessi
     projects: on.projects && data.projects.length > 0,
     languages: on.languages && data.languages.length > 0,
     references: on.references && (data.references.mode === "on-request" || data.references.items.length > 0),
+  };
+  const { sections: _sections, ...rest } = doc;
+  void _sections;
+  return { ...rest, data, show };
+}
+
+export function prepareEuropass(doc: EuropassDocument): PreparedEuropass {
+  const d = collapseSpaces(doc.data);
+  const data: EuropassDocument["data"] = {
+    ...d,
+    experience: d.experience.filter((e) => anyText(e.position, e.organization)).map(withBullets),
+    education: d.education
+      .filter((e) => anyText(e.degree, e.institution))
+      .map((e) => ({ ...e, subjects: cleanList(e.subjects) })),
+    languages: {
+      motherTongues: cleanList(d.languages.motherTongues),
+      other: d.languages.other.filter((l) => hasText(l.name)),
+    },
+    digitalSkills: cleanList(d.digitalSkills),
+    skills: d.skills.map((g) => ({ ...g, items: cleanList(g.items) })).filter((g) => g.items.length > 0),
+    drivingLicence: cleanList(d.drivingLicence),
+    additional: d.additional.filter((a) => hasText(a.title)),
+    hobbies: cleanList(d.hobbies),
+  };
+  const on = doc.sections;
+  const show: Record<EuropassSection, boolean> = {
+    photo: on.photo && d.photo !== null,
+    aboutMe: on.aboutMe && hasText(d.aboutMe),
+    experience: on.experience && data.experience.length > 0,
+    education: on.education && data.education.length > 0,
+    languages: on.languages && (data.languages.motherTongues.length > 0 || data.languages.other.length > 0),
+    digitalSkills: on.digitalSkills && data.digitalSkills.length > 0,
+    skills: on.skills && data.skills.length > 0,
+    drivingLicence: on.drivingLicence && data.drivingLicence.length > 0,
+    additional: on.additional && data.additional.length > 0,
+    hobbies: on.hobbies && data.hobbies.length > 0,
   };
   const { sections: _sections, ...rest } = doc;
   void _sections;

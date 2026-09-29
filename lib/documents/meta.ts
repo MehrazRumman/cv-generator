@@ -16,6 +16,13 @@ export const DOCUMENT_TYPE_META: Record<DocumentType, DocumentTypeMeta> = {
     description: "A clean 1–2 page résumé with standard headings that applicant tracking systems can read.",
     bestFor: ["Private sector jobs", "Tech & engineering roles", "Online applications (ATS)"],
   },
+  europass: {
+    type: "europass",
+    title: "Europass CV",
+    tagline: "Jobs & study in Europe",
+    description: "The standard European CV layout: personal details, the CEFR language grid, EQF education levels, digital skills and driving licence.",
+    bestFor: ["Jobs in the EU / EEA", "Erasmus+ & European scholarships", "European university admissions"],
+  },
   biodata: {
     type: "biodata",
     title: "Biodata",

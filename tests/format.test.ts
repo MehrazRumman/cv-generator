@@ -46,6 +46,7 @@ describe("file names", () => {
     expect(buildFileName("Ayesha Rahman", "professional", "pdf", now)).toBe("Ayesha_Rahman_CV_2026-09-28.pdf");
     expect(buildFileName("Farhana Islam", "academic", "pdf", now)).toBe("Farhana_Islam_Academic_CV_2026-09-28.pdf");
     expect(buildFileName("Nusrat Jahan", "europass", "json", now)).toBe("Nusrat_Jahan_Europass_CV_2026-09-28.json");
+    expect(buildFileName("আনিসুর রহমান", "political", "pdf", now)).toBe("আনিসুর_রহমান_Political_CV_2026-09-28.pdf");
   });
   it("keeps Bangla names and strips unsafe characters", () => {
     expect(buildFileName("তানভীর আহমেদ", "biodata", "pdf", now)).toBe("তানভীর_আহমেদ_Biodata_2026-09-28.pdf");

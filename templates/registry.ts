@@ -1,6 +1,6 @@
 import type { DocumentProps } from "@react-pdf/renderer";
 import type { ReactElement } from "react";
-import { prepareAcademic, prepareBiodata, prepareEuropass, prepareProfessional } from "@/lib/documents/prepare";
+import { prepareAcademic, prepareBiodata, prepareEuropass, preparePolitical, prepareProfessional } from "@/lib/documents/prepare";
 import type { AnyDocument, DocumentType } from "@/lib/schemas";
 import { AcademicBanner } from "./academic/Banner";
 import { AcademicClassic } from "./academic/Classic";
@@ -23,6 +23,9 @@ import { EuropassMinimal } from "./europass/Minimal";
 import { EuropassModern } from "./europass/Modern";
 import { EuropassSidebar } from "./europass/Sidebar";
 import { EuropassTimeline } from "./europass/Timeline";
+import { PoliticalBanner } from "./political/Banner";
+import { PoliticalClassic } from "./political/Classic";
+import { PoliticalFramed } from "./political/Framed";
 import { Banner } from "./professional/Banner";
 import { Classic } from "./professional/Classic";
 import { Compact } from "./professional/Compact";
@@ -80,6 +83,7 @@ const COMPONENTS: { [T in DocumentType]: Record<string, TemplateComponent<T>> } 
   },
   biodata: { classic: BiodataClassic, modern: BiodataModern, elegant: BiodataElegant, minimal: BiodataMinimal, bordered: BiodataBordered, sidebar: BiodataSidebar, heritage: BiodataHeritage },
   academic: { classic: AcademicClassic, modern: AcademicModern, timeline: AcademicTimeline, minimal: AcademicMinimal, banner: AcademicBanner, compact: AcademicCompact, sidebar: AcademicSidebar },
+  political: { classic: PoliticalClassic, banner: PoliticalBanner, framed: PoliticalFramed },
 };
 
 export const TEMPLATES = TEMPLATE_CATALOG;
@@ -104,5 +108,7 @@ export function renderDocument(doc: AnyDocument): ReactElement<DocumentProps> {
       return component("biodata", doc.settings.templateId)({ doc: prepareBiodata(doc) });
     case "academic":
       return component("academic", doc.settings.templateId)({ doc: prepareAcademic(doc) });
+    case "political":
+      return component("political", doc.settings.templateId)({ doc: preparePolitical(doc) });
   }
 }

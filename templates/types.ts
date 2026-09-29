@@ -1,10 +1,11 @@
 import type { ReactElement } from "react";
 import type { DocumentProps } from "@react-pdf/renderer";
-import type { PreparedAcademic, PreparedBiodata, PreparedProfessional } from "@/lib/documents/prepare";
+import type { PreparedAcademic, PreparedBiodata, PreparedEuropass, PreparedProfessional } from "@/lib/documents/prepare";
 import type { DocumentType } from "@/lib/schemas";
 
 export interface PreparedByType {
   professional: PreparedProfessional;
+  europass: PreparedEuropass;
   biodata: PreparedBiodata;
   academic: PreparedAcademic;
 }

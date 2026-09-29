@@ -185,6 +185,34 @@ export const TEMPLATE_CATALOG: Record<DocumentType, TemplateInfo[]> = {
       fonts: { fontId: "poppins", headingFontId: "same" },
     },
   ],
+  europass: [
+    {
+      id: "classic",
+      name: "Classic",
+      description: "Labels and dates in a left column, ruled headings.",
+      atsFriendly: true,
+      inspiredBy: "The traditional Europass CV layout",
+      accent: "#1c6ea4",
+      fonts: { fontId: "open-sans", headingFontId: "same" },
+    },
+    {
+      id: "modern",
+      name: "Modern",
+      description: "Photo beside the name, bold headings over a full rule.",
+      atsFriendly: true,
+      inspiredBy: "The current Europass online CV editor",
+      accent: "#0b4f9c",
+      fonts: { fontId: "open-sans", headingFontId: "same" },
+    },
+    {
+      id: "minimal",
+      name: "Minimal",
+      description: "Quiet single column that prints well in black and white.",
+      atsFriendly: true,
+      accent: "#333333",
+      fonts: { fontId: "source-sans", headingFontId: "same" },
+    },
+  ],
   biodata: [
     {
       id: "classic",

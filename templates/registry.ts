@@ -1,6 +1,6 @@
 import type { DocumentProps } from "@react-pdf/renderer";
 import type { ReactElement } from "react";
-import { prepareAcademic, prepareBiodata, prepareProfessional } from "@/lib/documents/prepare";
+import { prepareAcademic, prepareBiodata, prepareEuropass, prepareProfessional } from "@/lib/documents/prepare";
 import type { AnyDocument, DocumentType } from "@/lib/schemas";
 import { AcademicBanner } from "./academic/Banner";
 import { AcademicClassic } from "./academic/Classic";
@@ -17,6 +17,9 @@ import { BiodataMinimal } from "./biodata/Minimal";
 import { BiodataModern } from "./biodata/Modern";
 import { BiodataSidebar } from "./biodata/Sidebar";
 import { TEMPLATE_CATALOG } from "./catalog";
+import { EuropassClassic } from "./europass/Classic";
+import { EuropassMinimal } from "./europass/Minimal";
+import { EuropassModern } from "./europass/Modern";
 import { Banner } from "./professional/Banner";
 import { Classic } from "./professional/Classic";
 import { Compact } from "./professional/Compact";
@@ -64,6 +67,7 @@ const COMPONENTS: { [T in DocumentType]: Record<string, TemplateComponent<T>> } 
     "navy-header": NavyHeader,
     "bold-pills": BoldPills,
   },
+  europass: { classic: EuropassClassic, modern: EuropassModern, minimal: EuropassMinimal },
   biodata: { classic: BiodataClassic, modern: BiodataModern, elegant: BiodataElegant, minimal: BiodataMinimal, bordered: BiodataBordered, sidebar: BiodataSidebar, heritage: BiodataHeritage },
   academic: { classic: AcademicClassic, modern: AcademicModern, timeline: AcademicTimeline, minimal: AcademicMinimal, banner: AcademicBanner, compact: AcademicCompact, sidebar: AcademicSidebar },
 };
@@ -84,6 +88,8 @@ export function renderDocument(doc: AnyDocument): ReactElement<DocumentProps> {
   switch (doc.type) {
     case "professional":
       return component("professional", doc.settings.templateId)({ doc: prepareProfessional(doc) });
+    case "europass":
+      return component("europass", doc.settings.templateId)({ doc: prepareEuropass(doc) });
     case "biodata":
       return component("biodata", doc.settings.templateId)({ doc: prepareBiodata(doc) });
     case "academic":

@@ -1,4 +1,5 @@
-import type { PoliticalParty } from "@/lib/schemas";
+import type { PoliticalDocument, PoliticalParty } from "@/lib/schemas";
+import { templateInfo } from "@/templates/catalog";
 
 export interface PartyInfo {
   id: PoliticalParty;
@@ -49,4 +50,13 @@ export const PARTIES: Record<PoliticalParty, PartyInfo> = {
 /** The party name to print: the typed name wins, then the built-in one in the label language. */
 export function partyName(party: PoliticalParty, typed: string, lang: "en" | "bn"): string {
   return typed.trim() || PARTIES[party].name[lang];
+}
+
+/**
+ * True when the document's accent is one set automatically (its party's colour or the template's
+ * default) rather than picked by the user, so it may follow a change of party.
+ */
+export function isPartyAccent(doc: Pick<PoliticalDocument, "settings" | "data">): boolean {
+  const accent = doc.settings.accentColor.toLowerCase();
+  return accent === PARTIES[doc.data.party].colors.primary || accent === templateInfo("political", doc.settings.templateId).accent.toLowerCase();
 }

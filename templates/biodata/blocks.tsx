@@ -49,10 +49,10 @@ export function labelsFor(doc: PreparedBiodata): { t: BiodataLabels; lang: Label
   return { t: BIODATA_LABELS[lang], lang };
 }
 
-const present = (rows: KV[]) => rows.filter((r) => hasText(r.value));
+export const present = (rows: KV[]) => rows.filter((r) => hasText(r.value));
 
 /** Heading glued to the first block so it's never left alone at the bottom of a page. */
-function Glued({ kit, title, children }: { kit: BioKit; title: string; children: ReactNode }) {
+export function Glued({ kit, title, children }: { kit: BioKit; title: string; children: ReactNode }) {
   const [first, ...rest] = Array.isArray(children) ? children.flat() : [children];
   return (
     <>
@@ -65,7 +65,7 @@ function Glued({ kit, title, children }: { kit: BioKit; title: string; children:
   );
 }
 
-function KVRow({ kit, row }: { kit: BioKit; row: KV }) {
+export function KVRow({ kit, row }: { kit: BioKit; row: KV }) {
   return (
     <View style={kit.s.kvRow} wrap={false}>
       <Text style={[kit.s.kvLabel, { width: kit.labelWidth }]}>{row.label}</Text>
@@ -75,7 +75,7 @@ function KVRow({ kit, row }: { kit: BioKit; row: KV }) {
   );
 }
 
-function KVList({ kit, rows, columns = 1 }: { kit: BioKit; rows: KV[]; columns?: 1 | 2 }) {
+export function KVList({ kit, rows, columns = 1 }: { kit: BioKit; rows: KV[]; columns?: 1 | 2 }) {
   if (columns === 1) return rows.map((r, i) => <KVRow key={i} kit={kit} row={r} />);
   const pairs: KV[][] = [];
   for (let i = 0; i < rows.length; i += 2) pairs.push(rows.slice(i, i + 2));
@@ -91,13 +91,13 @@ function KVList({ kit, rows, columns = 1 }: { kit: BioKit; rows: KV[]; columns?:
   ));
 }
 
-interface Column<Row> {
+export interface Column<Row> {
   title: string;
   width: number; // flex weight
   value: (row: Row) => string;
 }
 
-function Table<Row>({ kit, columns, rows, caption }: { kit: BioKit; columns: Column<Row>[]; rows: Row[]; caption?: ReactNode }) {
+export function Table<Row>({ kit, columns, rows, caption }: { kit: BioKit; columns: Column<Row>[]; rows: Row[]; caption?: ReactNode }) {
   const visible = columns.filter((c) => rows.some((r) => hasText(c.value(r))));
   const head = (
     <View style={kit.s.headRow} wrap={false}>

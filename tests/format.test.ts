@@ -1,6 +1,12 @@
 import { describe, expect, it } from "vitest";
 import { authorListToString, formatCitation, initials, isSelf, parseAuthorList, segmentsToText, selfAuthors } from "@/lib/format/citation";
-import { ageInYears, formatDateRange, formatPartialDate } from "@/lib/format/dates";
+import {
+  ageInYears,
+  formatDateRange,
+  formatNumericIsoDate,
+  formatNumericPartialDate,
+  formatPartialDate,
+} from "@/lib/format/dates";
 import { buildFileName } from "@/lib/format/filename";
 import { newPublication } from "@/lib/documents/factories";
 
@@ -15,6 +21,15 @@ describe("dates", () => {
     expect(formatDateRange({ start: "2018", end: "2022", current: false })).toBe("2018 – 2022");
     expect(formatDateRange({ start: "", end: "2012", current: false })).toBe("2012");
     expect(formatDateRange({ start: "2020-05", end: "2020-05", current: false })).toBe("May 2020");
+  });
+  it("formats Europass-style numeric dates", () => {
+    expect(formatNumericPartialDate("2022-03")).toBe("03/2022");
+    expect(formatNumericPartialDate("2022")).toBe("2022");
+    expect(formatNumericPartialDate("2022-13")).toBe("2022");
+    expect(formatDateRange({ start: "2021-09", end: "", current: true }, "Current", formatNumericPartialDate)).toBe("09/2021 – Current");
+    expect(formatDateRange({ start: "2015", end: "2019-06", current: false }, "Current", formatNumericPartialDate)).toBe("2015 – 06/2019");
+    expect(formatNumericIsoDate("1996-03-05")).toBe("05/03/1996");
+    expect(formatNumericIsoDate("05.03.1996")).toBe("05.03.1996");
   });
   it("calculates age from date of birth", () => {
     const today = new Date(2026, 8, 28);

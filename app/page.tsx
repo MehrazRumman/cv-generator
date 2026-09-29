@@ -9,7 +9,7 @@ import { LATIN_FONTS } from "@/lib/pdf/fonts-meta";
 import { DOCUMENT_TYPES, type DocumentType } from "@/lib/schemas";
 import { TEMPLATE_CATALOG } from "@/templates/catalog";
 
-const REPO_URL = "https://github.com/MehrazRumman/cv-generator";
+const DEVELOPER_EMAIL = "mehrazrumman@gmail.com";
 
 const TYPE_STYLE: Record<DocumentType, { gradient: string; ring: string; chip: string; cover: string }> = {
   professional: { gradient: "from-indigo-500 to-sky-500", ring: "hover:ring-indigo-300", chip: "bg-indigo-50 text-indigo-700", cover: "modern" },
@@ -270,9 +270,12 @@ export default function Home() {
             <Logo size={20} /> CV Generator — open source
           </span>
           <span>Templates modelled on open-source designs; fonts under the SIL Open Font License.</span>
-          <a href={REPO_URL} className="hover:text-zinc-800" target="_blank" rel="noreferrer">
-            GitHub
-          </a>
+          <span>
+            Developed by{" "}
+            <a href={`mailto:${DEVELOPER_EMAIL}`} className="font-medium text-zinc-700 hover:text-zinc-900 hover:underline">
+              {DEVELOPER_EMAIL}
+            </a>
+          </span>
         </div>
       </footer>
     </div>

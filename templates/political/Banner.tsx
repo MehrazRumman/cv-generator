@@ -62,7 +62,7 @@ export function PoliticalBanner({ doc }: { doc: PreparedPolitical }) {
               marginRight: 14,
             }}
           >
-            <PartyEmblem doc={doc} size={EMBLEM} color={accent} />
+            <PartyEmblem doc={doc} size={EMBLEM} />
           </View>
         ) : null}
         <View style={{ flex: 1 }}>

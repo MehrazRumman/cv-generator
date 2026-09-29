@@ -45,7 +45,7 @@ export function PoliticalFramed({ doc }: { doc: PreparedPolitical }) {
       }
     >
       <View style={{ alignItems: "center" }}>
-        {hasEmblem(doc) ? <PartyEmblem doc={doc} size={58} color={accent} /> : null}
+        {hasEmblem(doc) ? <PartyEmblem doc={doc} size={58} /> : null}
         {hasText(h.party) ? (
           <Text style={{ ...hf, fontSize: 13.5, fontWeight: 700, color: accent, marginTop: 4, textAlign: "center", letterSpacing: trackFor(h.party, 0.3) }}>{h.party}</Text>
         ) : null}

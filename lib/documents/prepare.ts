@@ -7,6 +7,8 @@ import {
   type BiodataSection,
   type EuropassDocument,
   type EuropassSection,
+  type PoliticalDocument,
+  type PoliticalSection,
   type ProfessionalDocument,
   type ProfessionalSection,
 } from "@/lib/schemas";
@@ -25,6 +27,7 @@ export type PreparedProfessional = Prepared<ProfessionalDocument, ProfessionalSe
 export type PreparedBiodata = Prepared<BiodataDocument, BiodataSection>;
 export type PreparedAcademic = Prepared<AcademicDocument, AcademicSection>;
 export type PreparedEuropass = Prepared<EuropassDocument, EuropassSection>;
+export type PreparedPolitical = Prepared<PoliticalDocument, PoliticalSection>;
 
 const anyText = (...values: string[]) => values.some(hasText);
 
@@ -185,6 +188,41 @@ export function prepareAcademic(doc: AcademicDocument): PreparedAcademic {
     memberships: on.memberships && data.memberships.length > 0,
     skills: on.skills && data.skills.length > 0,
     referees: on.referees && data.referees.length > 0,
+  };
+  const { sections: _sections, ...rest } = doc;
+  void _sections;
+  return { ...rest, data, show };
+}
+
+export function preparePolitical(doc: PoliticalDocument): PreparedPolitical {
+  const d = collapseSpaces(doc.data);
+  const data: PoliticalDocument["data"] = {
+    ...d,
+    positions: d.positions.filter((p) => anyText(p.position, p.organization)),
+    elections: d.elections.filter((e) => hasText(e.election)),
+    movements: d.movements.filter((m) => hasText(m.title)),
+    cases: d.cases.filter((c) => hasText(c.description)),
+    education: d.education.filter((e) => anyText(e.degree, e.institution)),
+    occupation: d.occupation.filter((o) => anyText(o.position, o.organization)).map(withBullets),
+    socialWork: d.socialWork.filter((s) => anyText(s.role, s.organization)),
+  };
+  const p = d.personal;
+  const c = d.contact;
+  const on = doc.sections;
+  const show: Record<PoliticalSection, boolean> = {
+    photo: on.photo && d.photo !== null,
+    personal: on.personal && anyText(p.fullName, p.fathersName, p.mothersName, p.spouseName, p.dateOfBirth, p.religion, p.nid),
+    contact: on.contact && anyText(c.presentAddress, c.permanentAddress, c.phone, c.email, c.facebook),
+    partyRole: on.partyRole && anyText(d.partyRole.position, d.partyRole.committee, d.partyRole.memberSince, d.partyRole.membershipNo),
+    nomination: on.nomination && anyText(d.nomination.election, d.nomination.constituency, d.nomination.area),
+    positions: on.positions && data.positions.length > 0,
+    elections: on.elections && data.elections.length > 0,
+    movements: on.movements && data.movements.length > 0,
+    cases: on.cases && data.cases.length > 0,
+    education: on.education && data.education.length > 0,
+    occupation: on.occupation && data.occupation.length > 0,
+    socialWork: on.socialWork && data.socialWork.length > 0,
+    declaration: on.declaration && hasText(d.declaration.text),
   };
   const { sections: _sections, ...rest } = doc;
   void _sections;

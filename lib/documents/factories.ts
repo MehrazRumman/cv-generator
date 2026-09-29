@@ -8,6 +8,7 @@ import type {
   EuropassData,
   EuropassLanguage,
   Experience,
+  PoliticalData,
   ProfessionalData,
   Project,
   Publication,
@@ -181,3 +182,27 @@ export const newEuropassAdditional = (category = ""): EuropassAdditional => ({
   date: "",
   description: "",
 });
+
+export const newPoliticalPosition = (): PoliticalData["positions"][number] => ({
+  id: newId(),
+  position: "",
+  organization: "",
+  level: "",
+  period: emptyRange(),
+});
+
+export const newPoliticalElection = (): PoliticalData["elections"][number] => ({
+  id: newId(),
+  election: "",
+  post: "",
+  constituency: "",
+  year: "",
+  result: "",
+  votes: "",
+});
+
+export const newMovement = (): PoliticalData["movements"][number] => ({ id: newId(), title: "", year: "", description: "" });
+
+export const newPoliticalCase = (): PoliticalData["cases"][number] => ({ id: newId(), description: "", year: "", status: "" });
+
+export const newSocialWork = (): PoliticalData["socialWork"][number] => ({ id: newId(), role: "", organization: "", period: emptyRange() });

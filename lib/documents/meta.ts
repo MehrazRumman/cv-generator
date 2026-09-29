@@ -37,6 +37,13 @@ export const DOCUMENT_TYPE_META: Record<DocumentType, DocumentTypeMeta> = {
     description: "Full academic record with publications in APA or IEEE style, grants, teaching, service and referees.",
     bestFor: ["Faculty positions", "PhD / Masters admissions", "Scholarships & research roles"],
   },
+  political: {
+    type: "political",
+    title: "Political CV",
+    tagline: "Party nomination & profile",
+    description: "Bangladeshi political CV (রাজনৈতিক জীবনবৃত্তান্ত) with party positions, elections, movements and the seat sought — themed for BNP, Awami League or Jamaat.",
+    bestFor: ["Party nomination applications", "Committee & convention profiles", "Bangla or English"],
+  },
 };
 
 export const isDocumentType = (value: string): value is DocumentType =>

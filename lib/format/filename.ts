@@ -6,6 +6,7 @@ const DOC_TYPE_LABEL: Record<DocumentType, string> = {
   europass: "Europass_CV",
   biodata: "Biodata",
   academic: "Academic_CV",
+  political: "Political_CV",
 };
 
 /** `Name_DocType_YYYY-MM-DD.ext` — keeps Unicode letters (Bangla names work), drops unsafe characters. */

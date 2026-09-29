@@ -5,11 +5,16 @@ import {
   type DocumentOf,
   type DocumentType,
   type EuropassDocument,
+  type PoliticalDocument,
   type ProfessionalDocument,
 } from "@/lib/schemas";
 import { todayIso } from "@/lib/format/dates";
 import { TEMPLATE_CATALOG } from "@/templates/catalog";
 import { emptyParent, newSkillGroup } from "./factories";
+
+/** Political CVs are usually filed in Bangla, so the default declaration is Bangla too. */
+export const DEFAULT_POLITICAL_DECLARATION =
+  "আমি এই মর্মে অঙ্গীকার করছি যে, উপরে প্রদত্ত সকল তথ্য সত্য ও সঠিক। আমি দলের গঠনতন্ত্র, ঘোষণাপত্র ও সকল সিদ্ধান্ত মেনে চলব।";
 
 export const DEFAULT_DECLARATION =
   "I hereby declare that the information furnished above is true, complete and correct to the best of my knowledge and belief.";
@@ -204,11 +209,54 @@ export function emptyAcademic(): AcademicDocument {
   };
 }
 
+export function emptyPolitical(): PoliticalDocument {
+  return {
+    schemaVersion: SCHEMA_VERSION,
+    type: "political",
+    updatedAt: new Date().toISOString(),
+    settings: { ...baseSettings, templateId: "classic", accentColor: TEMPLATE_CATALOG.political[0].accent, labelLanguage: "bn" },
+    sections: {
+      photo: true,
+      personal: true,
+      contact: true,
+      partyRole: true,
+      nomination: true,
+      positions: true,
+      elections: true,
+      movements: true,
+      cases: true,
+      education: true,
+      occupation: true,
+      socialWork: true,
+      declaration: true,
+    },
+    data: {
+      party: "other",
+      partyName: "",
+      partyLogo: null,
+      photo: null,
+      personal: { fullName: "", fathersName: "", mothersName: "", spouseName: "", dateOfBirth: "", religion: "", nid: "" },
+      contact: { presentAddress: "", permanentAddress: "", phone: "", email: "", facebook: "" },
+      partyRole: { position: "", committee: "", memberSince: "", membershipNo: "" },
+      nomination: { election: "", constituency: "", area: "" },
+      positions: [],
+      elections: [],
+      movements: [],
+      cases: [],
+      education: [],
+      occupation: [],
+      socialWork: [],
+      declaration: { text: DEFAULT_POLITICAL_DECLARATION, place: "", date: todayIso() },
+    },
+  };
+}
+
 const factories: { [T in DocumentType]: () => DocumentOf<T> } = {
   professional: emptyProfessional,
   europass: emptyEuropass,
   biodata: emptyBiodata,
   academic: emptyAcademic,
+  political: emptyPolitical,
 };
 
 export function emptyDocument<T extends DocumentType>(type: T): DocumentOf<T> {

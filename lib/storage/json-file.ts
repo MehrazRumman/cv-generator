@@ -15,7 +15,7 @@ export function downloadBlob(blob: Blob, fileName: string): void {
 }
 
 export function documentOwnerName(doc: AnyDocument): string {
-  return doc.type === "biodata" ? doc.data.personal.fullName : doc.data.header.fullName;
+  return doc.type === "biodata" || doc.type === "political" ? doc.data.personal.fullName : doc.data.header.fullName;
 }
 
 export function exportDocumentJson(doc: AnyDocument): void {

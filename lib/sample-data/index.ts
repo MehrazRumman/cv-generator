@@ -2,6 +2,7 @@ import type { DocumentOf, DocumentType } from "@/lib/schemas";
 import { sampleAcademic } from "./academic";
 import { sampleBiodataJob, sampleBiodataMarriage } from "./biodata";
 import { sampleEuropass } from "./europass";
+import { samplePoliticalAwamiLeague, samplePoliticalBnp, samplePoliticalJamaat } from "./political";
 import { sampleProfessional } from "./professional";
 
 export interface SampleVariant<T extends DocumentType> {
@@ -27,6 +28,12 @@ export const SAMPLE_VARIANTS: { [T in DocumentType]: SampleVariant<T>[] } = {
       },
     },
   ],
+  // One per party, in the order of the party picker. render-samples pairs them with the templates.
+  political: [
+    { label: "BNP candidate (বাংলা)", create: samplePoliticalBnp },
+    { label: "Awami League candidate (বাংলা)", create: samplePoliticalAwamiLeague },
+    { label: "Jamaat candidate (বাংলা)", create: samplePoliticalJamaat },
+  ],
 };
 
 export const SAMPLE_DATA: { [T in DocumentType]: () => DocumentOf<T> } = {
@@ -34,4 +41,5 @@ export const SAMPLE_DATA: { [T in DocumentType]: () => DocumentOf<T> } = {
   europass: SAMPLE_VARIANTS.europass[0].create,
   biodata: SAMPLE_VARIANTS.biodata[0].create,
   academic: SAMPLE_VARIANTS.academic[0].create,
+  political: SAMPLE_VARIANTS.political[0].create,
 };

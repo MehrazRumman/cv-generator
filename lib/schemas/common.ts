@@ -5,7 +5,7 @@ import type { Rules } from "./rules";
 /* Enums & constants shared by every document type                     */
 /* ------------------------------------------------------------------ */
 
-export const DOCUMENT_TYPES = ["professional", "europass", "biodata", "academic"] as const;
+export const DOCUMENT_TYPES = ["professional", "europass", "biodata", "academic", "political"] as const;
 export type DocumentType = (typeof DOCUMENT_TYPES)[number];
 
 export const PAPER_SIZES = ["A4", "LETTER"] as const;

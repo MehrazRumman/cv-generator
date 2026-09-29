@@ -5,7 +5,7 @@ export interface PartyInfo {
   id: PoliticalParty;
   name: { en: string; bn: string };
   short: string;
-  /** The party's election symbol, drawn by templates/political/emblems.tsx. */
+  /** The party's election symbol, named in the nomination section. */
   symbol: { en: string; bn: string } | null;
   /** Main colour (used as the accent) and a second colour for stripes. */
   colors: { primary: string; secondary: string };
@@ -13,8 +13,8 @@ export interface PartyInfo {
 
 /**
  * Names, election symbols and colours of the parties with a built-in theme (sources: party flags and
- * the Election Commission's symbol list). The symbols are simple original drawings, not party logos;
- * users can upload an official logo in the form.
+ * the Election Commission's symbol list). Each party's logo ships in public/parties (see its LICENSE.md);
+ * users can upload a different one in the form.
  */
 export const PARTIES: Record<PoliticalParty, PartyInfo> = {
   bnp: {

@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { emptyAcademic, emptyBiodata, emptyEuropass, emptyProfessional } from "@/lib/documents/defaults";
-import { newEuropassAdditional, newEuropassLanguage, newExperience } from "@/lib/documents/factories";
-import { prepareAcademic, prepareBiodata, prepareEuropass, prepareProfessional } from "@/lib/documents/prepare";
+import { emptyAcademic, emptyBiodata, emptyEuropass, emptyPolitical, emptyProfessional } from "@/lib/documents/defaults";
+import { newEuropassAdditional, newEuropassLanguage, newExperience, newPoliticalPosition } from "@/lib/documents/factories";
+import { isPartyAccent, partyName, PARTIES } from "@/lib/documents/parties";
+import { prepareAcademic, prepareBiodata, prepareEuropass, preparePolitical, prepareProfessional } from "@/lib/documents/prepare";
 import { documentResolver } from "@/lib/documents/validation";
 import { SAMPLE_VARIANTS } from "@/lib/sample-data";
 import { biodataSchema, documentSchemas, DOCUMENT_TYPES, draftSchemas, europassSchema, professionalSchema } from "@/lib/schemas";
@@ -88,6 +89,49 @@ describe("europass", () => {
     doc.data.additional = [newEuropassAdditional()];
     expect(Object.keys((await resolve(doc)).errors)).toContain("data");
     doc.sections.additional = false;
+    expect((await resolve(doc)).errors).toEqual({});
+  });
+});
+
+describe("political", () => {
+  it("prints only the pre-filled declaration on an empty political CV", () => {
+    const show = preparePolitical(emptyPolitical()).show;
+    expect(Object.entries(show).filter(([, v]) => v).map(([k]) => k)).toEqual(["declaration"]);
+  });
+
+  it("drops blank positions and shows the party role once anything is filled in", () => {
+    const doc = emptyPolitical();
+    doc.data.positions = [newPoliticalPosition(), { ...newPoliticalPosition(), position: "Convener", organization: "Ward 5" }];
+    doc.data.partyRole.memberSince = "1995";
+    const prepared = preparePolitical(doc);
+    expect(prepared.data.positions).toHaveLength(1);
+    expect(prepared.show.positions).toBe(true);
+    expect(prepared.show.partyRole).toBe(true);
+  });
+
+  it("prints the built-in party name unless one is typed", () => {
+    expect(partyName("jamaat", "", "bn")).toBe(PARTIES.jamaat.name.bn);
+    expect(partyName("bnp", "", "en")).toBe(PARTIES.bnp.name.en);
+    expect(partyName("other", " Independent ", "en")).toBe("Independent");
+  });
+
+  it("lets an automatic party colour follow the party, but keeps a colour the user chose", () => {
+    const doc = emptyPolitical();
+    expect(isPartyAccent(doc)).toBe(true); // template default
+    doc.data.party = "awami-league";
+    doc.settings.accentColor = PARTIES["awami-league"].colors.primary;
+    expect(isPartyAccent(doc)).toBe(true);
+    doc.settings.accentColor = "#123456";
+    expect(isPartyAccent(doc)).toBe(false);
+  });
+
+  it("requires a position and organisation for each political post", async () => {
+    const doc = emptyPolitical();
+    doc.data.personal.fullName = "A";
+    doc.data.positions = [newPoliticalPosition()];
+    const errors = (await resolve(doc)).errors as { data?: { positions?: unknown } };
+    expect(errors.data?.positions).toBeDefined();
+    doc.sections.positions = false;
     expect((await resolve(doc)).errors).toEqual({});
   });
 });

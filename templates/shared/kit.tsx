@@ -41,6 +41,8 @@ export interface Kit {
    */
   entryLayout: "stacked" | "dateBelow" | "dateColumn";
   dateColumnWidth: number;
+  /** Alignment of dates inside the date column (default "left"; Europass right-aligns them against a rule). */
+  dateColumnAlign?: "left" | "right";
   /**
    * Optional timeline rail for stacked/dateBelow entries: `style` (e.g. a left border + padding) is
    * applied to the entry head and to each continuation bullet, `marker` (absolutely positioned, e.g. a
@@ -256,7 +258,12 @@ export function Entry({ kit, title, subtitle, date, meta, bullets = [], children
     // The date sits absolutely in the left gutter of an indented column. (A flex row here makes
     // react-pdf collapse the title lines when the entry lands near a page break.)
     const dateLabel = (
-      <Text style={[s.entryDate, { position: "absolute", top: 0, left: -kit.dateColumnWidth, width: kit.dateColumnWidth - 8, textAlign: "left", marginLeft: 0 }]}>
+      <Text
+        style={[
+          s.entryDate,
+          { position: "absolute", top: 0, left: -kit.dateColumnWidth, width: kit.dateColumnWidth - 8, textAlign: kit.dateColumnAlign ?? "left", marginLeft: 0 },
+        ]}
+      >
         {date ?? ""}
       </Text>
     );

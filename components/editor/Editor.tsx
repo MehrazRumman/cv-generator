@@ -49,10 +49,14 @@ function withRequestedTemplate(doc: AnyDocument): AnyDocument {
   const template = id ? TEMPLATE_CATALOG[doc.type].find((t) => t.id === id) : undefined;
   if (!template || template.id === doc.settings.templateId) return doc;
   const sections = template.featuresPhoto && doc.type === "professional" ? { ...doc.sections, photo: true } : doc.sections;
+  // Like the template picker: adopt the template's colour only if the user hasn't chosen their own.
+  const current = TEMPLATE_CATALOG[doc.type].find((t) => t.id === doc.settings.templateId);
+  const customised = current !== undefined && doc.settings.accentColor.toLowerCase() !== current.accent.toLowerCase();
+  const accentColor = customised ? doc.settings.accentColor : template.accent;
   return {
     ...doc,
     sections,
-    settings: { ...doc.settings, templateId: template.id, accentColor: template.accent, ...(template.fonts ?? {}) },
+    settings: { ...doc.settings, templateId: template.id, accentColor, ...(template.fonts ?? {}) },
   } as AnyDocument;
 }
 

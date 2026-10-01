@@ -286,3 +286,90 @@ export function samplePoliticalJamaat(): PoliticalDocument {
     },
   };
 }
+
+export function samplePoliticalNcp(): PoliticalDocument {
+  const doc = base("ncp");
+  return {
+    ...doc,
+    data: {
+      ...doc.data,
+      personal: {
+        fullName: "তাসনিম আহমেদ",
+        fathersName: "মোঃ জাহিদুল ইসলাম",
+        mothersName: "সালমা খাতুন",
+        spouseName: "",
+        dateOfBirth: "1998-11-08",
+        religion: "ইসলাম",
+        nid: "1998 3021 5678 912",
+      },
+      contact: {
+        presentAddress: "বাসা ২২, রোড ৩, মিরপুর ১০, ঢাকা-১২১৬",
+        permanentAddress: "গ্রাম: পূর্বপাড়া, উপজেলা: সদর, জেলা: রংপুর",
+        phone: "+880 1611-000444",
+        email: "tasnim.ahmed@example.com",
+        facebook: "facebook.com/example.tasnim",
+      },
+      partyRole: { position: "যুগ্ম সদস্য সচিব", committee: "রংপুর জেলা সমন্বয় কমিটি, এনসিপি", memberSince: "2025", membershipNo: "" },
+      nomination: { election: "জাতীয় সংসদ নির্বাচন", constituency: "রংপুর-০০ (উদাহরণ)", area: "সদর উপজেলা ও সিটি কর্পোরেশন" },
+      positions: [
+        {
+          id: "pos1",
+          position: "যুগ্ম সদস্য সচিব",
+          organization: "রংপুর জেলা সমন্বয় কমিটি, জাতীয় নাগরিক পার্টি",
+          level: "district",
+          period: { start: "2025", end: "", current: true },
+        },
+        {
+          id: "pos2",
+          position: "সমন্বয়ক",
+          organization: "ছাত্র আন্দোলন, রংপুর জেলা",
+          level: "district",
+          period: { start: "2024", end: "2025", current: false },
+        },
+        {
+          id: "pos3",
+          position: "সাধারণ সম্পাদক",
+          organization: "বিতর্ক সংসদ, কারমাইকেল কলেজ",
+          level: "upazila",
+          period: { start: "2019", end: "2021", current: false },
+        },
+      ],
+      elections: [
+        { id: "el1", election: "কলেজ ছাত্র সংসদ নির্বাচন", post: "সাধারণ সম্পাদক", constituency: "কারমাইকেল কলেজ", year: "2025", result: "won", votes: "৪,৮১২" },
+      ],
+      movements: [
+        { id: "mv1", title: "জুলাই গণঅভ্যুত্থান", year: "২০২৪", description: "জেলা পর্যায়ে ছাত্র কর্মসূচি সমন্বয় ও আহতদের চিকিৎসা সহায়তা।" },
+      ],
+      cases: [],
+      education: [
+        {
+          id: "edu1",
+          degree: "স্নাতক (সম্মান)",
+          fieldOfStudy: "অর্থনীতি",
+          institution: "কারমাইকেল কলেজ",
+          board: "জাতীয় বিশ্ববিদ্যালয়",
+          location: "",
+          period: { start: "", end: "2021", current: false },
+          result: "সিজিপিএ ৩.৪২",
+        },
+        {
+          id: "edu2",
+          degree: "এইচএসসি",
+          fieldOfStudy: "বিজ্ঞান",
+          institution: "রংপুর সরকারি কলেজ",
+          board: "দিনাজপুর বোর্ড",
+          location: "",
+          period: { start: "", end: "2016", current: false },
+          result: "জিপিএ ৫.০০",
+        },
+      ],
+      occupation: [
+        { id: "occ1", position: "সহ-প্রতিষ্ঠাতা", organization: "পূর্বপাড়া ডিজিটাল সেবা কেন্দ্র", location: "রংপুর", period: { start: "2022", end: "", current: true }, bullets: [] },
+      ],
+      socialWork: [
+        { id: "sw1", role: "স্বেচ্ছাসেবক সমন্বয়ক", organization: "রংপুর বন্যা ত্রাণ উদ্যোগ", period: { start: "2022", end: "", current: true } },
+      ],
+      declaration: { ...doc.data.declaration, place: "রংপুর" },
+    },
+  };
+}

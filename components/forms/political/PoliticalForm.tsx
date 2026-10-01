@@ -49,7 +49,7 @@ function PartyPicker() {
   return (
     <div className="rounded-lg border border-zinc-200 bg-surface p-3 shadow-xs">
       <p className="mb-2 text-xs font-medium text-zinc-700">Party</p>
-      <div className="grid grid-cols-2 gap-1 rounded-md bg-zinc-100 p-1 sm:grid-cols-4" role="radiogroup" aria-label="Party">
+      <div className="grid grid-cols-2 gap-1 rounded-md bg-zinc-100 p-1 sm:grid-cols-3" role="radiogroup" aria-label="Party">
         {POLITICAL_PARTIES.map((p) => {
           const info = PARTIES[p];
           return (

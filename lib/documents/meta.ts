@@ -41,7 +41,7 @@ export const DOCUMENT_TYPE_META: Record<DocumentType, DocumentTypeMeta> = {
     type: "political",
     title: "Political CV",
     tagline: "Party nomination & profile",
-    description: "Bangladeshi political CV (রাজনৈতিক জীবনবৃত্তান্ত) with party positions, elections, movements and the seat sought — themed for BNP, Awami League or Jamaat.",
+    description: "Bangladeshi political CV (রাজনৈতিক জীবনবৃত্তান্ত) with party positions, elections, movements and the seat sought — themed for BNP, Awami League, Jamaat or NCP.",
     bestFor: ["Party nomination applications", "Committee & convention profiles", "Bangla or English"],
   },
 };

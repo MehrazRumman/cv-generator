@@ -111,6 +111,7 @@ describe("political", () => {
 
   it("prints the built-in party name unless one is typed", () => {
     expect(partyName("jamaat", "", "bn")).toBe(PARTIES.jamaat.name.bn);
+    expect(partyName("ncp", "", "bn")).toBe("জাতীয় নাগরিক পার্টি (এনসিপি)");
     expect(partyName("bnp", "", "en")).toBe(PARTIES.bnp.name.en);
     expect(partyName("other", " Independent ", "en")).toBe("Independent");
   });

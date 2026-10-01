@@ -38,6 +38,13 @@ export const PARTIES: Record<PoliticalParty, PartyInfo> = {
     symbol: { en: "Scales", bn: "দাঁড়িপাল্লা" },
     colors: { primary: "#2e8b3d", secondary: "#14532d" },
   },
+  ncp: {
+    id: "ncp",
+    name: { en: "National Citizen Party (NCP)", bn: "জাতীয় নাগরিক পার্টি (এনসিপি)" },
+    short: "NCP",
+    symbol: { en: "Water lily bud", bn: "শাপলা কলি" },
+    colors: { primary: "#006a33", secondary: "#da2128" },
+  },
   other: {
     id: "other",
     name: { en: "", bn: "" },

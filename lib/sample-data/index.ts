@@ -2,7 +2,7 @@ import type { DocumentOf, DocumentType } from "@/lib/schemas";
 import { sampleAcademic } from "./academic";
 import { sampleBiodataJob, sampleBiodataMarriage } from "./biodata";
 import { sampleEuropass } from "./europass";
-import { samplePoliticalAwamiLeague, samplePoliticalBnp, samplePoliticalJamaat } from "./political";
+import { samplePoliticalAwamiLeague, samplePoliticalBnp, samplePoliticalJamaat, samplePoliticalNcp } from "./political";
 import { sampleProfessional } from "./professional";
 
 export interface SampleVariant<T extends DocumentType> {
@@ -33,6 +33,7 @@ export const SAMPLE_VARIANTS: { [T in DocumentType]: SampleVariant<T>[] } = {
     { label: "BNP candidate (বাংলা)", create: samplePoliticalBnp },
     { label: "Awami League candidate (বাংলা)", create: samplePoliticalAwamiLeague },
     { label: "Jamaat candidate (বাংলা)", create: samplePoliticalJamaat },
+    { label: "NCP candidate (বাংলা)", create: samplePoliticalNcp },
   ],
 };
 

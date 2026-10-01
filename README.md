@@ -17,7 +17,7 @@ Build a **Professional CV**, a **Europass CV**, a South Asian **Biodata** (marri
   - **Europass CV (6 templates):** the European CV structure, with the CEFR language self-assessment grid (A1–C2 for listening, reading, spoken production, spoken interaction and writing), EQF levels for education, digital skills, driving licence and categorised additional information. Dates print the European way (`08/2021 – Current`).
   - **Biodata (7 templates):** marriage/job mode, English or Bangla headings.
   - **Academic CV (7 templates):** APA 7 or IEEE citations, with your name bolded automatically in author lists.
-  - **Political CV (3 templates):** a Bangladeshi party nomination CV (রাজনৈতিক জীবনবৃত্তান্ত) themed for **BNP**, **Awami League** or **Jamaat-e-Islami** (or any other party): the party's logo and colours, its election symbol (sheaf of paddy, boat, scales), party position, seat sought, positions held, elections contested, movements, cases, education, profession, social work and a signed declaration. Headings in Bangla or English.
+  - **Political CV (3 templates):** a Bangladeshi party nomination CV (রাজনৈতিক জীবনবৃত্তান্ত) themed for **BNP**, **Awami League**, **Jamaat-e-Islami** or **NCP** (or any other party): the party's logo and colours, its election symbol (sheaf of paddy, boat, scales, water lily bud), party position, seat sought, positions held, elections contested, movements, cases, education, profession, social work and a signed declaration. Headings in Bangla or English.
 - **Live preview.** The PDF is re-rendered about 0.4 s after you stop typing and shown with pdf.js (it works on phones too). On mobile, Form and Preview are tabs.
 - **Repeatable sections.** Add, remove and reorder entries by dragging or with the ↑/↓ buttons.
 - **Section switches.** Any section can be hidden, and empty sections are never printed.
@@ -145,7 +145,7 @@ The layouts are original react-pdf implementations, modelled on the look of thes
 | Professional / Academic — Minimal | [JSON Resume](https://jsonresume.org/themes/) minimalist themes (MIT) |
 | Professional — Executive, Academic — Classic | Harvard Office of Career Services résumé / CV guides |
 | Biodata — Bordered | The traditional Bangladeshi office biodata form |
-| Political — party logos | The BNP, Awami League and Jamaat-e-Islami logos from Wikimedia Commons (CC0 / public domain; see [public/parties/LICENSE.md](public/parties/LICENSE.md)); users can upload a different logo in the form |
+| Political — party logos | The BNP, Awami League, Jamaat-e-Islami and NCP logos from Wikimedia Commons (CC0 / public domain; see [public/parties/LICENSE.md](public/parties/LICENSE.md)); users can upload a different logo in the form |
 | Europass — Classic, Modern | The structure of the [Europass CV](https://europass.europa.eu/) (traditional and current layouts); no Europass or EU logos are used, and the app is not affiliated with the European Union |
 | Professional — Navy Sidebar, Pastel Split, Gray Column, Geometric, Photo Header, Diagonal, Soft Panel, Navy Header, Bold Pills | Original designs in the style of popular photo résumé layouts (dark or pastel sidebars, header bands, geometric accents); no third-party artwork is copied |
 

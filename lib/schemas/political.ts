@@ -3,7 +3,7 @@ import { buildCommon, buildDocument } from "./common";
 import { draftRules, strictRules, type Rules } from "./rules";
 
 /** Parties with a built-in colour theme and election symbol; "other" uses `partyName` and no symbol. */
-export const POLITICAL_PARTIES = ["bnp", "awami-league", "jamaat", "other"] as const;
+export const POLITICAL_PARTIES = ["bnp", "awami-league", "jamaat", "ncp", "other"] as const;
 export type PoliticalParty = (typeof POLITICAL_PARTIES)[number];
 
 /** Organisational tiers of Bangladeshi party committees. */

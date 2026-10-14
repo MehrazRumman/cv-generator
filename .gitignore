@@ -45,5 +45,5 @@ next-env.d.ts
 /sample-output
 /promo
 
-# Local Google Form builder script
-/scripts/political-cv-google-form.gs
+# Local Google Form builder scripts
+/scripts/*.gs

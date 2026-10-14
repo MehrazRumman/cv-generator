@@ -44,3 +44,6 @@ next-env.d.ts
 /public/pdf.worker.min.mjs
 /sample-output
 /promo
+
+# Local Google Form builder script
+/scripts/political-cv-google-form.gs
